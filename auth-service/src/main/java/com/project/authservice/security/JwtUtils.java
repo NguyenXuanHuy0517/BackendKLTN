@@ -53,9 +53,8 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
     private SecretKey getSignKey() {
-        return SECRET_KEY;
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

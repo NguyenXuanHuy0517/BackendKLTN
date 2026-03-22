@@ -27,4 +27,10 @@ public class AuthController {
         authService.register(request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+    @GetMapping("/debug/secret")
+    public ResponseEntity<String> debugSecret(
+            @org.springframework.beans.factory.annotation.Value("${jwt.secret}") String secret) {
+        return ResponseEntity.ok("AUTH secret: [" + secret + "] length=" + secret.length());
+    }
 }

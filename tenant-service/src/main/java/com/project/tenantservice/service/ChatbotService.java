@@ -1,0 +1,252 @@
+package com.project.tenantservice.service;
+
+import com.project.datalayer.entity.ChatbotHistory;
+import com.project.datalayer.entity.User;
+import com.project.datalayer.repository.ChatbotHistoryRepository;
+import com.project.datalayer.repository.ContractRepository;
+import com.project.datalayer.repository.InvoiceRepository;
+import com.project.datalayer.repository.UserRepository;
+import com.project.tenantservice.dto.chatbot.ChatRequestDTO;
+import com.project.tenantservice.dto.chatbot.ChatResponseDTO;
+import com.project.tenantservice.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ChatbotService {
+
+    private final UserRepository userRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final ContractRepository contractRepository;
+    private final ChatbotHistoryRepository chatbotHistoryRepository;
+
+    public ChatResponseDTO chat(Long userId, ChatRequestDTO request) {
+        String message = request.getMessage().toLowerCase().trim();
+        String intent = detectIntent(message);
+        String reply = generateReply(userId, intent, message);
+
+        // Lưu lịch sử
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy người dùng: " + userId));
+
+        ChatbotHistory history = new ChatbotHistory();
+        history.setUser(user);
+        history.setUserQuestion(request.getMessage());
+        history.setBotResponse(reply);
+        history.setIntentDetected(intent);
+        chatbotHistoryRepository.save(history);
+
+        ChatResponseDTO response = new ChatResponseDTO();
+        response.setReply(reply);
+        response.setIntentDetected(intent);
+        return response;
+    }
+
+    // ── Intent detection ─────────────────────────────────────
+    private String detectIntent(String message) {
+        if (containsAny(message, "hóa đơn", "tiền phòng", "tiền điện",
+                "tiền nước", "thanh toán", "nợ", "bao nhiêu")) {
+            return "INVOICE_QUERY";
+        }
+        if (containsAny(message, "hợp đồng", "ngày hết hạn", "gia hạn",
+                "còn bao lâu", "hết hạn khi nào")) {
+            return "CONTRACT_QUERY";
+        }
+        if (containsAny(message, "dịch vụ", "wifi", "gửi xe", "vệ sinh",
+                "điện nước", "giá điện", "giá nước")) {
+            return "SERVICE_QUERY";
+        }
+        if (containsAny(message, "giờ giấc", "quy định", "nội quy",
+                "khách", "giờ đóng cửa", "giờ mở")) {
+            return "RULE_QUERY";
+        }
+        if (containsAny(message, "báo hỏng", "sửa chữa", "hỏng",
+                "rò rỉ", "điện không", "nước không", "sự cố")) {
+            return "REPORT_ISSUE";
+        }
+        if (containsAny(message, "xin chào", "hello", "chào", "hi")) {
+            return "GREETING";
+        }
+        return "UNKNOWN";
+    }
+
+    // ── Reply generation ─────────────────────────────────────
+    private String generateReply(Long userId, String intent, String message) {
+        return switch (intent) {
+            case "INVOICE_QUERY" -> handleInvoiceQuery(userId);
+            case "CONTRACT_QUERY" -> handleContractQuery(userId);
+            case "SERVICE_QUERY" -> handleServiceQuery(userId);
+            case "RULE_QUERY" -> handleRuleQuery();
+            case "REPORT_ISSUE" -> handleReportIssue();
+            case "GREETING" -> "Xin chào! Tôi là trợ lý ảo của SmartRoomMS. " +
+                    "Tôi có thể giúp bạn tra cứu hóa đơn, hợp đồng, " +
+                    "dịch vụ hoặc báo sự cố. Bạn cần hỗ trợ gì?";
+            default -> "Xin lỗi, tôi chưa hiểu câu hỏi của bạn. " +
+                    "Bạn có thể hỏi về: hóa đơn, hợp đồng, dịch vụ, " +
+                    "quy định hoặc báo sự cố.";
+        };
+    }
+
+    private String handleInvoiceQuery(Long userId) {
+        var invoices = invoiceRepository
+                .findByContract_Room_Area_Host_UserId(userId).stream()
+                .filter(i -> i.getContract().getTenant()
+                        .getUserId().equals(userId))
+                .toList();
+
+        if (invoices.isEmpty()) {
+            return "Bạn chưa có hóa đơn nào trong hệ thống.";
+        }
+
+        // Tìm hóa đơn tháng hiện tại hoặc chưa thanh toán
+        LocalDate now = LocalDate.now();
+        var currentInvoice = invoices.stream()
+                .filter(i -> i.getBillingMonth() == now.getMonthValue()
+                        && i.getBillingYear() == now.getYear())
+                .findFirst();
+
+        if (currentInvoice.isPresent()) {
+            var inv = currentInvoice.get();
+            return String.format(
+                    "Hóa đơn tháng %d/%d của bạn:\n" +
+                            "• Tiền phòng: %,.0f đ\n" +
+                            "• Tiền điện: %,.0f đ\n" +
+                            "• Tiền nước: %,.0f đ\n" +
+                            "• Dịch vụ: %,.0f đ\n" +
+                            "• Tổng cộng: %,.0f đ\n" +
+                            "• Trạng thái: %s",
+                    inv.getBillingMonth(), inv.getBillingYear(),
+                    inv.getRentAmount(),
+                    inv.getElecAmount(),
+                    inv.getWaterAmount(),
+                    inv.getServiceAmount(),
+                    inv.getTotalAmount(),
+                    translateStatus(inv.getStatus()));
+        }
+
+        // Tìm hóa đơn chưa thanh toán
+        var unpaid = invoices.stream()
+                .filter(i -> List.of("UNPAID", "OVERDUE")
+                        .contains(i.getStatus()))
+                .findFirst();
+
+        if (unpaid.isPresent()) {
+            var inv = unpaid.get();
+            return String.format(
+                    "Bạn có hóa đơn chưa thanh toán:\n" +
+                            "• Kỳ: tháng %d/%d\n" +
+                            "• Tổng tiền: %,.0f đ\n" +
+                            "• Trạng thái: %s\n" +
+                            "Vui lòng thanh toán sớm để tránh phát sinh phí.",
+                    inv.getBillingMonth(), inv.getBillingYear(),
+                    inv.getTotalAmount(),
+                    translateStatus(inv.getStatus()));
+        }
+
+        return "Tất cả hóa đơn của bạn đã được thanh toán. " +
+                "Bạn có thể xem chi tiết trong mục Hóa đơn.";
+    }
+
+    private String handleContractQuery(Long userId) {
+        var contracts = contractRepository.findByTenant_UserId(userId);
+        var active = contracts.stream()
+                .filter(c -> c.getStatus().equals("ACTIVE"))
+                .findFirst();
+
+        if (active.isEmpty()) {
+            return "Bạn hiện không có hợp đồng đang hiệu lực.";
+        }
+
+        var contract = active.get();
+        long daysLeft = LocalDate.now()
+                .until(contract.getEndDate()).getDays();
+
+        String warning = "";
+        if (daysLeft <= 30 && daysLeft >= 0) {
+            warning = String.format(
+                    "\n⚠️ Hợp đồng còn %d ngày nữa sẽ hết hạn. " +
+                            "Vui lòng liên hệ chủ trọ để gia hạn.", daysLeft);
+        }
+
+        return String.format(
+                "Thông tin hợp đồng hiện tại của bạn:\n" +
+                        "• Mã HĐ: %s\n" +
+                        "• Phòng: %s — %s\n" +
+                        "• Giá thuê: %,.0f đ/tháng\n" +
+                        "• Hiệu lực: %s → %s\n" +
+                        "• Còn lại: %d ngày%s",
+                contract.getContractCode(),
+                contract.getRoom().getRoomCode(),
+                contract.getRoom().getArea().getAreaName(),
+                contract.getActualRentPrice(),
+                contract.getStartDate(),
+                contract.getEndDate(),
+                daysLeft,
+                warning);
+    }
+
+    private String handleServiceQuery(Long userId) {
+        var active = contractRepository.findByTenant_UserId(userId).stream()
+                .filter(c -> c.getStatus().equals("ACTIVE"))
+                .findFirst();
+
+        if (active.isEmpty()) {
+            return "Bạn hiện không có hợp đồng đang hiệu lực.";
+        }
+
+        var room = active.get().getRoom();
+        return String.format(
+                "Thông tin giá dịch vụ phòng %s:\n" +
+                        "• Giá điện: %,.0f đ/kWh\n" +
+                        "• Giá nước: %,.0f đ/m³\n\n" +
+                        "Để xem danh sách dịch vụ đăng ký, " +
+                        "vui lòng vào mục Hợp đồng.",
+                room.getRoomCode(),
+                active.get().getElecPriceOverride() != null
+                        ? active.get().getElecPriceOverride()
+                        : room.getElecPrice(),
+                active.get().getWaterPriceOverride() != null
+                        ? active.get().getWaterPriceOverride()
+                        : room.getWaterPrice());
+    }
+
+    private String handleRuleQuery() {
+        return "Một số quy định chung của khu trọ:\n" +
+                "• Giờ đóng cửa: 23:00 — mở cửa: 05:00\n" +
+                "• Khách ở lại qua đêm cần đăng ký với chủ trọ\n" +
+                "• Không gây ồn ào sau 22:00\n" +
+                "• Giữ gìn vệ sinh chung\n\n" +
+                "Để biết quy định chi tiết, " +
+                "vui lòng liên hệ trực tiếp với chủ trọ.";
+    }
+
+    private String handleReportIssue() {
+        return "Để báo sự cố hoặc yêu cầu sửa chữa, " +
+                "vui lòng vào mục Khiếu nại & Bảo trì trong ứng dụng " +
+                "và nhấn nút Gửi khiếu nại. " +
+                "Chủ trọ sẽ xử lý trong thời gian sớm nhất.";
+    }
+
+    // ── Helpers ──────────────────────────────────────────────
+    private boolean containsAny(String message, String... keywords) {
+        for (String kw : keywords) {
+            if (message.contains(kw)) return true;
+        }
+        return false;
+    }
+
+    private String translateStatus(String status) {
+        return switch (status) {
+            case "DRAFT" -> "Chưa có chỉ số";
+            case "UNPAID" -> "Chưa thanh toán";
+            case "PAID" -> "Đã thanh toán";
+            case "OVERDUE" -> "Quá hạn";
+            default -> status;
+        };
+    }
+}
