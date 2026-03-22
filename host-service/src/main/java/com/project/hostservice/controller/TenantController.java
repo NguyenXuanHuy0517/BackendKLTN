@@ -1,0 +1,53 @@
+package com.project.hostservice.controller;
+
+import com.project.datalayer.dto.common.ApiResponse;
+import com.project.hostservice.dto.tenant.TenantCreateDTO;
+import com.project.hostservice.dto.tenant.TenantResponseDTO;
+import com.project.hostservice.service.TenantService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/host/tenants")
+@RequiredArgsConstructor
+public class TenantController {
+
+    private final TenantService tenantService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<TenantResponseDTO>>> getTenants(@RequestParam Long hostId) {
+        log.info("GET /api/host/tenants - hostId: {}", hostId);
+        List<TenantResponseDTO> result = tenantService.getTenantsByHost(hostId);
+        log.info("GET /api/host/tenants - trả về {} người thuê", result.size());
+        return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    @GetMapping("/{tenantId}")
+    public ResponseEntity<ApiResponse<TenantResponseDTO>> getTenantDetail(@PathVariable Long tenantId) {
+        log.info("GET /api/host/tenants/{}", tenantId);
+        TenantResponseDTO result = tenantService.getTenantDetail(tenantId);
+        log.info("GET /api/host/tenants/{} - fullName: {}", tenantId, result.getFullName());
+        return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<TenantResponseDTO>> createTenant(@RequestBody TenantCreateDTO request) {
+        log.info("POST /api/host/tenants - email: {}", request.getEmail());
+        TenantResponseDTO result = tenantService.createTenant(request);
+        log.info("POST /api/host/tenants - tạo thành công userId: {}", result.getUserId());
+        return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    @PatchMapping("/{tenantId}/toggle")
+    public ResponseEntity<ApiResponse<Void>> toggleActive(@PathVariable Long tenantId) {
+        log.info("PATCH /api/host/tenants/{}/toggle", tenantId);
+        tenantService.toggleActive(tenantId);
+        log.info("PATCH /api/host/tenants/{}/toggle - thành công", tenantId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+}

@@ -1,0 +1,14 @@
+package com.project.datalayer.repository;
+
+import com.project.datalayer.entity.ContractService;
+import com.project.datalayer.entity.ContractServiceId;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ContractServiceRepository extends JpaRepository<ContractService, ContractServiceId> {
+    List<ContractService> findByContract_ContractId(Long contractId);
+    void deleteByContract_ContractIdAndService_ServiceId(Long contractId, Long serviceId);
+}
