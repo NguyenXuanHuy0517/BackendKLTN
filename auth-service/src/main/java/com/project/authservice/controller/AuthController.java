@@ -1,8 +1,6 @@
 package com.project.authservice.controller;
 
-import com.project.authservice.dto.LoginRequestDTO;
-import com.project.authservice.dto.LoginResponseDTO;
-import com.project.authservice.dto.RegisterRequestDTO;
+import com.project.authservice.dto.*;
 import com.project.authservice.service.AuthService;
 import com.project.datalayer.dto.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,31 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> register(@RequestBody RegisterRequestDTO request) {
         authService.register(request);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<RefreshTokenResponseDTO>> refreshToken(@RequestBody RefreshTokenRequestDTO request) {
+        RefreshTokenResponseDTO response = authService.refreshToken(request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        authService.logout(token);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Void>> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
+        authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestBody ResetPasswordRequestDTO request) {
+        authService.resetPassword(request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

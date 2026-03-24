@@ -1,8 +1,6 @@
 package com.project.authservice.service;
 
-import com.project.authservice.dto.LoginRequestDTO;
-import com.project.authservice.dto.LoginResponseDTO;
-import com.project.authservice.dto.RegisterRequestDTO;
+import com.project.authservice.dto.*;
 import com.project.authservice.exception.ResourceNotFoundException;
 import com.project.authservice.security.JwtUtils;
 import com.project.datalayer.entity.Role;
@@ -18,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -28,6 +28,10 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
+    
+    // Simple in-memory token blacklist (use Redis/DB in production)
+    private static final Set<String> tokenBlacklist = new HashSet<>();
+    private static final Map<String, String> passwordResetTokens = new HashMap<>();
 
     public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -76,4 +80,53 @@ public class AuthService {
 
         userRepository.save(user);
     }
+
+    public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request) {
+        if (tokenBlacklist.contains(request.getToken())) {
+            throw new BadCredentialsException("Token đã bị hủy");
+        }
+
+        String email = jwtUtils.extractEmail(request.getToken());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        
+        if (!jwtUtils.validateToken(request.getToken(), userDetails)) {
+            throw new BadCredentialsException("Token không hợp lệ");
+        }
+
+        String newToken = jwtUtils.generateToken(userDetails);
+        return new RefreshTokenResponseDTO(newToken);
+    }
+
+    public void logout(String token) {
+        tokenBlacklist.add(token);
+    }
+
+    public void forgotPassword(ForgotPasswordRequestDTO request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
+
+        // Generate reset token (in production use proper JWT or secure random token)
+        String resetToken = UUID.randomUUID().toString();
+        passwordResetTokens.put(resetToken, user.getEmail());
+        
+        // TODO: Send email with reset token
+        // emailService.sendPasswordResetEmail(user.getEmail(), resetToken);
+    }
+
+    public void resetPassword(ResetPasswordRequestDTO request) {
+        String email = passwordResetTokens.get(request.getToken());
+        if (email == null) {
+            throw new BadCredentialsException("Token không hợp lệ hoặc đã hết hạn");
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        // Remove used token
+        passwordResetTokens.remove(request.getToken());
+    }
 }
+
