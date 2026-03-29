@@ -26,12 +26,13 @@ public class AdminRoomController {
         return ResponseEntity.ok(ApiResponse.success(rooms));
     }
 
-    @GetMapping("/missing-invoices")
-    public ResponseEntity<ApiResponse<List<AdminRoomResponseDTO>>> getRoomsMissingInvoices() {
-        log.info("GET /api/admin/rooms/missing-invoices");
+    // FIX: Đổi path từ /missing-invoices sang /without-invoice
+    // để tránh xung đột mapping với AdminRevenueController#getRoomsMissingInvoices()
+    @GetMapping("/without-invoice")
+    public ResponseEntity<ApiResponse<List<AdminRoomResponseDTO>>> getRoomsWithoutInvoice() {
+        log.info("GET /api/admin/rooms/without-invoice");
         List<AdminRoomResponseDTO> rooms = roomService.getRoomsMissingInvoices();
-        log.info("GET /api/admin/rooms/missing-invoices - trả về {} phòng", rooms.size());
+        log.info("GET /api/admin/rooms/without-invoice - trả về {} phòng", rooms.size());
         return ResponseEntity.ok(ApiResponse.success(rooms));
     }
 }
-

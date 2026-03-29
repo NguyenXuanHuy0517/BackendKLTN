@@ -10,8 +10,16 @@ import java.util.Optional;
 
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Long> {
+
     List<Contract> findByRoom_Area_Host_UserId(Long hostId);
+
+    // FIX: Thêm method bị thiếu — được gọi trong TenantService, ChatbotService, MyContractService
     List<Contract> findByTenant_UserId(Long tenantId);
+
     Optional<Contract> findByRoom_RoomIdAndStatus(Long roomId, String status);
+
     List<Contract> findByStatusAndEndDateBefore(String status, LocalDate date);
+
+    // FIX: Thêm findByStatus để InvoiceScheduler có thể dùng nếu cần
+    List<Contract> findByStatus(String status);
 }
