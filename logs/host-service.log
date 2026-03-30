@@ -52,3 +52,10 @@
 2026-03-30 10:11:43 [http-nio-8082-exec-2] INFO  c.p.h.controller.ReportController - GET /api/host/reports/dashboard - revenue: 0, occupancy: 0.0%
 2026-03-30 10:14:00 [http-nio-8082-exec-5] INFO  c.p.h.controller.ReportController - GET /api/host/reports/dashboard - hostId: 132
 2026-03-30 10:14:01 [http-nio-8082-exec-5] INFO  c.p.h.controller.ReportController - GET /api/host/reports/dashboard - revenue: 0, occupancy: 0.0%
+2026-03-30 11:04:35 [http-nio-8082-exec-9] INFO  c.p.h.controller.ReportController - GET /api/host/reports/dashboard - hostId: 132
+2026-03-30 11:04:35 [http-nio-8082-exec-9] INFO  c.p.h.controller.ReportController - GET /api/host/reports/dashboard - revenue: 0, occupancy: 0.0%
+2026-03-30 11:07:03 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-30 11:07:04 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-30 11:07:04 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 11:07:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-30 11:07:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -11,16 +11,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Cho phép người thuê cập nhật avatar của chính mình.
- * tenant-service không có Cloudinary nên gọi qua host-service upload endpoint,
- * hoặc dùng chung Cloudinary bean nếu cấu hình.
  *
- * Hiện tại: lưu trực tiếp URL Cloudinary vào DB (nếu tenant-service thêm
- * cloudinary dependency) hoặc chỉ nhận URL string từ Flutter sau khi Flutter
- * tự upload lên Cloudinary bằng unsigned preset.
+ * Flow 1 - Upload file trực tiếp:
+ *   Flutter → POST /api/tenant/avatar?userId=X (multipart file)
+ *          ← { success: true, data: "https://res.cloudinary.com/..." }
  *
- * Approach đơn giản nhất (không cần Cloudinary ở tenant-service):
- *   Flutter tự upload ảnh lên Cloudinary bằng unsigned upload preset,
- *   lấy URL về, rồi PUT URL đó vào /api/tenant/profile/avatar.
+ * Flow 2 - Cập nhật via URL (Flutter tự upload lên Cloudinary):
+ *   Flutter → PUT /api/tenant/avatar?userId=X (JSON body với avatarUrl)
+ *          ← { success: true, data: "https://res.cloudinary.com/..." }
+ *
+ * Flutter sau đó lưu URL mới vào SharedPreferences và hiển thị lại avatar.
  */
 @Slf4j
 @RestController
@@ -29,6 +29,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class AvatarController {
 
     private final AvatarService avatarService;
+
+    /**
+     * Upload avatar mới cho user.
+     * File được upload lên Cloudinary, URL được lưu vào users.avatar_url.
+     */
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<String>> uploadAvatar(
+            @RequestParam Long userId,
+            @RequestParam("file") MultipartFile file) {
+
+        log.info("POST /api/tenant/avatar - userId: {}, fileName: {}, size: {} bytes",
+                userId, file.getOriginalFilename(), file.getSize());
+
+        String avatarUrl = avatarService.updateAvatar(userId, file);
+
+        log.info("POST /api/tenant/avatar - userId: {} cập nhật avatar thành công: {}", userId, avatarUrl);
+        return ResponseEntity.ok(ApiResponse.success(avatarUrl));
+    }
 
     /**
      * Cập nhật avatar qua URL (sau khi Flutter đã upload lên Cloudinary).
@@ -45,23 +63,13 @@ public class AvatarController {
     }
 
     /**
-     * Upload avatar trực tiếp (nếu tenant-service có Cloudinary bean).
+     * Xoá avatar — đặt lại về null (dùng ảnh mặc định trên Flutter).
      */
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<String>> uploadAvatar(
-            @RequestParam Long userId,
-            @RequestParam("file") MultipartFile file) {
-        log.info("POST /api/tenant/avatar - userId: {}, size: {} bytes",
-                userId, file.getSize());
-        String url = avatarService.uploadAvatar(userId, file);
-        log.info("POST /api/tenant/avatar - userId: {} upload thành công: {}", userId, url);
-        return ResponseEntity.ok(ApiResponse.success(url));
-    }
-
     @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> removeAvatar(@RequestParam Long userId) {
         log.info("DELETE /api/tenant/avatar - userId: {}", userId);
         avatarService.removeAvatar(userId);
+        log.info("DELETE /api/tenant/avatar - userId: {} xoá avatar thành công", userId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
