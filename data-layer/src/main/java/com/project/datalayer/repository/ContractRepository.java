@@ -13,13 +13,16 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
     List<Contract> findByRoom_Area_Host_UserId(Long hostId);
 
-    // FIX: Thêm method bị thiếu — được gọi trong TenantService, ChatbotService, MyContractService
     List<Contract> findByTenant_UserId(Long tenantId);
 
     Optional<Contract> findByRoom_RoomIdAndStatus(Long roomId, String status);
 
     List<Contract> findByStatusAndEndDateBefore(String status, LocalDate date);
 
-    // FIX: Thêm findByStatus để InvoiceScheduler có thể dùng nếu cần
+    /**
+     * FIX: Thêm method này — được dùng bởi InvoiceScheduler và ContractExpiryScheduler.
+     * Trước đây thiếu method này nên InvoiceScheduler phải dùng findAll().stream().filter()
+     * hoặc truyền null vào findByRoom_Area_Host_UserId().
+     */
     List<Contract> findByStatus(String status);
 }

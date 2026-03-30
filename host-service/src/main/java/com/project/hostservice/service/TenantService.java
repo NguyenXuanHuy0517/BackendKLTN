@@ -28,42 +28,29 @@ public class TenantService {
     /**
      * Lấy danh sách người thuê thuộc về một chủ trọ (hostId).
      *
-     * FIX: Trước đây dùng findByRole_RoleName("TENANT") → trả về TẤT CẢ tenant toàn hệ thống,
-     *      không phân biệt host nào quản lý.
+     * FIX: Trước đây dùng findByRole_RoleName("TENANT") → trả về TẤT CẢ tenant
+     *      toàn hệ thống, bỏ qua hostId hoàn toàn.
      *
-     *      Nay: Lấy tất cả hợp đồng của hostId → trích xuất tenant duy nhất từ danh sách đó.
-     *      Cách này chỉ trả về tenant đã/đang thuê phòng trong khu trọ của chủ trọ này.
+     *      Nay: Join qua contract → room → area → host để chỉ lấy tenant
+     *      đã hoặc đang thuê phòng trong khu trọ của hostId này.
      */
     public List<TenantResponseDTO> getTenantsByHost(Long hostId) {
-        // Lấy tất cả hợp đồng (mọi trạng thái) của host → trích xuất tenant unique
         return contractRepository.findByRoom_Area_Host_UserId(hostId).stream()
                 .map(contract -> contract.getTenant())
-                .distinct() // loại trùng nếu 1 tenant có nhiều hợp đồng
+                .distinct()
                 .map(user -> {
                     TenantResponseDTO dto = tenantMapper.toDTO(user);
 
-                    // Tìm hợp đồng ACTIVE hiện tại (nếu có)
-                    contractRepository.findByRoom_RoomIdAndStatus(
-                                    // Tìm hợp đồng active của tenant này trong khu trọ của host
-                                    user.getUserId(), "ACTIVE")
-                            .ifPresent(contract -> {
-                                dto.setCurrentRoomCode(contract.getRoom().getRoomCode());
-                                dto.setContractStatus(contract.getStatus());
+                    // Tìm hợp đồng ACTIVE của tenant này trong khu trọ của host
+                    contractRepository.findByTenant_UserId(user.getUserId()).stream()
+                            .filter(c -> "ACTIVE".equals(c.getStatus()))
+                            .filter(c -> c.getRoom().getArea().getHost()
+                                    .getUserId().equals(hostId))
+                            .findFirst()
+                            .ifPresent(c -> {
+                                dto.setCurrentRoomCode(c.getRoom().getRoomCode());
+                                dto.setContractStatus(c.getStatus());
                             });
-
-                    // Nếu cách trên không tìm được, tìm theo tenant_id
-                    if (dto.getCurrentRoomCode() == null) {
-                        contractRepository.findByTenant_UserId(user.getUserId()).stream()
-                                .filter(c -> "ACTIVE".equals(c.getStatus()))
-                                // Đảm bảo hợp đồng active này thuộc về host đang đăng nhập
-                                .filter(c -> c.getRoom().getArea().getHost()
-                                        .getUserId().equals(hostId))
-                                .findFirst()
-                                .ifPresent(c -> {
-                                    dto.setCurrentRoomCode(c.getRoom().getRoomCode());
-                                    dto.setContractStatus(c.getStatus());
-                                });
-                    }
 
                     return dto;
                 })
@@ -89,9 +76,11 @@ public class TenantService {
     }
 
     public TenantResponseDTO createTenant(TenantCreateDTO request) {
-        // Kiểm tra email đã tồn tại chưa
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email đã tồn tại: " + request.getEmail());
+        }
+        if (userRepository.findByPhoneNumber(request.getPhoneNumber()).isPresent()) {
+            throw new IllegalArgumentException("Số điện thoại đã tồn tại: " + request.getPhoneNumber());
         }
 
         Role role = roleRepository.findByRoleName("TENANT")

@@ -12,7 +12,9 @@ import com.project.hostservice.exception.ResourceNotFoundException;
 import com.project.hostservice.mapper.DepositMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,12 +32,21 @@ public class DepositService {
                 .toList();
     }
 
+    /**
+     * FIX: Thêm @Transactional — tạo deposit + cập nhật room.status phải atomic.
+     */
+    @Transactional
     public DepositResponseDTO createDeposit(DepositCreateDTO request) {
         User tenant = userRepository.findById(request.getTenantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người thuê: " + request.getTenantId()));
 
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + request.getRoomId()));
+
+        if (!"AVAILABLE".equals(room.getStatus())) {
+            throw new IllegalStateException(
+                    "Phòng " + room.getRoomCode() + " hiện không ở trạng thái AVAILABLE.");
+        }
 
         Deposit deposit = new Deposit();
         deposit.setTenant(tenant);
@@ -47,8 +58,8 @@ public class DepositService {
 
         room.setStatus("DEPOSITED");
         roomRepository.save(room);
-
         depositRepository.save(deposit);
+
         return depositMapper.toDTO(deposit);
     }
 
@@ -57,10 +68,14 @@ public class DepositService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt cọc: " + depositId));
         deposit.setStatus("CONFIRMED");
         deposit.setConfirmedBy(confirmedBy);
-        deposit.setConfirmedAt(java.time.LocalDateTime.now());
+        deposit.setConfirmedAt(LocalDateTime.now());
         depositRepository.save(deposit);
     }
 
+    /**
+     * FIX: Thêm @Transactional — hoàn cọc + cập nhật room.status phải atomic.
+     */
+    @Transactional
     public void refundDeposit(Long depositId) {
         Deposit deposit = depositRepository.findById(depositId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt cọc: " + depositId));
@@ -69,7 +84,6 @@ public class DepositService {
         Room room = deposit.getRoom();
         room.setStatus("AVAILABLE");
         roomRepository.save(room);
-
         depositRepository.save(deposit);
     }
 }

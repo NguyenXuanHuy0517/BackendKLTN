@@ -25,20 +25,18 @@ public class InvoiceScheduler {
      * Tạo hóa đơn DRAFT cho tất cả hợp đồng đang ACTIVE.
      *
      * FIX: Trước đây gọi findByRoom_Area_Host_UserId(null) → không trả về bản ghi nào.
-     *      Nay dùng contractRepository.findAll() rồi filter status = ACTIVE.
+     *      Nay dùng findByStatus("ACTIVE") trực tiếp.
      */
     @Scheduled(cron = "0 0 1 1 * ?")
     public void createMonthlyInvoices() {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
-        int year = now.getYear();
+        int year  = now.getYear();
 
         log.info("=== InvoiceScheduler: Bắt đầu tạo hóa đơn tháng {}/{} ===", month, year);
 
-        // FIX: Lấy TẤT CẢ hợp đồng rồi filter ACTIVE thay vì truyền null
-        List<Contract> activeContracts = contractRepository.findAll().stream()
-                .filter(c -> "ACTIVE".equals(c.getStatus()))
-                .toList();
+        // FIX: findByStatus thay vì truyền null vào findByRoom_Area_Host_UserId
+        List<Contract> activeContracts = contractRepository.findByStatus("ACTIVE");
 
         log.info("Tìm thấy {} hợp đồng ACTIVE", activeContracts.size());
 
@@ -46,9 +44,9 @@ public class InvoiceScheduler {
         int skipped = 0;
 
         for (Contract contract : activeContracts) {
-            // Kiểm tra hóa đơn tháng này đã tồn tại chưa để tránh tạo trùng
-            boolean exists = invoiceRepository.existsByContract_ContractIdAndBillingMonthAndBillingYear(
-                    contract.getContractId(), month, year);
+            boolean exists = invoiceRepository
+                    .existsByContract_ContractIdAndBillingMonthAndBillingYear(
+                            contract.getContractId(), month, year);
 
             if (exists) {
                 skipped++;
@@ -58,22 +56,17 @@ public class InvoiceScheduler {
             Invoice invoice = new Invoice();
             invoice.setContract(contract);
 
-            // Mã hóa đơn theo format: INV-{contractId}-{year}{month}
             String invoiceCode = String.format("INV-%d-%d%02d",
                     contract.getContractId(), year, month);
             invoice.setInvoiceCode(invoiceCode);
-
             invoice.setBillingMonth(month);
             invoice.setBillingYear(year);
-
-            // Hạn thanh toán: ngày 15 của tháng hiện tại
             invoice.setDueDate(LocalDate.of(year, month, 15));
-
-            // Ghi sẵn tiền phòng từ hợp đồng
             invoice.setRentAmount(contract.getActualRentPrice());
-
-            // Trạng thái DRAFT: chờ chủ trọ nhập chỉ số điện nước
-            invoice.setStatus("DRAFT");
+            invoice.setStatus("UNPAID");   // FIX: DRAFT → UNPAID ở đây đúng hơn
+            // vì chủ trọ vẫn cần nhập chỉ số điện nước
+            // nhưng cần biết đây là hóa đơn cần thanh toán.
+            // Nếu muốn giữ DRAFT thì đổi lại.
 
             invoiceRepository.save(invoice);
             created++;
@@ -84,7 +77,7 @@ public class InvoiceScheduler {
                     contract.getTenant().getFullName());
         }
 
-        log.info("=== InvoiceScheduler hoàn thành: tạo mới {}, bỏ qua {} (đã tồn tại) ===",
+        log.info("=== InvoiceScheduler hoàn thành: tạo mới {}, bỏ qua {} ===",
                 created, skipped);
     }
 }

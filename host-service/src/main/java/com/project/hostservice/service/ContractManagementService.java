@@ -9,6 +9,7 @@ import com.project.hostservice.exception.ResourceNotFoundException;
 import com.project.hostservice.mapper.ContractMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,12 +44,24 @@ public class ContractManagementService {
         );
     }
 
+    /**
+     * FIX: Thêm @Transactional — tạo contract, cập nhật deposit, cập nhật room
+     * phải là một atomic operation. Nếu bất kỳ bước nào thất bại, toàn bộ rollback.
+     */
+    @Transactional
     public ContractResponseDTO createContract(ContractCreateDTO request) {
         User tenant = userRepository.findById(request.getTenantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người thuê: " + request.getTenantId()));
 
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + request.getRoomId()));
+
+        // Validate phòng phải đang AVAILABLE hoặc DEPOSITED
+        if (!"AVAILABLE".equals(room.getStatus()) && !"DEPOSITED".equals(room.getStatus())) {
+            throw new IllegalStateException(
+                    "Phòng " + room.getRoomCode() + " hiện đang ở trạng thái " + room.getStatus()
+                            + " — không thể tạo hợp đồng.");
+        }
 
         Contract contract = new Contract();
         contract.setRoom(room);
@@ -60,7 +73,8 @@ public class ContractManagementService {
         contract.setWaterPriceOverride(request.getWaterPriceOverride());
         contract.setPenaltyTerms(request.getPenaltyTerms());
         contract.setStatus("ACTIVE");
-        contract.setContractCode("HD-" + System.currentTimeMillis());
+        // FIX: dùng format cố định để tránh trùng nếu nhiều hợp đồng tạo cùng millisecond
+        contract.setContractCode("HD-" + request.getRoomId() + "-" + System.currentTimeMillis());
 
         if (request.getDepositId() != null) {
             depositRepository.findById(request.getDepositId()).ifPresent(deposit -> {
@@ -87,6 +101,10 @@ public class ContractManagementService {
                 contractServiceRepository.findByContract_ContractId(contractId));
     }
 
+    /**
+     * FIX: Thêm @Transactional — chấm dứt contract + cập nhật room phải atomic.
+     */
+    @Transactional
     public void terminateContract(Long contractId, User terminatedBy) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));

@@ -1,16 +1,16 @@
-2026-03-27 13:30:47 [main] INFO  c.p.datalayer.DataLayerApplication - Starting DataLayerApplication using Java 17.0.16 with PID 21352 (C:\Users\AD\Desktop\KLTN\Project\Backend\data-layer\target\classes started by XUN HI in C:\Users\AD\Desktop\KLTN\Project\Backend)
-2026-03-27 13:30:47 [main] DEBUG c.p.datalayer.DataLayerApplication - Running with Spring Boot v4.0.4, Spring v7.0.6
-2026-03-27 13:30:47 [main] INFO  c.p.datalayer.DataLayerApplication - No active profile set, falling back to 1 default profile: "default"
-2026-03-27 13:30:48 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-27 13:30:48 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 127 ms. Found 15 JPA repository interfaces.
-2026-03-27 13:30:48 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-27 13:30:49 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
-2026-03-27 13:30:50 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-27 13:30:50 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-03-27 13:30:50 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.mariadb.jdbc.Connection@1796b2d4
-2026-03-27 13:30:50 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-03-27 13:30:50 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-27 13:30:50 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-03-30 10:08:23 [main] INFO  c.p.datalayer.DataLayerApplication - Starting DataLayerApplication using Java 17.0.16 with PID 20196 (C:\Users\AD\Desktop\KLTN\Project\Backend\data-layer\target\classes started by XUN HI in C:\Users\AD\Desktop\KLTN\Project\Backend)
+2026-03-30 10:08:23 [main] DEBUG c.p.datalayer.DataLayerApplication - Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-03-30 10:08:23 [main] INFO  c.p.datalayer.DataLayerApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-30 10:08:24 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-30 10:08:24 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 124 ms. Found 15 JPA repository interfaces.
+2026-03-30 10:08:24 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-03-30 10:08:24 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-03-30 10:08:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-30 10:08:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-30 10:08:25 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.mariadb.jdbc.Connection@62e73ab6
+2026-03-30 10:08:25 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-30 10:08:25 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-30 10:08:25 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [jdbc:mariadb://localhost/smartroomms?user=root]
 	Database driver: MariaDB Connector/J
 	Database dialect: MariaDBDialect
@@ -22,10 +22,10 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-03-27 13:30:53 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-27 13:30:53 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-27 13:30:53 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-27 13:30:54 [main] INFO  c.p.datalayer.DataLayerApplication - Started DataLayerApplication in 7.714 seconds (process running for 9.681)
-2026-03-27 13:30:54 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-27 13:30:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-03-27 13:30:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-30 10:08:27 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-30 10:08:27 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 10:08:28 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-30 10:08:28 [main] INFO  c.p.datalayer.DataLayerApplication - Started DataLayerApplication in 6.127 seconds (process running for 7.35)
+2026-03-30 10:08:28 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-30 10:08:28 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-30 10:08:28 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
