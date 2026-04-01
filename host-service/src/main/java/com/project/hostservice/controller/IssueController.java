@@ -20,10 +20,17 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getIssues(@RequestParam Long hostId) {
-        log.info("GET /api/host/issues - hostId: {}", hostId);
-        List<IssueResponseDTO> result = issueService.getIssuesByHost(hostId);
-        log.info("GET /api/host/issues - trả về {} khiếu nại", result.size());
+    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getIssues(@RequestParam Long hostId,
+                                                                          @RequestParam(required = false) String issueType) {
+        log.info("GET /api/host/issues - hostId: {}, issueType: {}", hostId, issueType);
+        List<IssueResponseDTO> result;
+        if (issueType != null && !issueType.isEmpty()) {
+            result = issueService.getIssuesByHostAndType(hostId, issueType);
+            log.info("GET /api/host/issues - trả về {} khiếu nại loại {}", result.size(), issueType);
+        } else {
+            result = issueService.getIssuesByHost(hostId);
+            log.info("GET /api/host/issues - trả về {} khiếu nại", result.size());
+        }
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 

@@ -20,6 +20,11 @@ public class IssueMapper {
         dto.setTenantFeedback(issue.getTenantFeedback());
         dto.setCreatedAt(issue.getCreatedAt());
         dto.setResolvedAt(issue.getResolvedAt());
+
+        // NEW - Issue type and service suggestion fields
+        dto.setIssueType(issue.getIssueType());
+        dto.setSuggestedServiceName(issue.getSuggestedServiceName());
+        dto.setSuggestionNote(issue.getSuggestionNote());
         return dto;
     }
 }

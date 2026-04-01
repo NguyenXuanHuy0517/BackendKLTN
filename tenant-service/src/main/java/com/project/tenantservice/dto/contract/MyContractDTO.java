@@ -1,5 +1,6 @@
 package com.project.tenantservice.dto.contract;
 
+import com.project.hostservice.dto.contract.ContractServiceDTO;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +19,11 @@ public class MyContractDTO {
     private BigDecimal elecPrice;
     private BigDecimal waterPrice;
     private String status;
+
+    // NEW - Full service details
+    private List<ContractServiceDTO> contractServices;
+
+    // Keep for backward compatibility
     private List<String> serviceNames;
     private long daysUntilExpiry;
 }

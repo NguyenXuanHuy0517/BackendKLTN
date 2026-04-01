@@ -55,6 +55,15 @@ public class MyIssueService {
                 ? request.getPriority() : "MEDIUM");
         issue.setStatus("OPEN");
 
+        // NEW - Set issue type and service suggestion fields
+        issue.setIssueType(request.getIssueType() != null
+                ? request.getIssueType() : "GENERAL");
+        if ("SERVICE_SUGGESTION".equals(request.getIssueType())) {
+            issue.setSuggestedServiceName(request.getSuggestedServiceName());
+            issue.setSuggestionNote(request.getSuggestionNote());
+            issue.setArea(room.getArea());
+        }
+
         issueRepository.save(issue);
         return issueMapper.toDTO(issue);
     }

@@ -1,10 +1,12 @@
 package com.project.adminservice.dto.dashboard;
 
+import com.project.adminservice.dto.common.AdminAlertDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +22,6 @@ public class AdminDashboardDTO {
     private BigDecimal thisMonthRevenue;
     private Long overdueInvoices;
     private Long activeContracts;
+    private List<AdminAlertDTO> alerts;  // NEW - Quick alerts for admin
 }
 

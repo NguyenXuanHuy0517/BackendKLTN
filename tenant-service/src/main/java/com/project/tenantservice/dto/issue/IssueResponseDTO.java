@@ -16,4 +16,9 @@ public class IssueResponseDTO {
     private String tenantFeedback;
     private LocalDateTime createdAt;
     private LocalDateTime resolvedAt;
+
+    // NEW - Issue type and service suggestion fields
+    private String issueType;
+    private String suggestedServiceName;
+    private String suggestionNote;
 }

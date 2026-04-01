@@ -23,11 +23,24 @@ public class Issue {
     @JoinColumn(name = "tenant_id", nullable = false)
     private User tenant;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id")
+    private MotelArea area;
+
+    @Column(name = "issue_type", nullable = false, length = 20)
+    private String issueType = "GENERAL";  // GENERAL, MAINTENANCE, SERVICE_SUGGESTION
+
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "suggested_service_name", length = 150)
+    private String suggestedServiceName;
+
+    @Column(name = "suggestion_note", columnDefinition = "TEXT")
+    private String suggestionNote;
 
     @Column(name = "images", columnDefinition = "JSON")
     private String images;

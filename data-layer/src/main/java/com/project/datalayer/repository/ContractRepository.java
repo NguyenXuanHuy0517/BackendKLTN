@@ -2,6 +2,8 @@ package com.project.datalayer.repository;
 
 import com.project.datalayer.entity.Contract;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,4 +27,12 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
      * hoặc truyền null vào findByRoom_Area_Host_UserId().
      */
     List<Contract> findByStatus(String status);
+
+    // NEW - Count active contracts by host
+    @Query("SELECT COUNT(c) FROM Contract c WHERE c.room.area.host.userId = :hostId AND c.status = :status")
+    Long countByRoom_Area_Host_UserIdAndStatus(@Param("hostId") Long hostId, @Param("status") String status);
+
+    // NEW - Count total active contracts
+    @Query("SELECT COUNT(c) FROM Contract c WHERE c.status = 'ACTIVE'")
+    Long countActiveContracts();
 }

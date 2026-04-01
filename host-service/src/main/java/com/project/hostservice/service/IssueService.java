@@ -25,6 +25,19 @@ public class IssueService {
                 .toList();
     }
 
+    // NEW - Get issues filtered by type
+    public List<IssueResponseDTO> getIssuesByHostAndType(Long hostId, String issueType) {
+        return issueRepository.findByRoom_Area_Host_UserId(hostId).stream()
+                .filter(issue -> issueType.equals(issue.getIssueType()))
+                .map(issueMapper::toDTO)
+                .toList();
+    }
+
+    // NEW - Get service suggestions only
+    public List<IssueResponseDTO> getServiceSuggestions(Long hostId) {
+        return getIssuesByHostAndType(hostId, "SERVICE_SUGGESTION");
+    }
+
     public IssueResponseDTO getIssueDetail(Long issueId) {
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khiếu nại: " + issueId));

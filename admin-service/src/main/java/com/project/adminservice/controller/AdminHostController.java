@@ -1,11 +1,14 @@
 package com.project.adminservice.controller;
 
 import com.project.datalayer.dto.common.ApiResponse;
+import com.project.adminservice.dto.host.AdminHostDetailDTO;
 import com.project.adminservice.dto.host.AdminHostResponseDTO;
+import com.project.adminservice.dto.host.AdminHostStatusUpdateRequest;
 import com.project.adminservice.service.AdminHostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +22,7 @@ public class AdminHostController {
     private final AdminHostService hostService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<AdminHostResponseDTO>>> getAllHosts() {
         log.info("GET /api/admin/hosts");
         List<AdminHostResponseDTO> hosts = hostService.getAllHosts();
@@ -27,18 +31,22 @@ public class AdminHostController {
     }
 
     @GetMapping("/{hostId}")
-    public ResponseEntity<ApiResponse<AdminHostResponseDTO>> getHostDetail(@PathVariable Long hostId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<AdminHostDetailDTO>> getHostDetail(@PathVariable Long hostId) {
         log.info("GET /api/admin/hosts/{}", hostId);
-        AdminHostResponseDTO host = hostService.getHostDetail(hostId);
+        AdminHostDetailDTO host = hostService.getHostDetail(hostId);
         log.info("GET /api/admin/hosts/{} - trả về chi tiết host", hostId);
         return ResponseEntity.ok(ApiResponse.success(host));
     }
 
-    @PatchMapping("/{hostId}/toggle")
-    public ResponseEntity<ApiResponse<Void>> toggleHostActive(@PathVariable Long hostId) {
-        log.info("PATCH /api/admin/hosts/{}/toggle", hostId);
-        hostService.toggleActive(hostId);
-        log.info("PATCH /api/admin/hosts/{}/toggle - thành công", hostId);
+    @PatchMapping("/{hostId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> updateHostStatus(
+            @PathVariable Long hostId,
+            @RequestBody AdminHostStatusUpdateRequest request) {
+        log.info("PATCH /api/admin/hosts/{}/status - active: {}, reason: {}", hostId, request.isActive(), request.getReason());
+        hostService.updateHostStatus(hostId, request);
+        log.info("PATCH /api/admin/hosts/{}/status - thành công", hostId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

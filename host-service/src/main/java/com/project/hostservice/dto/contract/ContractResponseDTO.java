@@ -18,5 +18,10 @@ public class ContractResponseDTO {
     private BigDecimal elecPriceOverride;
     private BigDecimal waterPriceOverride;
     private String status;
+
+    // NEW - Replace serviceNames with full service details
+    private List<ContractServiceDTO> contractServices;
+
+    // Keep for backward compatibility (optional - can remove later)
     private List<String> serviceNames;
 }

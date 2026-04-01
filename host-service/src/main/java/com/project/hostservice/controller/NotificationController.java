@@ -1,8 +1,10 @@
 package com.project.hostservice.controller;
 
 import com.project.datalayer.dto.common.ApiResponse;
+import com.project.hostservice.dto.notification.NotificationRequestDTO;
 import com.project.hostservice.dto.notification.NotificationResponseDTO;
 import com.project.hostservice.service.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,79 @@ public class NotificationController {
         notificationService.markAllAsRead(userId);
         log.info("PATCH /api/host/notifications/mark-all-read - đánh dấu tất cả đã đọc thành công");
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * Gửi thông báo đến một tenant cụ thể
+     */
+    @PostMapping("/send-to-tenant/{tenantId}")
+    public ResponseEntity<ApiResponse<Void>> sendToTenant(
+            @RequestParam Long hostId,
+            @PathVariable Long tenantId,
+            @Valid @RequestBody NotificationRequestDTO request) {
+        log.info("POST /api/host/notifications/send-to-tenant/{} - hostId: {}", tenantId, hostId);
+
+        notificationService.sendToTenant(
+                tenantId,
+                request.getType(),
+                request.getTitle(),
+                request.getBody(),
+                request.getRefType(),
+                request.getRefId()
+        );
+
+        log.info("POST /api/host/notifications/send-to-tenant/{} - gửi thành công", tenantId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Gửi thông báo đến tenant thành công"));
+    }
+
+    /**
+     * Gửi thông báo đến tất cả tenants của một host
+     */
+    @PostMapping("/send-to-all")
+    public ResponseEntity<ApiResponse<Void>> sendToAllTenants(
+            @RequestParam Long hostId,
+            @Valid @RequestBody NotificationRequestDTO request) {
+        log.info("POST /api/host/notifications/send-to-all - hostId: {}", hostId);
+
+        notificationService.sendToAllTenantsByHost(
+                hostId,
+                request.getType(),
+                request.getTitle(),
+                request.getBody(),
+                request.getRefType(),
+                request.getRefId()
+        );
+
+        log.info("POST /api/host/notifications/send-to-all - gửi thành công");
+        return ResponseEntity.ok(ApiResponse.success(null, "Gửi thông báo đến tất cả tenants thành công"));
+    }
+
+    /**
+     * Gửi thông báo đến tenant cụ thể hoặc tất cả tenants (nếu tenantId null)
+     */
+    @PostMapping("/send")
+    public ResponseEntity<ApiResponse<Void>> sendNotification(
+            @RequestParam Long hostId,
+            @Valid @RequestBody NotificationRequestDTO request) {
+        log.info("POST /api/host/notifications/send - hostId: {}, tenantId: {}, type: {}",
+                 hostId, request.getTenantId(), request.getType());
+
+        notificationService.sendNotification(
+                hostId,
+                request.getTenantId(),
+                request.getType(),
+                request.getTitle(),
+                request.getBody(),
+                request.getRefType(),
+                request.getRefId()
+        );
+
+        String message = request.getTenantId() != null
+                ? "Gửi thông báo đến tenant thành công"
+                : "Gửi thông báo đến tất cả tenants thành công";
+
+        log.info("POST /api/host/notifications/send - {}", message);
+        return ResponseEntity.ok(ApiResponse.success(null, message));
     }
 }
 

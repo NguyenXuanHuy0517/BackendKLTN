@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByPhoneNumber(String phoneNumber);
     List<User> findByRole_RoleName(String roleName);
+
+    // NEW - Find users by role and active status
+    List<User> findByRole_RoleNameAndIsActiveFalse(String roleName);
 }
