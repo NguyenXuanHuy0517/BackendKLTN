@@ -35,6 +35,10 @@ public class MyInvoiceDetailDTO {
     private BigDecimal totalAmount;
 
     private String status;
+    private String paymentProofUrl;
+    private LocalDateTime paymentSubmittedAt;
+    private String paymentNote;
+    private String paymentStatus;
     private LocalDateTime createdAt;
     private LocalDateTime paidAt;
 }

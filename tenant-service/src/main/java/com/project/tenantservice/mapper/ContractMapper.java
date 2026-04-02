@@ -2,7 +2,7 @@ package com.project.tenantservice.mapper;
 
 import com.project.datalayer.entity.Contract;
 import com.project.datalayer.entity.ContractService;
-import com.project.hostservice.dto.contract.ContractServiceDTO;
+import com.project.tenantservice.dto.contract.ContractServiceDTO;
 import com.project.tenantservice.dto.contract.MyContractDTO;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +30,11 @@ public MyContractDTO toDTO(Contract contract, List<ContractService> services) {
         dto.setEndDate(contract.getEndDate());
         dto.setActualRentPrice(contract.getActualRentPrice());
         dto.setStatus(contract.getStatus());
+        if (contract.getDeposit() != null) {
+            dto.setDepositAmount(contract.getDeposit().getAmount());
+            dto.setDepositStatus(contract.getDeposit().getStatus());
+            dto.setDepositDate(contract.getDeposit().getDepositDate());
+        }
 
         
         dto.setElecPrice(contract.getElecPriceOverride() != null

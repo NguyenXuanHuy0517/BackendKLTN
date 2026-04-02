@@ -1,21 +1,22 @@
 package com.project.hostservice.controller;
 
 import com.project.datalayer.dto.common.ApiResponse;
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.hostservice.dto.issue.IssueResponseDTO;
 import com.project.hostservice.dto.issue.IssueStatusUpdateDTO;
 import com.project.hostservice.service.IssueService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Vai trò: REST controller của module host-service.
- * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ issue và điều phối xử lý sang tầng bên dưới.
- */
-@Slf4j
 @RestController
 @RequestMapping("/api/host/issues")
 @RequiredArgsConstructor
@@ -23,47 +24,40 @@ public class IssueController {
 
     private final IssueService issueService;
 
-        /**
-     * Chức năng: Lấy dữ liệu issues.
-     * URL: GET /api/host/issues
-     */
-@GetMapping
-    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getIssues(@RequestParam Long hostId,
-                                                                          @RequestParam(required = false) String issueType) {
-        log.info("GET /api/host/issues - hostId: {}, issueType: {}", hostId, issueType);
-        List<IssueResponseDTO> result;
-        if (issueType != null && !issueType.isEmpty()) {
-            result = issueService.getIssuesByHostAndType(hostId, issueType);
-            log.info("GET /api/host/issues - trả về {} khiếu nại loại {}", result.size(), issueType);
-        } else {
-            result = issueService.getIssuesByHost(hostId);
-            log.info("GET /api/host/issues - trả về {} khiếu nại", result.size());
-        }
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getIssues(
+            @RequestParam Long hostId,
+            @RequestParam(required = false) String issueType) {
+        List<IssueResponseDTO> result = issueType != null && !issueType.isBlank()
+                ? issueService.getIssuesByHostAndType(hostId, issueType)
+                : issueService.getIssuesByHost(hostId);
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu issue detail.
-     * URL: GET /api/host/issues/{issueId}
-     */
-@GetMapping("/{issueId}")
+    @GetMapping("/paged")
+    public ResponseEntity<ApiResponse<PagedResponse<IssueResponseDTO>>> getIssuesPaged(
+            @RequestParam Long hostId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String issueType,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(
+                issueService.getIssuesPage(hostId, status, issueType, search, page, size, sort)
+        ));
+    }
+
+    @GetMapping("/{issueId}")
     public ResponseEntity<ApiResponse<IssueResponseDTO>> getIssueDetail(@PathVariable Long issueId) {
-        log.info("GET /api/host/issues/{}", issueId);
-        IssueResponseDTO result = issueService.getIssueDetail(issueId);
-        log.info("GET /api/host/issues/{} - title: {}", issueId, result.getTitle());
-        return ResponseEntity.ok(ApiResponse.success(result));
+        return ResponseEntity.ok(ApiResponse.success(issueService.getIssueDetail(issueId)));
     }
 
-        /**
-     * Chức năng: Cập nhật status.
-     * URL: PATCH /api/host/issues/{issueId}/status
-     */
-@PatchMapping("/{issueId}/status")
-    public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable Long issueId,
-                                                          @RequestBody IssueStatusUpdateDTO request) {
-        log.info("PATCH /api/host/issues/{}/status - status: {}", issueId, request.getStatus());
+    @PatchMapping("/{issueId}/status")
+    public ResponseEntity<ApiResponse<Void>> updateStatus(
+            @PathVariable Long issueId,
+            @RequestBody IssueStatusUpdateDTO request) {
         issueService.updateStatus(issueId, request);
-        log.info("PATCH /api/host/issues/{}/status - cập nhật thành công", issueId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

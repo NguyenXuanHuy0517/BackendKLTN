@@ -1,5 +1,6 @@
 package com.project.tenantservice.service;
 
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.datalayer.entity.Issue;
 import com.project.datalayer.entity.Room;
 import com.project.datalayer.entity.User;
@@ -12,48 +13,63 @@ import com.project.tenantservice.dto.issue.IssueResponseDTO;
 import com.project.tenantservice.exception.ResourceNotFoundException;
 import com.project.tenantservice.mapper.IssueMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
- * Chức năng: Chứa logic xử lý liên quan đến my issue.
- */
 @Service
 @RequiredArgsConstructor
 public class MyIssueService {
+
+    private static final Set<String> ISSUE_SORT_FIELDS = Set.of(
+            "createdAt", "updatedAt", "priority", "status"
+    );
 
     private final IssueRepository issueRepository;
     private final ContractRepository contractRepository;
     private final UserRepository userRepository;
     private final IssueMapper issueMapper;
 
-        /**
-     * Chức năng: Lấy dữ liệu my issues.
-     */
-public List<IssueResponseDTO> getMyIssues(Long tenantId) {
+    public List<IssueResponseDTO> getMyIssues(Long tenantId) {
         return issueRepository.findByTenant_UserId(tenantId).stream()
                 .map(issueMapper::toDTO)
                 .toList();
     }
 
-        /**
-     * Chức năng: Tạo issue.
-     */
-public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
+    public PagedResponse<IssueResponseDTO> getMyIssuesPage(
+            Long tenantId,
+            String status,
+            String search,
+            int page,
+            int size,
+            String sort
+    ) {
+        Page<Issue> issuePage = issueRepository.findPageWithRelationsByTenantId(
+                tenantId,
+                normalize(status),
+                normalize(search),
+                PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), 100), buildSort(sort))
+        );
+        List<IssueResponseDTO> items = issuePage.getContent().stream()
+                .map(issueMapper::toDTO)
+                .toList();
+        return PagedResponse.from(issuePage, items);
+    }
+
+    public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
         User tenant = userRepository.findById(tenantId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy người dùng: " + tenantId));
+                        "Khong tim thay nguoi dung: " + tenantId));
 
-        
-        Room room = contractRepository.findByTenant_UserId(tenantId).stream()
-                .filter(c -> c.getStatus().equals("ACTIVE"))
-                .findFirst()
-                .map(c -> c.getRoom())
+        Room room = contractRepository.findFirstByTenant_UserIdAndStatusOrderByStartDateDesc(tenantId, "ACTIVE")
+                .map(contract -> contract.getRoom())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Bạn không có hợp đồng đang hiệu lực"));
+                        "Ban khong co hop dong dang hieu luc"));
 
         Issue issue = new Issue();
         issue.setTenant(tenant);
@@ -61,13 +77,10 @@ public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
         issue.setTitle(request.getTitle());
         issue.setDescription(request.getDescription());
         issue.setImages(request.getImages());
-        issue.setPriority(request.getPriority() != null
-                ? request.getPriority() : "MEDIUM");
+        issue.setPriority(request.getPriority() != null ? request.getPriority() : "MEDIUM");
         issue.setStatus("OPEN");
+        issue.setIssueType(request.getIssueType() != null ? request.getIssueType() : "GENERAL");
 
-        
-        issue.setIssueType(request.getIssueType() != null
-                ? request.getIssueType() : "GENERAL");
         if ("SERVICE_SUGGESTION".equals(request.getIssueType())) {
             issue.setSuggestedServiceName(request.getSuggestedServiceName());
             issue.setSuggestionNote(request.getSuggestionNote());
@@ -78,23 +91,29 @@ public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
         return issueMapper.toDTO(issue);
     }
 
-        /**
-     * Chức năng: Thực hiện nghiệp vụ rate issue.
-     */
-public IssueResponseDTO rateIssue(Long issueId, Long tenantId,
-                                      IssueRatingDTO request) {
+    public IssueResponseDTO getIssueDetail(Long issueId, Long tenantId) {
         Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy khiếu nại: " + issueId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay khieu nai: " + issueId));
 
         if (!issue.getTenant().getUserId().equals(tenantId)) {
-            throw new ResourceNotFoundException(
-                    "Không tìm thấy khiếu nại: " + issueId);
+            throw new ResourceNotFoundException("Khong tim thay khieu nai: " + issueId);
         }
 
-        if (!issue.getStatus().equals("RESOLVED")) {
+        return issueMapper.toDTO(issue);
+    }
+
+    public IssueResponseDTO rateIssue(Long issueId, Long tenantId, IssueRatingDTO request) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Khong tim thay khieu nai: " + issueId));
+
+        if (!issue.getTenant().getUserId().equals(tenantId)) {
+            throw new ResourceNotFoundException("Khong tim thay khieu nai: " + issueId);
+        }
+
+        if (!"RESOLVED".equals(issue.getStatus())) {
             throw new IllegalStateException(
-                    "Chỉ có thể đánh giá khiếu nại đã được giải quyết");
+                    "Chi co the danh gia khieu nai da duoc giai quyet");
         }
 
         issue.setRating(request.getRating());
@@ -104,5 +123,23 @@ public IssueResponseDTO rateIssue(Long issueId, Long tenantId,
 
         issueRepository.save(issue);
         return issueMapper.toDTO(issue);
+    }
+
+    private Sort buildSort(String sort) {
+        String[] sortParts = (sort == null ? "" : sort).split(",", 2);
+        String requestedField = sortParts.length > 0 ? sortParts[0].trim() : "";
+        String field = ISSUE_SORT_FIELDS.contains(requestedField) ? requestedField : "createdAt";
+        Sort.Direction direction = sortParts.length > 1 && "asc".equalsIgnoreCase(sortParts[1].trim())
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+        return Sort.by(direction, field);
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }

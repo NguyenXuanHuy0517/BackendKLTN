@@ -18,5 +18,8 @@ public class InvoiceResponseDTO {
     private int billingYear;
     private BigDecimal totalAmount;
     private String status;
+    private String paymentProofUrl;
+    private LocalDateTime paymentSubmittedAt;
+    private String paymentStatus;
     private LocalDateTime createdAt;
 }

@@ -1,9 +1,9 @@
 package com.project.tenantservice.dto.contract;
 
-import com.project.hostservice.dto.contract.ContractServiceDTO;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,6 +23,9 @@ public class MyContractDTO {
     private BigDecimal elecPrice;
     private BigDecimal waterPrice;
     private String status;
+    private BigDecimal depositAmount;
+    private String depositStatus;
+    private LocalDateTime depositDate;
 
     
     private List<ContractServiceDTO> contractServices;

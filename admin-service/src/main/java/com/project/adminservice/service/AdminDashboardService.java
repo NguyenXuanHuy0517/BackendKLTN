@@ -2,7 +2,10 @@ package com.project.adminservice.service;
 
 import com.project.adminservice.dto.common.AdminAlertDTO;
 import com.project.adminservice.dto.dashboard.AdminDashboardDTO;
-import com.project.datalayer.repository.*;
+import com.project.datalayer.repository.ContractRepository;
+import com.project.datalayer.repository.InvoiceRepository;
+import com.project.datalayer.repository.RoomRepository;
+import com.project.datalayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,118 +14,81 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module admin-service.
- * Chức năng: Chứa logic xử lý liên quan đến admin dashboard.
- */
 @Service
 @RequiredArgsConstructor
 public class AdminDashboardService {
 
     private final UserRepository userRepository;
-    private final MotelAreaRepository areaRepository;
     private final RoomRepository roomRepository;
     private final ContractRepository contractRepository;
     private final InvoiceRepository invoiceRepository;
 
-        /**
-     * Chức năng: Lấy dữ liệu dashboard.
-     */
-public AdminDashboardDTO getDashboard() {
+    public AdminDashboardDTO getDashboard() {
         AdminDashboardDTO dashboard = new AdminDashboardDTO();
-        
-        
         dashboard.setTotalUsers(userRepository.count());
-        dashboard.setTotalHosts((long) userRepository.findByRole_RoleName("HOST").size());
-        dashboard.setTotalTenants((long) userRepository.findByRole_RoleName("TENANT").size());
+        dashboard.setTotalHosts(userRepository.countByRole_RoleName("HOST"));
+        dashboard.setTotalTenants(userRepository.countByRole_RoleName("TENANT"));
         dashboard.setTotalRooms(roomRepository.countTotalRooms());
         dashboard.setTotalContracts(contractRepository.count());
-        
-        
+
         Long rentedRooms = roomRepository.countRentedRooms();
         Long totalRooms = dashboard.getTotalRooms();
         long occupancyRate = (totalRooms > 0) ? (rentedRooms * 100) / totalRooms : 0;
         dashboard.setOccupancyRate(occupancyRate);
-        
-        
+
         BigDecimal totalRevenue = invoiceRepository.sumRevenueAllTime();
         dashboard.setTotalRevenue(totalRevenue != null ? totalRevenue : BigDecimal.ZERO);
 
-        
         YearMonth now = YearMonth.now();
         BigDecimal thisMonthRevenue = invoiceRepository.sumRevenueByPeriod(now.getMonthValue(), now.getYear());
         dashboard.setThisMonthRevenue(thisMonthRevenue != null ? thisMonthRevenue : BigDecimal.ZERO);
 
-        
         Long overdueInvoices = invoiceRepository.countOverdueInvoices();
         dashboard.setOverdueInvoices(overdueInvoices != null ? overdueInvoices : 0L);
 
-        
         Long activeContracts = contractRepository.countActiveContracts();
         dashboard.setActiveContracts(activeContracts != null ? activeContracts : 0L);
 
-        
-        List<AdminAlertDTO> alerts = buildAlerts(overdueInvoices, activeContracts);
-        dashboard.setAlerts(alerts);
-
+        dashboard.setAlerts(buildAlerts(
+                overdueInvoices != null ? overdueInvoices : 0L,
+                now.getMonthValue(),
+                now.getYear()
+        ));
         return dashboard;
     }
 
-        /**
-     * Chức năng: Khởi tạo alerts.
-     */
-private List<AdminAlertDTO> buildAlerts(Long overdueInvoices, Long activeContracts) {
+    private List<AdminAlertDTO> buildAlerts(Long overdueInvoices, int month, int year) {
         List<AdminAlertDTO> alerts = new ArrayList<>();
 
-        
-        if (overdueInvoices != null && overdueInvoices > 0) {
-            AdminAlertDTO alert = new AdminAlertDTO(
+        if (overdueInvoices > 0) {
+            alerts.add(new AdminAlertDTO(
                     "OVERDUE_INVOICE",
-                    "Có " + overdueInvoices + " hóa đơn quá hạn cần xử lý",
+                    "Co " + overdueInvoices + " hoa don qua han can xu ly",
                     Math.toIntExact(overdueInvoices),
                     "ERROR"
-            );
-            alerts.add(alert);
+            ));
         }
 
-        
-        YearMonth now = YearMonth.now();
-        long roomsWithoutInvoice = countRoomsWithoutInvoiceGlobally(now.getMonthValue(), now.getYear());
+        long roomsWithoutInvoice = contractRepository.countRoomsWithoutInvoice(month, year);
         if (roomsWithoutInvoice > 0) {
-            AdminAlertDTO alert = new AdminAlertDTO(
+            alerts.add(new AdminAlertDTO(
                     "MISSING_INVOICE",
-                    "Có " + roomsWithoutInvoice + " phòng chưa có hóa đơn kỳ này",
+                    "Co " + roomsWithoutInvoice + " phong chua co hoa don ky nay",
                     Math.toIntExact(roomsWithoutInvoice),
                     "WARNING"
-            );
-            alerts.add(alert);
+            ));
         }
 
-        
-        long blockedHosts = userRepository.findByRole_RoleNameAndIsActiveFalse("HOST").size();
+        long blockedHosts = userRepository.countByRole_RoleNameAndIsActiveFalse("HOST");
         if (blockedHosts > 0) {
-            AdminAlertDTO alert = new AdminAlertDTO(
+            alerts.add(new AdminAlertDTO(
                     "HOST_BLOCKED",
-                    "Có " + blockedHosts + " host đang bị khóa",
+                    "Co " + blockedHosts + " host dang bi khoa",
                     Math.toIntExact(blockedHosts),
                     "INFO"
-            );
-            alerts.add(alert);
+            ));
         }
 
         return alerts;
-    }
-
-        /**
-     * Chức năng: Thực hiện nghiệp vụ count rooms without invoice globally.
-     */
-private long countRoomsWithoutInvoiceGlobally(int month, int year) {
-        
-        return contractRepository.findByStatus("ACTIVE").stream()
-                .filter(contract -> !invoiceRepository.existsByContract_ContractIdAndBillingMonthAndBillingYear(
-                        contract.getContractId(), month, year))
-                .map(contract -> contract.getRoom().getRoomId())
-                .distinct()
-                .count();
     }
 }

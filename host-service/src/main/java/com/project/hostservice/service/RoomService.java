@@ -1,25 +1,41 @@
 package com.project.hostservice.service;
 
+import com.project.datalayer.dto.common.PagedResponse;
+import com.project.datalayer.entity.Contract;
 import com.project.datalayer.entity.MotelArea;
 import com.project.datalayer.entity.Room;
 import com.project.datalayer.entity.RoomStatusHistory;
 import com.project.datalayer.entity.User;
-import com.project.datalayer.repository.*;
-import com.project.hostservice.dto.room.*;
+import com.project.datalayer.repository.ContractRepository;
+import com.project.datalayer.repository.MotelAreaRepository;
+import com.project.datalayer.repository.RoomRepository;
+import com.project.datalayer.repository.RoomStatusHistoryRepository;
+import com.project.hostservice.dto.room.RoomCreateDTO;
+import com.project.hostservice.dto.room.RoomResponseDTO;
+import com.project.hostservice.dto.room.RoomStatusUpdateDTO;
+import com.project.hostservice.dto.room.RoomUpdateDTO;
 import com.project.hostservice.exception.ResourceNotFoundException;
 import com.project.hostservice.mapper.RoomMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module host-service.
- * Chức năng: Chứa logic xử lý liên quan đến room.
- */
 @Service
 @RequiredArgsConstructor
 public class RoomService {
+
+    private static final Set<String> ROOM_SORT_FIELDS = Set.of(
+            "roomCode", "basePrice", "status", "createdAt", "updatedAt"
+    );
 
     private final RoomRepository roomRepository;
     private final MotelAreaRepository areaRepository;
@@ -27,46 +43,76 @@ public class RoomService {
     private final ContractRepository contractRepository;
     private final RoomMapper roomMapper;
 
-        /**
-     * Chức năng: Lấy dữ liệu rooms by host.
-     */
-public List<RoomResponseDTO> getRoomsByHost(Long hostId) {
-        return roomRepository.findByArea_Host_UserId(hostId).stream()
-                .map(room -> {
-                    RoomResponseDTO dto = roomMapper.toDTO(room);
-                    contractRepository.findByRoom_RoomIdAndStatus(room.getRoomId(), "ACTIVE")
-                            .ifPresent(contract -> {
-                                dto.setCurrentTenantName(contract.getTenant().getFullName());
-                                dto.setCurrentContractId(contract.getContractId());
-                            });
-                    return dto;
-                })
+    public List<RoomResponseDTO> getRoomsByHost(Long hostId) {
+        List<Room> rooms = roomRepository.findWithAreaAndHostByHostId(hostId);
+        Map<Long, Contract> activeContractsByRoomId = contractRepository
+                .findWithRelationsByHostIdAndStatus(hostId, "ACTIVE").stream()
+                .collect(Collectors.toMap(
+                        contract -> contract.getRoom().getRoomId(),
+                        Function.identity(),
+                        (first, second) -> first
+                ));
+
+        return rooms.stream()
+                .map(room -> enrichRoom(room, activeContractsByRoomId.get(room.getRoomId())))
                 .toList();
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu rooms by area.
-     */
-public List<RoomResponseDTO> getRoomsByArea(Long areaId) {
-        return roomRepository.findByArea_AreaId(areaId).stream()
-                .map(room -> {
-                    RoomResponseDTO dto = roomMapper.toDTO(room);
-                    contractRepository.findByRoom_RoomIdAndStatus(room.getRoomId(), "ACTIVE")
-                            .ifPresent(contract -> {
-                                dto.setCurrentTenantName(contract.getTenant().getFullName());
-                                dto.setCurrentContractId(contract.getContractId());
-                            });
-                    return dto;
-                })
+    public PagedResponse<RoomResponseDTO> getRoomsPage(
+            Long hostId,
+            Long areaId,
+            String status,
+            String search,
+            int page,
+            int size,
+            String sort
+    ) {
+        Page<Room> roomPage = roomRepository.findPageWithAreaAndHostByHostId(
+                hostId,
+                areaId,
+                normalize(status),
+                normalize(search),
+                buildPageable(page, size, sort)
+        );
+
+        List<Long> roomIds = roomPage.getContent().stream()
+                .map(Room::getRoomId)
+                .toList();
+
+        Map<Long, Contract> activeContractsByRoomId = roomIds.isEmpty()
+                ? Map.of()
+                : contractRepository.findWithRelationsByRoomIdsAndStatus(roomIds, "ACTIVE").stream()
+                .collect(Collectors.toMap(
+                        contract -> contract.getRoom().getRoomId(),
+                        Function.identity(),
+                        (first, second) -> first
+                ));
+
+        List<RoomResponseDTO> items = roomPage.getContent().stream()
+                .map(room -> enrichRoom(room, activeContractsByRoomId.get(room.getRoomId())))
+                .toList();
+
+        return PagedResponse.from(roomPage, items);
+    }
+
+    public List<RoomResponseDTO> getRoomsByArea(Long areaId) {
+        List<Room> rooms = roomRepository.findWithAreaAndHostByAreaId(areaId);
+        Map<Long, Contract> activeContractsByRoomId = contractRepository
+                .findWithRelationsByAreaIdAndStatus(areaId, "ACTIVE").stream()
+                .collect(Collectors.toMap(
+                        contract -> contract.getRoom().getRoomId(),
+                        Function.identity(),
+                        (first, second) -> first
+                ));
+
+        return rooms.stream()
+                .map(room -> enrichRoom(room, activeContractsByRoomId.get(room.getRoomId())))
                 .toList();
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu room detail.
-     */
-public RoomResponseDTO getRoomDetail(Long roomId) {
+    public RoomResponseDTO getRoomDetail(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay phong: " + roomId));
         RoomResponseDTO dto = roomMapper.toDTO(room);
         contractRepository.findByRoom_RoomIdAndStatus(roomId, "ACTIVE")
                 .ifPresent(contract -> {
@@ -76,12 +122,9 @@ public RoomResponseDTO getRoomDetail(Long roomId) {
         return dto;
     }
 
-        /**
-     * Chức năng: Tạo room.
-     */
-public RoomResponseDTO createRoom(RoomCreateDTO request) {
+    public RoomResponseDTO createRoom(RoomCreateDTO request) {
         MotelArea area = areaRepository.findById(request.getAreaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khu trọ: " + request.getAreaId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay khu tro: " + request.getAreaId()));
 
         Room room = new Room();
         room.setArea(area);
@@ -100,12 +143,9 @@ public RoomResponseDTO createRoom(RoomCreateDTO request) {
         return roomMapper.toDTO(room);
     }
 
-        /**
-     * Chức năng: Cập nhật room.
-     */
-public RoomResponseDTO updateRoom(Long roomId, RoomUpdateDTO request) {
+    public RoomResponseDTO updateRoom(Long roomId, RoomUpdateDTO request) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay phong: " + roomId));
 
         room.setBasePrice(request.getBasePrice());
         room.setElecPrice(request.getElecPrice());
@@ -119,12 +159,9 @@ public RoomResponseDTO updateRoom(Long roomId, RoomUpdateDTO request) {
         return roomMapper.toDTO(room);
     }
 
-        /**
-     * Chức năng: Cập nhật status.
-     */
-public void updateStatus(Long roomId, RoomStatusUpdateDTO request, User changedBy) {
+    public void updateStatus(Long roomId, RoomStatusUpdateDTO request, User changedBy) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay phong: " + roomId));
 
         String oldStatus = room.getStatus();
         room.setStatus(request.getStatus());
@@ -139,10 +176,34 @@ public void updateStatus(Long roomId, RoomStatusUpdateDTO request, User changedB
         statusHistoryRepository.save(history);
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu status history.
-     */
-public List<RoomStatusHistory> getStatusHistory(Long roomId) {
+    public List<RoomStatusHistory> getStatusHistory(Long roomId) {
         return statusHistoryRepository.findByRoom_RoomIdOrderByChangedAtDesc(roomId);
+    }
+
+    private RoomResponseDTO enrichRoom(Room room, Contract activeContract) {
+        RoomResponseDTO dto = roomMapper.toDTO(room);
+        if (activeContract != null) {
+            dto.setCurrentTenantName(activeContract.getTenant().getFullName());
+            dto.setCurrentContractId(activeContract.getContractId());
+        }
+        return dto;
+    }
+
+    private Pageable buildPageable(int page, int size, String sort) {
+        String[] sortParts = (sort == null ? "" : sort).split(",", 2);
+        String requestedField = sortParts.length > 0 ? sortParts[0].trim() : "";
+        String field = ROOM_SORT_FIELDS.contains(requestedField) ? requestedField : "roomCode";
+        Sort.Direction direction = sortParts.length > 1 && "desc".equalsIgnoreCase(sortParts[1].trim())
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        return PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), 100), Sort.by(direction, field));
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }

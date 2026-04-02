@@ -1,22 +1,24 @@
 package com.project.tenantservice.controller;
 
 import com.project.datalayer.dto.common.ApiResponse;
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.tenantservice.dto.issue.IssueCreateDTO;
 import com.project.tenantservice.dto.issue.IssueRatingDTO;
 import com.project.tenantservice.dto.issue.IssueResponseDTO;
 import com.project.tenantservice.service.MyIssueService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Vai trò: REST controller của module tenant-service.
- * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ my issue và điều phối xử lý sang tầng bên dưới.
- */
-@Slf4j
 @RestController
 @RequestMapping("/api/tenant/issues")
 @RequiredArgsConstructor
@@ -24,45 +26,43 @@ public class MyIssueController {
 
     private final MyIssueService issueService;
 
-        /**
-     * Chức năng: Lấy dữ liệu my issues.
-     * URL: GET /api/tenant/issues
-     */
-@GetMapping
-    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getMyIssues(
-            @RequestParam Long userId) {
-        log.info("GET /api/tenant/issues - userId: {}", userId);
-        return ResponseEntity.ok(
-                ApiResponse.success(issueService.getMyIssues(userId)));
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getMyIssues(@RequestParam Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(issueService.getMyIssues(userId)));
     }
 
-        /**
-     * Chức năng: Tạo issue.
-     * URL: POST /api/tenant/issues
-     */
-@PostMapping
+    @GetMapping("/paged")
+    public ResponseEntity<ApiResponse<PagedResponse<IssueResponseDTO>>> getMyIssuesPaged(
+            @RequestParam Long userId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(
+                issueService.getMyIssuesPage(userId, status, search, page, size, sort)
+        ));
+    }
+
+    @GetMapping("/{issueId}")
+    public ResponseEntity<ApiResponse<IssueResponseDTO>> getIssueDetail(
+            @PathVariable Long issueId,
+            @RequestParam Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(issueService.getIssueDetail(issueId, userId)));
+    }
+
+    @PostMapping
     public ResponseEntity<ApiResponse<IssueResponseDTO>> createIssue(
             @RequestParam Long userId,
             @RequestBody IssueCreateDTO request) {
-        log.info("POST /api/tenant/issues - userId: {}, title: {}",
-                userId, request.getTitle());
-        return ResponseEntity.ok(
-                ApiResponse.success(issueService.createIssue(userId, request)));
+        return ResponseEntity.ok(ApiResponse.success(issueService.createIssue(userId, request)));
     }
 
-        /**
-     * Chức năng: Thực hiện nghiệp vụ rate issue.
-     * URL: PATCH /api/tenant/issues/{issueId}/rating
-     */
-@PatchMapping("/{issueId}/rating")
+    @PatchMapping("/{issueId}/rating")
     public ResponseEntity<ApiResponse<IssueResponseDTO>> rateIssue(
             @PathVariable Long issueId,
             @RequestParam Long userId,
             @RequestBody IssueRatingDTO request) {
-        log.info("PATCH /api/tenant/issues/{}/rating - userId: {}",
-                issueId, userId);
-        return ResponseEntity.ok(
-                ApiResponse.success(
-                        issueService.rateIssue(issueId, userId, request)));
+        return ResponseEntity.ok(ApiResponse.success(issueService.rateIssue(issueId, userId, request)));
     }
 }

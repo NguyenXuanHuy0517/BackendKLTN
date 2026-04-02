@@ -11,12 +11,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Vai trò: Scheduler của module host-service.
- * Chức năng: Thực thi các tác vụ nền liên quan đến invoice theo lịch.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -25,63 +24,48 @@ public class InvoiceScheduler {
     private final ContractRepository contractRepository;
     private final InvoiceRepository invoiceRepository;
 
-    
-
-        /**
-     * Chức năng: Tạo monthly invoices.
-     */
-@Scheduled(cron = "0 0 1 1 * ?")
+    @Scheduled(cron = "0 0 1 1 * ?")
     @Transactional
     public void createMonthlyInvoices() {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
-        int year  = now.getYear();
+        int year = now.getYear();
 
-        log.info("=== InvoiceScheduler: Bắt đầu tạo hóa đơn tháng {}/{} ===", month, year);
+        log.info("=== InvoiceScheduler: Bat dau tao hoa don thang {}/{} ===", month, year);
 
-        
-        List<Contract> activeContracts = contractRepository.findByStatus("ACTIVE");
+        List<Contract> activeContracts = contractRepository.findWithRelationsByStatus("ACTIVE");
+        List<Long> contractIds = activeContracts.stream()
+                .map(Contract::getContractId)
+                .toList();
+        Set<Long> existingContractIds = new HashSet<>(invoiceRepository
+                .findExistingContractIdsForPeriod(contractIds, month, year));
 
-        log.info("Tìm thấy {} hợp đồng ACTIVE", activeContracts.size());
-
-        int created = 0;
+        List<Invoice> invoicesToCreate = new ArrayList<>();
         int skipped = 0;
 
         for (Contract contract : activeContracts) {
-            boolean exists = invoiceRepository
-                    .existsByContract_ContractIdAndBillingMonthAndBillingYear(
-                            contract.getContractId(), month, year);
-
-            if (exists) {
+            if (existingContractIds.contains(contract.getContractId())) {
                 skipped++;
                 continue;
             }
 
             Invoice invoice = new Invoice();
             invoice.setContract(contract);
-
-            String invoiceCode = String.format("INV-%d-%d%02d",
-                    contract.getContractId(), year, month);
-            invoice.setInvoiceCode(invoiceCode);
+            invoice.setInvoiceCode(String.format("INV-%d-%d%02d",
+                    contract.getContractId(), year, month));
             invoice.setBillingMonth(month);
             invoice.setBillingYear(year);
             invoice.setDueDate(LocalDate.of(year, month, 15));
             invoice.setRentAmount(contract.getActualRentPrice());
-            invoice.setStatus("UNPAID");   
-            
-            
-            
-
-            invoiceRepository.save(invoice);
-            created++;
-
-            log.info("Tạo hóa đơn {} cho hợp đồng {} (tenant: {})",
-                    invoiceCode,
-                    contract.getContractCode(),
-                    contract.getTenant().getFullName());
+            invoice.setStatus("UNPAID");
+            invoicesToCreate.add(invoice);
         }
 
-        log.info("=== InvoiceScheduler hoàn thành: tạo mới {}, bỏ qua {} ===",
-                created, skipped);
+        if (!invoicesToCreate.isEmpty()) {
+            invoiceRepository.saveAll(invoicesToCreate);
+        }
+
+        log.info("=== InvoiceScheduler hoan thanh: tao moi {}, bo qua {} ===",
+                invoicesToCreate.size(), skipped);
     }
 }

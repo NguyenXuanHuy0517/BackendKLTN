@@ -2,6 +2,7 @@ package com.project.hostservice.dto.invoice;
 
 import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class InvoiceDetailDTO {
     private String roomCode;
     private int billingMonth;
     private int billingYear;
+    private LocalDate dueDate;
     private BigDecimal rentAmount;
     private int elecOld;
     private int elecNew;
@@ -30,6 +32,10 @@ public class InvoiceDetailDTO {
     private List<String> serviceNames;
     private BigDecimal totalAmount;
     private String status;
+    private String paymentProofUrl;
+    private LocalDateTime paymentSubmittedAt;
+    private String paymentNote;
+    private String paymentStatus;
     private LocalDateTime createdAt;
     private LocalDateTime paidAt;
 }

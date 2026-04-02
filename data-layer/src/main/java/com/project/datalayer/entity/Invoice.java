@@ -8,7 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "invoices")
+@Table(
+        name = "invoices",
+        indexes = {
+                @Index(name = "idx_invoices_contract_period_status", columnList = "contract_id,billing_month,billing_year,status")
+        }
+)
 @Data
 public class Invoice {
 
@@ -78,6 +83,18 @@ public class Invoice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paid_by")
     private User paidBy;
+
+    @Column(name = "payment_proof_url", length = 500)
+    private String paymentProofUrl;
+
+    @Column(name = "payment_submitted_at")
+    private LocalDateTime paymentSubmittedAt;
+
+    @Column(name = "payment_note", columnDefinition = "TEXT")
+    private String paymentNote;
+
+    @Column(name = "payment_status", length = 30)
+    private String paymentStatus;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

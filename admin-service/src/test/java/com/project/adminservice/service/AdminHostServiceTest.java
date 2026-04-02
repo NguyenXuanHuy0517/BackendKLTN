@@ -1,6 +1,7 @@
 package com.project.adminservice.service;
 
 import com.project.adminservice.dto.host.AdminHostDetailDTO;
+import com.project.adminservice.dto.host.AdminHostResponseDTO;
 import com.project.adminservice.dto.host.AdminHostStatusUpdateRequest;
 import com.project.adminservice.exception.ResourceNotFoundException;
 import com.project.datalayer.entity.Role;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,8 +61,8 @@ public class AdminHostServiceTest {
     @Test
     public void testGetHostDetailSuccess() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(testHost));
-        when(areaRepository.findByHost_UserId(1L)).thenReturn(new java.util.ArrayList<>());
-        when(roomRepository.findByArea_Host_UserId(1L)).thenReturn(new java.util.ArrayList<>());
+        when(areaRepository.countByHost_UserId(1L)).thenReturn(0L);
+        when(roomRepository.countByArea_Host_UserId(1L)).thenReturn(0L);
         when(contractRepository.countByRoom_Area_Host_UserIdAndStatus(1L, "ACTIVE")).thenReturn(0L);
         when(invoiceRepository.countOverdueByHostId(1L)).thenReturn(0L);
         when(roomRepository.countRoomsWithoutInvoiceByHostId(1L, java.time.YearMonth.now().getMonthValue(), java.time.YearMonth.now().getYear())).thenReturn(0L);
@@ -71,6 +73,39 @@ public class AdminHostServiceTest {
         assertEquals("Test Host", detail.getFullName());
         assertEquals("host@test.com", detail.getEmail());
         assertTrue(detail.isActive());
+    }
+
+    @Test
+    public void testGetAllHostsUsesAggregateCounts() {
+        User secondHost = new User();
+        secondHost.setUserId(2L);
+        secondHost.setFullName("Second Host");
+        secondHost.setEmail("second@test.com");
+        secondHost.setPhoneNumber("0987654321");
+        secondHost.setActive(false);
+        secondHost.setRole(hostRole);
+
+        when(userRepository.findByRole_RoleName("HOST")).thenReturn(List.of(testHost, secondHost));
+        when(areaRepository.countAreasByHostIds(List.of(1L, 2L))).thenReturn(List.of(
+                new Object[]{1L, 2L},
+                new Object[]{2L, 1L}
+        ));
+        when(roomRepository.countRoomsByHostIds(List.of(1L, 2L))).thenReturn(List.of(
+                new Object[]{1L, 5L},
+                new Object[]{2L, 3L}
+        ));
+
+        List<AdminHostResponseDTO> result = adminHostService.getAllHosts();
+
+        assertEquals(2, result.size());
+        assertEquals(2L, result.get(0).getTotalAreas());
+        assertEquals(5L, result.get(0).getTotalRooms());
+        assertEquals(1L, result.get(1).getTotalAreas());
+        assertEquals(3L, result.get(1).getTotalRooms());
+        verify(areaRepository).countAreasByHostIds(List.of(1L, 2L));
+        verify(roomRepository).countRoomsByHostIds(List.of(1L, 2L));
+        verify(areaRepository, never()).countByHost_UserId(anyLong());
+        verify(roomRepository, never()).countByArea_Host_UserId(anyLong());
     }
 
     @Test

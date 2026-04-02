@@ -43,3 +43,1455 @@
 2026-04-02 10:24:01 [http-nio-8081-exec-6] INFO  c.p.a.controller.AuthController - Tenant registration request for email: xuanhuy123@gmail.com
 2026-04-02 10:24:01 [http-nio-8081-exec-6] INFO  c.p.authservice.service.AuthService - Tenant registered successfully: xuanhuy123@gmail.com
 2026-04-02 10:24:14 [http-nio-8081-exec-8] INFO  c.p.a.controller.AuthController - Login request for email: xuanhuy123@gmail.com
+2026-04-02 11:15:14 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@e7ba45 ((conn=516) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:15:16 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@6d23c9ef ((conn=532) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:15:28 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@415e6d16 ((conn=529) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:15:28 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@e7c8177 ((conn=517) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:15:29 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@7d635de6 ((conn=519) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:15:38 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@4f67b981 ((conn=514) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:16:05 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@6f712df6 ((conn=520) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:16:05 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@7a43dab0 ((conn=515) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:16:12 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@1cd1faa6 ((conn=528) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:16:17 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.mariadb.jdbc.Connection@2461aad8 ((conn=518) Connection.setNetworkTimeout cannot be called on a closed connection). Possibly consider using a shorter maxLifetime value.
+2026-04-02 11:27:50 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 11:27:50 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-02 11:27:50 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 11:27:50 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-02 11:27:50 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-02 18:45:20 [main] INFO  c.p.a.AuthServiceApplication - Starting AuthServiceApplication using Java 17.0.16 with PID 5244 (C:\Users\AD\Desktop\KLTN\Project\Backend\auth-service\target\classes started by XUN HI in C:\Users\AD\Desktop\KLTN\Project\Backend)
+2026-04-02 18:45:20 [main] DEBUG c.p.a.AuthServiceApplication - Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-02 18:45:20 [main] INFO  c.p.a.AuthServiceApplication - The following 1 profile is active: "local"
+2026-04-02 18:45:21 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-02 18:45:21 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 120 ms. Found 15 JPA repository interfaces.
+2026-04-02 18:45:23 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-02 18:45:23 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 18:45:23 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-02 18:45:23 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2730 ms
+2026-04-02 18:45:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Starting...
+2026-04-02 18:45:23 [main] INFO  com.zaxxer.hikari.pool.HikariPool - auth-service-hikari - Added connection org.mariadb.jdbc.Connection@223967ea
+2026-04-02 18:45:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Start completed.
+2026-04-02 18:45:23 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-02 18:45:24 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-02 18:45:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-02 18:45:25 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-02 18:45:25 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mariadb://localhost/smartroomms?user=root]
+	Database driver: MariaDB Connector/J
+	Database dialect: MariaDBDialect
+	Database version: 12.0.2
+	Default catalog/schema: smartroomms/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-02 18:45:27 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-02 18:45:27 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 18:45:27 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-02 18:45:28 [main] DEBUG c.p.a.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-04-02 18:45:28 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-02 18:45:28 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-02 18:45:28 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-02 18:45:30 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-04-02 18:45:31 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-04-02 18:45:31 [main] INFO  c.p.a.AuthServiceApplication - Started AuthServiceApplication in 11.4 seconds (process running for 12.38)
+2026-04-02 18:45:31 [RMI TCP Connection(2)-192.168.31.101] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-02 18:45:31 [RMI TCP Connection(2)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-02 18:45:31 [RMI TCP Connection(2)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-04-02 18:45:35 [RMI TCP Connection(4)-192.168.31.101] WARN  o.s.b.m.health.MailHealthIndicator - Mail health check failed
+jakarta.mail.AuthenticationFailedException: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2b2749793b9sm27346255ad.48 - gsmtp
+
+	at org.eclipse.angus.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:954)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:865)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:769)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.testConnection(JavaMailSenderImpl.java:347)
+	at org.springframework.boot.mail.health.MailHealthIndicator.doHealthCheck(MailHealthIndicator.java:52)
+	at org.springframework.boot.health.contributor.AbstractHealthIndicator.health(AbstractHealthIndicator.java:80)
+	at org.springframework.boot.health.contributor.HealthIndicator.health(HealthIndicator.java:37)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:148)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:126)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptorAndLogIfSlow(HealthEndpointSupport.java:172)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:145)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getAggregateDescriptor(HealthEndpointSupport.java:157)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:141)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:110)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:82)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:80)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:70)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:127)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:99)
+	at java.management/com.sun.jmx.interceptor.DefaultMBeanServerInterceptor.invoke(DefaultMBeanServerInterceptor.java:814)
+	at java.management/com.sun.jmx.mbeanserver.JmxMBeanServer.invoke(JmxMBeanServer.java:802)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doOperation(RMIConnectionImpl.java:1472)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl$PrivilegedOperation.run(RMIConnectionImpl.java:1310)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doPrivilegedOperation(RMIConnectionImpl.java:1405)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.invoke(RMIConnectionImpl.java:829)
+	at java.base/jdk.internal.reflect.GeneratedMethodAccessor49.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:712)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:587)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:828)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:705)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:704)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-04-02 18:47:38 [http-nio-8081-exec-1] INFO  c.p.a.controller.AuthController - Login request for email: tenant.01@smartroomms.local
+2026-04-02 18:47:38 [http-nio-8081-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [3]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=21]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Tenant 01 Nguyen An]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260103]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T18:47:38.814453800]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100003]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [3]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T18:47:38.853967200]
+2026-04-02 18:47:38 [http-nio-8081-exec-1] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [4]
+2026-04-02 19:33:08 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 19:33:12 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-02 19:33:12 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 19:33:12 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown initiated...
+2026-04-02 19:33:12 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown completed.
+2026-04-02 20:17:07 [main] INFO  c.p.a.AuthServiceApplication - Starting AuthServiceApplication using Java 17.0.16 with PID 17268 (C:\Users\AD\Desktop\KLTN\Project\Backend\auth-service\target\classes started by XUN HI in C:\Users\AD\Desktop\KLTN\Project\Backend)
+2026-04-02 20:17:07 [main] DEBUG c.p.a.AuthServiceApplication - Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-02 20:17:07 [main] INFO  c.p.a.AuthServiceApplication - The following 1 profile is active: "local"
+2026-04-02 20:17:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-02 20:17:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 125 ms. Found 15 JPA repository interfaces.
+2026-04-02 20:17:09 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-02 20:17:09 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 20:17:09 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-02 20:17:09 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2658 ms
+2026-04-02 20:17:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Starting...
+2026-04-02 20:17:10 [main] INFO  com.zaxxer.hikari.pool.HikariPool - auth-service-hikari - Added connection org.mariadb.jdbc.Connection@6f07d414
+2026-04-02 20:17:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Start completed.
+2026-04-02 20:17:10 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-02 20:17:10 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-02 20:17:11 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-02 20:17:11 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-02 20:17:11 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mariadb://localhost/smartroomms?user=root]
+	Database driver: MariaDB Connector/J
+	Database dialect: MariaDBDialect
+	Database version: 12.0.2
+	Default catalog/schema: smartroomms/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-02 20:17:14 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-02 20:17:14 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 20:17:14 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-02 20:17:14 [main] DEBUG c.p.a.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-04-02 20:17:16 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-02 20:17:16 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-02 20:17:16 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-02 20:17:19 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-04-02 20:17:19 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-04-02 20:17:19 [main] INFO  c.p.a.AuthServiceApplication - Started AuthServiceApplication in 12.828 seconds (process running for 13.969)
+2026-04-02 20:17:20 [RMI TCP Connection(3)-192.168.31.101] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-02 20:17:20 [RMI TCP Connection(3)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-02 20:17:20 [RMI TCP Connection(3)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 10 ms
+2026-04-02 20:17:24 [RMI TCP Connection(4)-192.168.31.101] WARN  o.s.b.m.health.MailHealthIndicator - Mail health check failed
+jakarta.mail.AuthenticationFailedException: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-35dbe623754sm7653680a91.6 - gsmtp
+
+	at org.eclipse.angus.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:954)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:865)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:769)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.testConnection(JavaMailSenderImpl.java:347)
+	at org.springframework.boot.mail.health.MailHealthIndicator.doHealthCheck(MailHealthIndicator.java:52)
+	at org.springframework.boot.health.contributor.AbstractHealthIndicator.health(AbstractHealthIndicator.java:80)
+	at org.springframework.boot.health.contributor.HealthIndicator.health(HealthIndicator.java:37)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:148)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:126)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptorAndLogIfSlow(HealthEndpointSupport.java:172)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:145)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getAggregateDescriptor(HealthEndpointSupport.java:157)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:141)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:110)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:82)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:80)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:70)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:127)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:99)
+	at java.management/com.sun.jmx.interceptor.DefaultMBeanServerInterceptor.invoke(DefaultMBeanServerInterceptor.java:814)
+	at java.management/com.sun.jmx.mbeanserver.JmxMBeanServer.invoke(JmxMBeanServer.java:802)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doOperation(RMIConnectionImpl.java:1472)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl$PrivilegedOperation.run(RMIConnectionImpl.java:1310)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doPrivilegedOperation(RMIConnectionImpl.java:1405)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.invoke(RMIConnectionImpl.java:829)
+	at java.base/jdk.internal.reflect.GeneratedMethodAccessor55.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:712)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:587)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:828)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:705)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:704)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-04-02 20:20:03 [http-nio-8081-exec-2] INFO  c.p.a.controller.AuthController - Tenant registration request for email: xuanhuyhuy@gmail.com
+2026-04-02 20:20:04 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.phone_number=?
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [05233132312]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_name=?
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [TENANT]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        users
+        (avatar_url, created_at, email, fcm_token, full_name, id_card_number, is_active, last_login_at, password_hash, phone_number, reset_token, reset_token_expiry, role_id, updated_at) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-04-02T20:20:04.348046600]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [TestA123]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:VARCHAR) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:BOOLEAN) <- [true]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:TIMESTAMP) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [$2a$10$xGfKjFqdAEQTQp3LAMeJmON7wQoV5/9iD/c8ERHIjj47Clw1QJRbK]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [05233132312]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:VARCHAR) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:TIMESTAMP) <- [null]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:INTEGER) <- [3]
+2026-04-02 20:20:04 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:TIMESTAMP) <- [2026-04-02T20:20:04.348046600]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] INFO  c.p.a.controller.AuthController - Login request for email: xuanhuyhuy@gmail.com
+2026-04-02 20:20:14 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [3]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [null]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [TestA123]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [null]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:20:14.537904700]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$xGfKjFqdAEQTQp3LAMeJmON7wQoV5/9iD/c8ERHIjj47Clw1QJRbK]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [05233132312]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [3]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:20:14.544383]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [10]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.contract_id,
+        c1_0.actual_rent_price,
+        c1_0.contract_code,
+        c1_0.created_at,
+        c1_0.deposit_id,
+        c1_0.digital_signature_url,
+        c1_0.elec_price_override,
+        c1_0.end_date,
+        c1_0.penalty_terms,
+        c1_0.room_id,
+        c1_0.start_date,
+        c1_0.status,
+        c1_0.tenant_id,
+        c1_0.terminated_at,
+        c1_0.terminated_by,
+        c1_0.termination_reason,
+        c1_0.updated_at,
+        c1_0.water_price_override 
+    from
+        contracts c1_0 
+    where
+        c1_0.tenant_id=? 
+        and c1_0.status=? 
+    order by
+        c1_0.start_date desc 
+    limit
+        ?
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [10]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [ACTIVE]
+2026-04-02 20:20:14 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [1]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 20:20:46 [http-nio-8081-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=12]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Host Alpha]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260101]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:20:46.389188100]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100001]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [2]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:20:46.391201900]
+2026-04-02 20:20:46 [http-nio-8081-exec-6] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [2]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] INFO  c.p.a.controller.AuthController - Login request for email: xuanhuyhuy@gmail.com
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [3]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [null]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [TestA123]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [null]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:23:57.992220500]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$xGfKjFqdAEQTQp3LAMeJmON7wQoV5/9iD/c8ERHIjj47Clw1QJRbK]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [05233132312]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [3]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:23:57.993216800]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [10]
+2026-04-02 20:23:57 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.contract_id,
+        c1_0.actual_rent_price,
+        c1_0.contract_code,
+        c1_0.created_at,
+        c1_0.deposit_id,
+        c1_0.digital_signature_url,
+        c1_0.elec_price_override,
+        c1_0.end_date,
+        c1_0.penalty_terms,
+        c1_0.room_id,
+        c1_0.start_date,
+        c1_0.status,
+        c1_0.tenant_id,
+        c1_0.terminated_at,
+        c1_0.terminated_by,
+        c1_0.termination_reason,
+        c1_0.updated_at,
+        c1_0.water_price_override 
+    from
+        contracts c1_0 
+    where
+        c1_0.tenant_id=? 
+        and c1_0.status=? 
+    order by
+        c1_0.start_date desc 
+    limit
+        ?
+2026-04-02 20:23:58 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [10]
+2026-04-02 20:23:58 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [ACTIVE]
+2026-04-02 20:23:58 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [1]
+2026-04-02 20:26:03 [http-nio-8081-exec-2] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 20:26:03 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:26:03 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:26:03 [http-nio-8081-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:26:03 [http-nio-8081-exec-2] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 20:26:03 [http-nio-8081-exec-2] ERROR c.p.a.controller.AuthController - Login failed: Mat khau khong dung
+2026-04-02 20:26:12 [http-nio-8081-exec-4] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 20:26:12 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=12]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Host Alpha]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260101]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:26:12.507314400]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100001]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [2]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:26:12.508351100]
+2026-04-02 20:26:12 [http-nio-8081-exec-4] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [2]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] INFO  c.p.a.controller.AuthController - Login request for email: xuanhuyhuy@gmail.com
+2026-04-02 20:38:05 [http-nio-8081-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [3]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [null]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [xuanhuyhuy@gmail.com]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [TestA123]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [null]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:38:05.463468100]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$xGfKjFqdAEQTQp3LAMeJmON7wQoV5/9iD/c8ERHIjj47Clw1QJRbK]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [05233132312]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [3]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:38:05.464838]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [10]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.contract_id,
+        c1_0.actual_rent_price,
+        c1_0.contract_code,
+        c1_0.created_at,
+        c1_0.deposit_id,
+        c1_0.digital_signature_url,
+        c1_0.elec_price_override,
+        c1_0.end_date,
+        c1_0.penalty_terms,
+        c1_0.room_id,
+        c1_0.start_date,
+        c1_0.status,
+        c1_0.tenant_id,
+        c1_0.terminated_at,
+        c1_0.terminated_by,
+        c1_0.termination_reason,
+        c1_0.updated_at,
+        c1_0.water_price_override 
+    from
+        contracts c1_0 
+    where
+        c1_0.tenant_id=? 
+        and c1_0.status=? 
+    order by
+        c1_0.start_date desc 
+    limit
+        ?
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [10]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [ACTIVE]
+2026-04-02 20:38:05 [http-nio-8081-exec-7] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [1]
+2026-04-02 20:38:47 [http-nio-8081-exec-10] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 20:38:47 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:38:47 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:38:47 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 20:38:47 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=12]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Host Alpha]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260101]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T20:38:48.033621300]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100001]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [2]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T20:38:48.034634500]
+2026-04-02 20:38:48 [http-nio-8081-exec-10] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [2]
+2026-04-02 22:09:55 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 22:09:57 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-02 22:09:57 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 22:09:57 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown initiated...
+2026-04-02 22:09:57 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown completed.
+2026-04-02 22:10:58 [main] INFO  c.p.a.AuthServiceApplication - Starting AuthServiceApplication using Java 17.0.16 with PID 4016 (C:\Users\AD\Desktop\KLTN\Project\Backend\auth-service\target\classes started by XUN HI in C:\Users\AD\Desktop\KLTN\Project\Backend)
+2026-04-02 22:10:58 [main] DEBUG c.p.a.AuthServiceApplication - Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-04-02 22:10:58 [main] INFO  c.p.a.AuthServiceApplication - The following 1 profile is active: "local"
+2026-04-02 22:11:00 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-02 22:11:00 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 149 ms. Found 15 JPA repository interfaces.
+2026-04-02 22:11:02 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-02 22:11:02 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-02 22:11:02 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-04-02 22:11:02 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4005 ms
+2026-04-02 22:11:03 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Starting...
+2026-04-02 22:11:03 [main] INFO  com.zaxxer.hikari.pool.HikariPool - auth-service-hikari - Added connection org.mariadb.jdbc.Connection@283a8ad6
+2026-04-02 22:11:03 [main] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Start completed.
+2026-04-02 22:11:03 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-02 22:11:03 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-04-02 22:11:05 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-02 22:11:05 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-02 22:11:05 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mariadb://localhost/smartroomms?user=root]
+	Database driver: MariaDB Connector/J
+	Database dialect: MariaDBDialect
+	Database version: 12.0.2
+	Default catalog/schema: smartroomms/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-02 22:11:08 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-02 22:11:08 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 22:11:08 [main] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-02 22:11:09 [main] DEBUG c.p.a.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-04-02 22:11:11 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-02 22:11:11 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-02 22:11:11 [main] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-02 22:11:14 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-04-02 22:11:15 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-04-02 22:11:15 [main] INFO  c.p.a.AuthServiceApplication - Started AuthServiceApplication in 17.434 seconds (process running for 18.701)
+2026-04-02 22:11:15 [RMI TCP Connection(5)-192.168.31.101] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-02 22:11:15 [RMI TCP Connection(5)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-02 22:11:15 [RMI TCP Connection(5)-192.168.31.101] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-04-02 22:11:19 [RMI TCP Connection(4)-192.168.31.101] WARN  o.s.b.m.health.MailHealthIndicator - Mail health check failed
+jakarta.mail.AuthenticationFailedException: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-35dd369f414sm2907377a91.15 - gsmtp
+
+	at org.eclipse.angus.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:954)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:865)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:769)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.testConnection(JavaMailSenderImpl.java:347)
+	at org.springframework.boot.mail.health.MailHealthIndicator.doHealthCheck(MailHealthIndicator.java:52)
+	at org.springframework.boot.health.contributor.AbstractHealthIndicator.health(AbstractHealthIndicator.java:80)
+	at org.springframework.boot.health.contributor.HealthIndicator.health(HealthIndicator.java:37)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:148)
+	at org.springframework.boot.health.actuate.endpoint.Contributor$Blocking.getDescriptor(Contributor.java:126)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptorAndLogIfSlow(HealthEndpointSupport.java:172)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:145)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getAggregateDescriptor(HealthEndpointSupport.java:157)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getDescriptor(HealthEndpointSupport.java:141)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:110)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpointSupport.getResult(HealthEndpointSupport.java:82)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:80)
+	at org.springframework.boot.health.actuate.endpoint.HealthEndpoint.health(HealthEndpoint.java:70)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281)
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:76)
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:62)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:127)
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:99)
+	at java.management/com.sun.jmx.interceptor.DefaultMBeanServerInterceptor.invoke(DefaultMBeanServerInterceptor.java:814)
+	at java.management/com.sun.jmx.mbeanserver.JmxMBeanServer.invoke(JmxMBeanServer.java:802)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doOperation(RMIConnectionImpl.java:1472)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl$PrivilegedOperation.run(RMIConnectionImpl.java:1310)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doPrivilegedOperation(RMIConnectionImpl.java:1405)
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.invoke(RMIConnectionImpl.java:829)
+	at java.base/jdk.internal.reflect.GeneratedMethodAccessor48.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:712)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:587)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:828)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:705)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:704)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-04-02 22:12:04 [http-nio-8081-exec-3] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 22:12:04 [http-nio-8081-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:12:04 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:12:04 [http-nio-8081-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 22:12:04 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 22:12:04 [http-nio-8081-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:12:04 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=12]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Host Alpha]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260101]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T22:12:05.043502100]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100001]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [2]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T22:12:05.093290700]
+2026-04-02 22:12:05 [http-nio-8081-exec-3] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [2]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] INFO  c.p.a.controller.AuthController - Login request for email: tenant.01@smartroomms.local
+2026-04-02 22:13:07 [http-nio-8081-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [3]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=21]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [tenant.01@smartroomms.local]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Tenant 01 Nguyen An]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260103]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T22:13:07.153492900]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100003]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [3]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T22:13:07.155717400]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [4]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.contract_id,
+        c1_0.actual_rent_price,
+        c1_0.contract_code,
+        c1_0.created_at,
+        c1_0.deposit_id,
+        c1_0.digital_signature_url,
+        c1_0.elec_price_override,
+        c1_0.end_date,
+        c1_0.penalty_terms,
+        c1_0.room_id,
+        c1_0.start_date,
+        c1_0.status,
+        c1_0.tenant_id,
+        c1_0.terminated_at,
+        c1_0.terminated_by,
+        c1_0.termination_reason,
+        c1_0.updated_at,
+        c1_0.water_price_override 
+    from
+        contracts c1_0 
+    where
+        c1_0.tenant_id=? 
+        and c1_0.status=? 
+    order by
+        c1_0.start_date desc 
+    limit
+        ?
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [4]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [ACTIVE]
+2026-04-02 22:13:07 [http-nio-8081-exec-5] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:INTEGER) <- [1]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] INFO  c.p.a.controller.AuthController - Login request for email: host.alpha@smartroomms.local
+2026-04-02 22:30:40 [http-nio-8081-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        r1_0.role_id,
+        r1_0.role_name 
+    from
+        roles r1_0 
+    where
+        r1_0.role_id=?
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:INTEGER) <- [2]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.user_id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.fcm_token,
+        u1_0.full_name,
+        u1_0.id_card_number,
+        u1_0.is_active,
+        u1_0.last_login_at,
+        u1_0.password_hash,
+        u1_0.phone_number,
+        u1_0.reset_token,
+        u1_0.reset_token_expiry,
+        u1_0.role_id,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] DEBUG org.hibernate.SQL - 
+    update
+        users 
+    set
+        avatar_url=?,
+        email=?,
+        fcm_token=?,
+        full_name=?,
+        id_card_number=?,
+        is_active=?,
+        last_login_at=?,
+        password_hash=?,
+        phone_number=?,
+        reset_token=?,
+        reset_token_expiry=?,
+        role_id=?,
+        updated_at=? 
+    where
+        user_id=?
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [https://i.pravatar.cc/150?img=12]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [host.alpha@smartroomms.local]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [null]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [Host Alpha]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [079001260101]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (6:BOOLEAN) <- [true]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (7:TIMESTAMP) <- [2026-04-02T22:30:40.261070300]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (8:VARCHAR) <- [$2a$10$Hlay3eZCaZ8gN8xH3eqkEunFAnmAAzp0KSfxFqwkwKSZmF3JsayAO]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (9:VARCHAR) <- [0909100001]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (10:VARCHAR) <- [null]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (11:TIMESTAMP) <- [null]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (12:INTEGER) <- [2]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (13:TIMESTAMP) <- [2026-04-02T22:30:40.262065400]
+2026-04-02 22:30:40 [http-nio-8081-exec-8] TRACE org.hibernate.orm.jdbc.bind - binding parameter (14:BIGINT) <- [2]
+2026-04-02 22:31:11 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 22:31:11 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-02 22:31:11 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 22:31:11 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown initiated...
+2026-04-02 22:31:11 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - auth-service-hikari - Shutdown completed.

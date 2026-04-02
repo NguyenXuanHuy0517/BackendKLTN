@@ -11,4 +11,5 @@ public class LoginResponseDTO {
     private String email;
     private String role;
     private String token;
+    private boolean requiresRentalJoin;
 }

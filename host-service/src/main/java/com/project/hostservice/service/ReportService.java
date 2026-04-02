@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Vai trò: Service xử lý nghiệp vụ của module host-service.
@@ -20,40 +22,42 @@ public class ReportService {
     private final RoomRepository roomRepository;
     private final InvoiceRepository invoiceRepository;
     private final IssueRepository issueRepository;
-    private final ContractServiceRepository contractServiceRepository;
 
         /**
      * Chức năng: Lấy dữ liệu dashboard.
      */
 public ReportDTO getDashboard(Long hostId) {
-        int totalRooms = roomRepository.findByArea_Host_UserId(hostId).size();
-        int rentedRooms = roomRepository.findByArea_Host_UserId(hostId).stream()
-                .filter(r -> r.getStatus().equals("RENTED")).toList().size();
-        int availableRooms = roomRepository.findByArea_Host_UserId(hostId).stream()
-                .filter(r -> r.getStatus().equals("AVAILABLE")).toList().size();
-        int maintenanceRooms = roomRepository.findByArea_Host_UserId(hostId).stream()
-                .filter(r -> r.getStatus().equals("MAINTENANCE")).toList().size();
+        int totalRooms = Math.toIntExact(roomRepository.countByArea_Host_UserId(hostId));
+        Map<String, Long> roomStatusCounts = roomRepository.countRoomStatusByHost(hostId).stream()
+                .collect(Collectors.toMap(
+                        row -> String.valueOf(row[0]),
+                        row -> (Long) row[1]
+                ));
+        int rentedRooms = Math.toIntExact(roomStatusCounts.getOrDefault("RENTED", 0L));
+        int availableRooms = Math.toIntExact(roomStatusCounts.getOrDefault("AVAILABLE", 0L));
+        int maintenanceRooms = Math.toIntExact(roomStatusCounts.getOrDefault("MAINTENANCE", 0L));
 
         LocalDate now = LocalDate.now();
-        BigDecimal totalRevenue = invoiceRepository.findByContract_Room_Area_Host_UserId(hostId).stream()
-                .filter(i -> i.getStatus().equals("PAID")
-                        && i.getBillingMonth() == now.getMonthValue()
-                        && i.getBillingYear() == now.getYear())
-                .map(i -> i.getTotalAmount())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalRevenue = invoiceRepository.sumRevenueByHostAndPeriod(
+                hostId,
+                now.getMonthValue(),
+                now.getYear()
+        );
 
-        BigDecimal previousRevenue = invoiceRepository.findByContract_Room_Area_Host_UserId(hostId).stream()
-                .filter(i -> i.getStatus().equals("PAID")
-                        && i.getBillingMonth() == now.minusMonths(1).getMonthValue()
-                        && i.getBillingYear() == now.minusMonths(1).getYear())
-                .map(i -> i.getTotalAmount())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        LocalDate previousMonth = now.minusMonths(1);
+        BigDecimal previousRevenue = invoiceRepository.sumRevenueByHostAndPeriod(
+                hostId,
+                previousMonth.getMonthValue(),
+                previousMonth.getYear()
+        );
 
-        int overdueCount = (int) invoiceRepository.findByContract_Room_Area_Host_UserId(hostId).stream()
-                .filter(i -> i.getStatus().equals("OVERDUE")).count();
+        int overdueCount = Math.toIntExact(
+                invoiceRepository.countByContract_Room_Area_Host_UserIdAndStatus(hostId, "OVERDUE")
+        );
 
-        int openIssueCount = (int) issueRepository.findByRoom_Area_Host_UserId(hostId).stream()
-                .filter(i -> i.getStatus().equals("OPEN") || i.getStatus().equals("PROCESSING")).count();
+        int openIssueCount = Math.toIntExact(
+                issueRepository.countByRoom_Area_Host_UserIdAndStatusIn(hostId, List.of("OPEN", "PROCESSING"))
+        );
 
         ReportDTO dto = new ReportDTO();
         dto.setTotalRevenue(totalRevenue);

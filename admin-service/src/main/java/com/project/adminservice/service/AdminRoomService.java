@@ -1,88 +1,64 @@
 package com.project.adminservice.service;
 
 import com.project.adminservice.dto.room.AdminRoomAuditDTO;
-import com.project.datalayer.entity.Contract;
-import com.project.datalayer.entity.Room;
-import com.project.datalayer.repository.ContractRepository;
-import com.project.datalayer.repository.InvoiceRepository;
 import com.project.datalayer.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module admin-service.
- * Chức năng: Chứa logic xử lý liên quan đến admin room.
- */
 @Service
 @RequiredArgsConstructor
 public class AdminRoomService {
 
     private final RoomRepository roomRepository;
-    private final ContractRepository contractRepository;
-    private final InvoiceRepository invoiceRepository;
 
-        /**
-     * Chức năng: Lấy dữ liệu all rooms.
-     */
-public List<AdminRoomAuditDTO> getAllRooms() {
-        return roomRepository.findAll().stream()
-                .map(this::mapToAuditDTO)
+    public List<AdminRoomAuditDTO> getAllRooms() {
+        return roomRepository.findAdminRoomAuditRows().stream()
+                .map(row -> mapToAuditDTO(row, null))
                 .toList();
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu rooms missing invoices.
-     */
-public List<AdminRoomAuditDTO> getRoomsMissingInvoices() {
-        
+    public List<AdminRoomAuditDTO> getRoomsMissingInvoices() {
         YearMonth currentMonth = YearMonth.now();
+        LocalDate firstOfMonth = LocalDate.of(currentMonth.getYear(), currentMonth.getMonthValue(), 1);
+        long daysWithoutInvoice = java.time.temporal.ChronoUnit.DAYS.between(firstOfMonth, LocalDate.now());
 
-        
-        return contractRepository.findByStatus("ACTIVE").stream()
-                .filter(contract -> !invoiceRepository.existsByContract_ContractIdAndBillingMonthAndBillingYear(
-                        contract.getContractId(), currentMonth.getMonthValue(), currentMonth.getYear()))
-                .map(Contract::getRoom)
-                .distinct()
-                .map(room -> mapToAuditDTOWithoutInvoice(room, currentMonth.getMonthValue(), currentMonth.getYear()))
+        return roomRepository.findAdminRoomsMissingInvoiceRows(
+                        currentMonth.getMonthValue(),
+                        currentMonth.getYear()
+                ).stream()
+                .map(row -> mapToAuditDTO(row, daysWithoutInvoice))
                 .toList();
     }
 
-        /**
-     * Chức năng: Ánh xạ to audit dto.
-     */
-private AdminRoomAuditDTO mapToAuditDTO(Room room) {
+    private AdminRoomAuditDTO mapToAuditDTO(Object[] row, Long daysWithoutInvoice) {
         AdminRoomAuditDTO dto = new AdminRoomAuditDTO();
-        dto.setRoomId(room.getRoomId());
-        dto.setRoomCode(room.getRoomCode());
-        dto.setAreaName(room.getArea().getAreaName());
-        dto.setHostName(room.getArea().getHost().getFullName());
-        dto.setStatus(room.getStatus());
-        dto.setBasePrice(room.getBasePrice());
-        
-        
-        contractRepository.findByRoom_RoomIdAndStatus(room.getRoomId(), "ACTIVE")
-                .ifPresent(contract -> dto.setCurrentTenantName(contract.getTenant().getFullName()));
-        
-        dto.setDaysWithoutInvoice(null);  
-
+        dto.setRoomId(asLong(row[0]));
+        dto.setRoomCode((String) row[1]);
+        dto.setAreaName((String) row[2]);
+        dto.setHostName((String) row[3]);
+        dto.setStatus((String) row[4]);
+        dto.setBasePrice(asBigDecimal(row[5]));
+        dto.setCurrentTenantName((String) row[6]);
+        dto.setDaysWithoutInvoice(daysWithoutInvoice);
         return dto;
     }
 
-        /**
-     * Chức năng: Ánh xạ to audit dto without invoice.
-     */
-private AdminRoomAuditDTO mapToAuditDTOWithoutInvoice(Room room, int month, int year) {
-        AdminRoomAuditDTO dto = mapToAuditDTO(room);
+    private Long asLong(Object value) {
+        return value == null ? null : ((Number) value).longValue();
+    }
 
-        
-        LocalDate firstOfMonth = LocalDate.of(year, month, 1);
-        long daysWithoutInvoice = java.time.temporal.ChronoUnit.DAYS.between(firstOfMonth, LocalDate.now());
-        dto.setDaysWithoutInvoice(daysWithoutInvoice);
-
-        return dto;
+    private BigDecimal asBigDecimal(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof BigDecimal decimal) {
+            return decimal;
+        }
+        return BigDecimal.valueOf(((Number) value).doubleValue());
     }
 }

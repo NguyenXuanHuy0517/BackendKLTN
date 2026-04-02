@@ -1,5 +1,6 @@
 package com.project.hostservice.service;
 
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.datalayer.entity.Issue;
 import com.project.datalayer.repository.IssueRepository;
 import com.project.hostservice.dto.issue.IssueResponseDTO;
@@ -7,70 +8,96 @@ import com.project.hostservice.dto.issue.IssueStatusUpdateDTO;
 import com.project.hostservice.exception.ResourceNotFoundException;
 import com.project.hostservice.mapper.IssueMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module host-service.
- * Chức năng: Chứa logic xử lý liên quan đến issue.
- */
 @Service
 @RequiredArgsConstructor
 public class IssueService {
 
+    private static final Set<String> ISSUE_SORT_FIELDS = Set.of(
+            "createdAt", "updatedAt", "priority", "status"
+    );
+
     private final IssueRepository issueRepository;
     private final IssueMapper issueMapper;
 
-        /**
-     * Chức năng: Lấy dữ liệu issues by host.
-     */
-public List<IssueResponseDTO> getIssuesByHost(Long hostId) {
-        return issueRepository.findByRoom_Area_Host_UserId(hostId).stream()
+    public List<IssueResponseDTO> getIssuesByHost(Long hostId) {
+        return issueRepository.findWithRelationsByHostId(hostId).stream()
                 .map(issueMapper::toDTO)
                 .toList();
     }
 
-    
-        /**
-     * Chức năng: Lấy dữ liệu issues by host and type.
-     */
-public List<IssueResponseDTO> getIssuesByHostAndType(Long hostId, String issueType) {
-        return issueRepository.findByRoom_Area_Host_UserId(hostId).stream()
-                .filter(issue -> issueType.equals(issue.getIssueType()))
+    public PagedResponse<IssueResponseDTO> getIssuesPage(
+            Long hostId,
+            String status,
+            String issueType,
+            String search,
+            int page,
+            int size,
+            String sort
+    ) {
+        Page<Issue> issuePage = issueRepository.findPageWithRelationsByHostId(
+                hostId,
+                normalize(status),
+                normalize(issueType),
+                normalize(search),
+                PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), 100), buildSort(sort))
+        );
+        List<IssueResponseDTO> items = issuePage.getContent().stream()
+                .map(issueMapper::toDTO)
+                .toList();
+        return PagedResponse.from(issuePage, items);
+    }
+
+    public List<IssueResponseDTO> getIssuesByHostAndType(Long hostId, String issueType) {
+        return issueRepository.findWithRelationsByHostIdAndIssueType(hostId, issueType).stream()
                 .map(issueMapper::toDTO)
                 .toList();
     }
 
-    
-        /**
-     * Chức năng: Lấy dữ liệu service suggestions.
-     */
-public List<IssueResponseDTO> getServiceSuggestions(Long hostId) {
+    public List<IssueResponseDTO> getServiceSuggestions(Long hostId) {
         return getIssuesByHostAndType(hostId, "SERVICE_SUGGESTION");
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu issue detail.
-     */
-public IssueResponseDTO getIssueDetail(Long issueId) {
+    public IssueResponseDTO getIssueDetail(Long issueId) {
         Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khiếu nại: " + issueId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay khieu nai: " + issueId));
         return issueMapper.toDTO(issue);
     }
 
-        /**
-     * Chức năng: Cập nhật status.
-     */
-public void updateStatus(Long issueId, IssueStatusUpdateDTO request) {
+    public void updateStatus(Long issueId, IssueStatusUpdateDTO request) {
         Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khiếu nại: " + issueId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay khieu nai: " + issueId));
         issue.setStatus(request.getStatus());
         issue.setHandlerNote(request.getHandlerNote());
-        if (request.getStatus().equals("RESOLVED")) {
+        if ("RESOLVED".equals(request.getStatus())) {
             issue.setResolvedAt(LocalDateTime.now());
         }
         issueRepository.save(issue);
+    }
+
+    private Sort buildSort(String sort) {
+        String[] sortParts = (sort == null ? "" : sort).split(",", 2);
+        String requestedField = sortParts.length > 0 ? sortParts[0].trim() : "";
+        String field = ISSUE_SORT_FIELDS.contains(requestedField) ? requestedField : "createdAt";
+        Sort.Direction direction = sortParts.length > 1 && "asc".equalsIgnoreCase(sortParts[1].trim())
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+        return Sort.by(direction, field);
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }

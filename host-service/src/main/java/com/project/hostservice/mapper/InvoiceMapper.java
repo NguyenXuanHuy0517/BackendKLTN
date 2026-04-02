@@ -28,6 +28,9 @@ public InvoiceResponseDTO toResponseDTO(Invoice invoice) {
         dto.setBillingYear(invoice.getBillingYear());
         dto.setTotalAmount(invoice.getTotalAmount());
         dto.setStatus(invoice.getStatus());
+        dto.setPaymentProofUrl(invoice.getPaymentProofUrl());
+        dto.setPaymentSubmittedAt(invoice.getPaymentSubmittedAt());
+        dto.setPaymentStatus(invoice.getPaymentStatus());
         dto.setCreatedAt(invoice.getCreatedAt());
         return dto;
     }
@@ -43,6 +46,7 @@ public InvoiceDetailDTO toDetailDTO(Invoice invoice, List<ContractService> servi
         dto.setRoomCode(invoice.getContract().getRoom().getRoomCode());
         dto.setBillingMonth(invoice.getBillingMonth());
         dto.setBillingYear(invoice.getBillingYear());
+        dto.setDueDate(invoice.getDueDate());
         dto.setRentAmount(invoice.getRentAmount());
         dto.setElecOld(invoice.getElecOld());
         dto.setElecNew(invoice.getElecNew());
@@ -58,6 +62,10 @@ public InvoiceDetailDTO toDetailDTO(Invoice invoice, List<ContractService> servi
                 .toList());
         dto.setTotalAmount(invoice.getTotalAmount());
         dto.setStatus(invoice.getStatus());
+        dto.setPaymentProofUrl(invoice.getPaymentProofUrl());
+        dto.setPaymentSubmittedAt(invoice.getPaymentSubmittedAt());
+        dto.setPaymentNote(invoice.getPaymentNote());
+        dto.setPaymentStatus(invoice.getPaymentStatus());
         dto.setCreatedAt(invoice.getCreatedAt());
         dto.setPaidAt(invoice.getPaidAt());
         return dto;

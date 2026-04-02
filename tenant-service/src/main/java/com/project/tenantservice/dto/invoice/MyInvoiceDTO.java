@@ -12,9 +12,13 @@ import java.time.LocalDateTime;
 public class MyInvoiceDTO {
     private Long invoiceId;
     private String invoiceCode;
+    private String roomCode;
     private int billingMonth;
     private int billingYear;
     private BigDecimal totalAmount;
     private String status;
+    private LocalDateTime paymentSubmittedAt;
+    private String paymentProofUrl;
+    private String paymentStatus;
     private LocalDateTime createdAt;
 }

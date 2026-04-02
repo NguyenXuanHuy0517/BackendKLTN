@@ -1,10 +1,17 @@
 package com.project.authservice.service;
 
-import com.project.authservice.dto.*;
+import com.project.authservice.dto.ForgotPasswordRequestDTO;
+import com.project.authservice.dto.LoginRequestDTO;
+import com.project.authservice.dto.LoginResponseDTO;
+import com.project.authservice.dto.RefreshTokenRequestDTO;
+import com.project.authservice.dto.RefreshTokenResponseDTO;
+import com.project.authservice.dto.RegisterRequestDTO;
+import com.project.authservice.dto.ResetPasswordRequestDTO;
 import com.project.authservice.exception.ResourceNotFoundException;
 import com.project.authservice.security.JwtUtils;
 import com.project.datalayer.entity.Role;
 import com.project.datalayer.entity.User;
+import com.project.datalayer.repository.ContractRepository;
 import com.project.datalayer.repository.RoleRepository;
 import com.project.datalayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,78 +24,78 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module auth-service.
- * Chức năng: Chứa logic xử lý liên quan đến auth.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-    
+
+    private static final Set<String> TOKEN_BLACKLIST = new HashSet<>();
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ContractRepository contractRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final Optional<EmailService> emailService;
-    
+
     @Value("${email.send-reset-password:false}")
     private boolean sendPasswordResetEmail;
 
-    
-    private static final Set<String> tokenBlacklist = new HashSet<>();
-    private static final Map<String, String> passwordResetTokens = new HashMap<>();
+    @Value("${auth.reset-token.expiration-minutes:60}")
+    private long resetTokenExpirationMinutes;
 
-    
-
-        /**
-     * Chức năng: Xử lý đăng nhập người dùng.
-     */
-public LoginResponseDTO login(LoginRequestDTO request) {
+    public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
+                .orElseThrow(() -> new ResourceNotFoundException("Email khong ton tai"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new BadCredentialsException("Mật khẩu không đúng");
+            throw new BadCredentialsException("Mat khau khong dung");
         }
 
         if (!user.isActive()) {
-            throw new BadCredentialsException("Tài khoản đã bị khóa");
+            throw new BadCredentialsException("Tai khoan da bi khoa");
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = jwtUtils.generateToken(userDetails);
+        user.setLastLoginAt(LocalDateTime.now());
+        userRepository.save(user);
+
+        boolean requiresRentalJoin = "TENANT".equalsIgnoreCase(user.getRole().getRoleName())
+                && contractRepository.findFirstByTenant_UserIdAndStatusOrderByStartDateDesc(
+                        user.getUserId(),
+                        "ACTIVE"
+                ).isEmpty();
 
         return new LoginResponseDTO(
                 user.getUserId(),
                 user.getFullName(),
                 user.getEmail(),
                 user.getRole().getRoleName(),
-                token
+                token,
+                requiresRentalJoin
         );
     }
 
-    
-
-        /**
-     * Chức năng: Xử lý đăng ký tenant.
-     */
-public void registerTenant(RegisterRequestDTO request) {
+    public void registerTenant(RegisterRequestDTO request) {
         validateUserRegistration(request);
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email đã tồn tại");
+            throw new IllegalArgumentException("Email da ton tai");
         }
-
         if (userRepository.findByPhoneNumber(request.getPhoneNumber()).isPresent()) {
-            throw new IllegalArgumentException("Số điện thoại đã tồn tại");
+            throw new IllegalArgumentException("So dien thoai da ton tai");
         }
 
         Role role = roleRepository.findByRoleName("TENANT")
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy role TENANT"));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay role TENANT"));
 
         User user = new User();
         user.setFullName(request.getFullName());
@@ -97,37 +104,28 @@ public void registerTenant(RegisterRequestDTO request) {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setRole(role);
         user.setActive(true);
-
         userRepository.save(user);
-        log.info("Tenant registered successfully: {}", request.getEmail());
 
-        
-        if (emailService.isPresent()) {
+        emailService.ifPresent(service -> {
             try {
-                emailService.get().sendWelcomeEmail(user.getEmail(), user.getFullName(), "TENANT");
+                service.sendWelcomeEmail(user.getEmail(), user.getFullName(), "TENANT");
             } catch (Exception e) {
-                log.warn("Failed to send welcome email to: {}", user.getEmail(), e);
+                log.warn("Failed to send welcome email to {}", user.getEmail(), e);
             }
-        }
+        });
     }
 
-    
-
-        /**
-     * Chức năng: Xử lý đăng ký host.
-     */
-public void registerHost(RegisterRequestDTO request) {
+    public void registerHost(RegisterRequestDTO request) {
         validateUserRegistration(request);
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email đã tồn tại");
+            throw new IllegalArgumentException("Email da ton tai");
         }
-
         if (userRepository.findByPhoneNumber(request.getPhoneNumber()).isPresent()) {
-            throw new IllegalArgumentException("Số điện thoại đã tồn tại");
+            throw new IllegalArgumentException("So dien thoai da ton tai");
         }
 
         Role role = roleRepository.findByRoleName("HOST")
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy role HOST"));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay role HOST"));
 
         User user = new User();
         user.setFullName(request.getFullName());
@@ -137,124 +135,87 @@ public void registerHost(RegisterRequestDTO request) {
         user.setIdCardNumber(request.getIdCardNumber());
         user.setRole(role);
         user.setActive(true);
-
         userRepository.save(user);
-        log.info("Host registered successfully: {}", request.getEmail());
 
-        
-        if (emailService.isPresent()) {
+        emailService.ifPresent(service -> {
             try {
-                emailService.get().sendWelcomeEmail(user.getEmail(), user.getFullName(), "HOST");
+                service.sendWelcomeEmail(user.getEmail(), user.getFullName(), "HOST");
             } catch (Exception e) {
-                log.warn("Failed to send welcome email to: {}", user.getEmail(), e);
+                log.warn("Failed to send welcome email to {}", user.getEmail(), e);
             }
-        }
+        });
     }
 
-    
-
-        /**
-     * Chức năng: Kiểm tra user registration.
-     */
-private void validateUserRegistration(RegisterRequestDTO request) {
+    private void validateUserRegistration(RegisterRequestDTO request) {
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("Email không được để trống");
+            throw new IllegalArgumentException("Email khong duoc de trong");
         }
         if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
-            throw new IllegalArgumentException("Mật khẩu không được để trống");
+            throw new IllegalArgumentException("Mat khau khong duoc de trong");
         }
         if (request.getFullName() == null || request.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Tên đầy đủ không được để trống");
+            throw new IllegalArgumentException("Ten day du khong duoc de trong");
         }
         if (request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty()) {
-            throw new IllegalArgumentException("Số điện thoại không được để trống");
+            throw new IllegalArgumentException("So dien thoai khong duoc de trong");
         }
     }
 
-    
-
-        /**
-     * Chức năng: Làm mới token.
-     */
-public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request) {
-        if (tokenBlacklist.contains(request.getToken())) {
-            throw new BadCredentialsException("Token đã bị hủy");
+    public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request) {
+        if (TOKEN_BLACKLIST.contains(request.getToken())) {
+            throw new BadCredentialsException("Token da bi huy");
         }
 
         String email = jwtUtils.extractEmail(request.getToken());
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        
+
         if (!jwtUtils.validateToken(request.getToken(), userDetails)) {
-            throw new BadCredentialsException("Token không hợp lệ");
+            throw new BadCredentialsException("Token khong hop le");
         }
 
-        String newToken = jwtUtils.generateToken(userDetails);
-        return new RefreshTokenResponseDTO(newToken);
+        return new RefreshTokenResponseDTO(jwtUtils.generateToken(userDetails));
     }
 
-    
-
-        /**
-     * Chức năng: Xử lý đăng xuất người dùng.
-     */
-public void logout(String token) {
-        tokenBlacklist.add(token);
-        log.info("Token added to blacklist - User logged out");
+    public void logout(String token) {
+        TOKEN_BLACKLIST.add(token);
+        log.info("Token added to blacklist - user logged out");
     }
 
-    
-
-        /**
-     * Chức năng: Tiếp nhận yêu cầu password.
-     */
-public void forgotPassword(ForgotPasswordRequestDTO request) {
-        
+    public void forgotPassword(ForgotPasswordRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
+                .orElseThrow(() -> new ResourceNotFoundException("Email khong ton tai"));
 
-        
         String resetToken = UUID.randomUUID().toString();
-        passwordResetTokens.put(resetToken, user.getEmail());
+        user.setResetToken(resetToken);
+        user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(resetTokenExpirationMinutes));
+        userRepository.save(user);
 
-        log.info("Password reset token generated for: {}", user.getEmail());
-
-        
         if (sendPasswordResetEmail) {
             emailService.ifPresentOrElse(
-                service -> {
-                    try {
-                        service.sendPasswordResetEmail(user.getEmail(), resetToken);
-                        log.info("Password reset email sent to: {}", user.getEmail());
-                    } catch (Exception e) {
-                        log.error("Failed to send password reset email to: {}", user.getEmail(), e);
-                    }
-                },
-                () -> log.warn("EmailService not available. Reset token: {} (use for testing)", resetToken)
+                    service -> {
+                        try {
+                            service.sendPasswordResetEmail(user.getEmail(), resetToken);
+                        } catch (Exception e) {
+                            log.error("Failed to send password reset email to {}", user.getEmail(), e);
+                        }
+                    },
+                    () -> log.warn("EmailService not available. Reset token: {} (use for testing)", resetToken)
             );
         } else {
             log.info("Email sending disabled. Reset token available: {} (use for testing)", resetToken);
         }
     }
 
-    
-
-        /**
-     * Chức năng: Đặt lại password.
-     */
-public void resetPassword(ResetPasswordRequestDTO request) {
-        String email = passwordResetTokens.get(request.getToken());
-        if (email == null) {
-            throw new BadCredentialsException("Token không hợp lệ hoặc đã hết hạn");
-        }
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
+    public void resetPassword(ResetPasswordRequestDTO request) {
+        User user = userRepository.findByResetTokenAndResetTokenExpiryAfter(
+                        request.getToken(),
+                        LocalDateTime.now()
+                )
+                .orElseThrow(() -> new BadCredentialsException("Token khong hop le hoac da het han"));
 
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
         userRepository.save(user);
-        log.info("Password reset successfully for: {}", email);
-
-        
-        passwordResetTokens.remove(request.getToken());
     }
 }

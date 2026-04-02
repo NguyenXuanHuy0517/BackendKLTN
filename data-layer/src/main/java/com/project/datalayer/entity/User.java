@@ -6,7 +6,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        indexes = {
+                @Index(name = "idx_users_role_active", columnList = "role_id,is_active"),
+                @Index(name = "idx_users_reset_token", columnList = "reset_token")
+        }
+)
 @Data
 public class User {
 
@@ -45,6 +51,12 @@ public class User {
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
+
+    @Column(name = "reset_token", length = 255)
+    private String resetToken;
+
+    @Column(name = "reset_token_expiry")
+    private LocalDateTime resetTokenExpiry;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

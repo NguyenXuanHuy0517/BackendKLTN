@@ -1,6 +1,7 @@
 package com.project.tenantservice.service;
 
 import com.project.datalayer.entity.ChatbotHistory;
+import com.project.datalayer.entity.Contract;
 import com.project.datalayer.entity.User;
 import com.project.datalayer.repository.ChatbotHistoryRepository;
 import com.project.datalayer.repository.ContractRepository;
@@ -109,11 +110,7 @@ private String generateReply(Long userId, String intent, String message) {
      * Chức năng: Xử lý invoice query.
      */
 private String handleInvoiceQuery(Long userId) {
-        var invoices = invoiceRepository
-                .findByContract_Room_Area_Host_UserId(userId).stream()
-                .filter(i -> i.getContract().getTenant()
-                        .getUserId().equals(userId))
-                .toList();
+        var invoices = invoiceRepository.findByContract_Tenant_UserId(userId);
 
         if (invoices.isEmpty()) {
             return "Bạn chưa có hóa đơn nào trong hệ thống.";
@@ -172,10 +169,7 @@ private String handleInvoiceQuery(Long userId) {
      * Chức năng: Xử lý contract query.
      */
 private String handleContractQuery(Long userId) {
-        var contracts = contractRepository.findByTenant_UserId(userId);
-        var active = contracts.stream()
-                .filter(c -> c.getStatus().equals("ACTIVE"))
-                .findFirst();
+        var active = findActiveContract(userId);
 
         if (active.isEmpty()) {
             return "Bạn hiện không có hợp đồng đang hiệu lực.";
@@ -213,9 +207,7 @@ private String handleContractQuery(Long userId) {
      * Chức năng: Xử lý service query.
      */
 private String handleServiceQuery(Long userId) {
-        var active = contractRepository.findByTenant_UserId(userId).stream()
-                .filter(c -> c.getStatus().equals("ACTIVE"))
-                .findFirst();
+        var active = findActiveContract(userId);
 
         if (active.isEmpty()) {
             return "Bạn hiện không có hợp đồng đang hiệu lực.";
@@ -282,5 +274,8 @@ private String translateStatus(String status) {
             case "OVERDUE" -> "Quá hạn";
             default -> status;
         };
+    }
+    private java.util.Optional<Contract> findActiveContract(Long userId) {
+        return contractRepository.findFirstByTenant_UserIdAndStatusOrderByStartDateDesc(userId, "ACTIVE");
     }
 }

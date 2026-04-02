@@ -22,10 +22,14 @@ public MyInvoiceDTO toDTO(Invoice invoice) {
         MyInvoiceDTO dto = new MyInvoiceDTO();
         dto.setInvoiceId(invoice.getInvoiceId());
         dto.setInvoiceCode(invoice.getInvoiceCode());
+        dto.setRoomCode(invoice.getContract().getRoom().getRoomCode());
         dto.setBillingMonth(invoice.getBillingMonth());
         dto.setBillingYear(invoice.getBillingYear());
         dto.setTotalAmount(invoice.getTotalAmount());
         dto.setStatus(invoice.getStatus());
+        dto.setPaymentSubmittedAt(invoice.getPaymentSubmittedAt());
+        dto.setPaymentProofUrl(invoice.getPaymentProofUrl());
+        dto.setPaymentStatus(invoice.getPaymentStatus());
         dto.setCreatedAt(invoice.getCreatedAt());
         return dto;
     }
@@ -59,6 +63,10 @@ public MyInvoiceDetailDTO toDetailDTO(Invoice invoice,
         dto.setServiceNames(services.stream()
                 .map(cs -> cs.getService().getServiceName())
                 .toList());
+        dto.setPaymentProofUrl(invoice.getPaymentProofUrl());
+        dto.setPaymentSubmittedAt(invoice.getPaymentSubmittedAt());
+        dto.setPaymentNote(invoice.getPaymentNote());
+        dto.setPaymentStatus(invoice.getPaymentStatus());
         return dto;
     }
 }

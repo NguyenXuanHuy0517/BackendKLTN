@@ -1,21 +1,23 @@
 package com.project.tenantservice.controller;
 
 import com.project.datalayer.dto.common.ApiResponse;
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.tenantservice.dto.invoice.MyInvoiceDTO;
 import com.project.tenantservice.dto.invoice.MyInvoiceDetailDTO;
 import com.project.tenantservice.service.MyInvoiceService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-/**
- * Vai trò: REST controller của module tenant-service.
- * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ my invoice và điều phối xử lý sang tầng bên dưới.
- */
-@Slf4j
 @RestController
 @RequestMapping("/api/tenant/invoices")
 @RequiredArgsConstructor
@@ -23,29 +25,39 @@ public class MyInvoiceController {
 
     private final MyInvoiceService invoiceService;
 
-        /**
-     * Chức năng: Lấy dữ liệu my invoices.
-     * URL: GET /api/tenant/invoices
-     */
-@GetMapping
-    public ResponseEntity<ApiResponse<List<MyInvoiceDTO>>> getMyInvoices(
-            @RequestParam Long userId) {
-        log.info("GET /api/tenant/invoices - userId: {}", userId);
-        return ResponseEntity.ok(
-                ApiResponse.success(invoiceService.getMyInvoices(userId)));
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<MyInvoiceDTO>>> getMyInvoices(@RequestParam Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(invoiceService.getMyInvoices(userId)));
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu invoice detail.
-     * URL: GET /api/tenant/invoices/{invoiceId}
-     */
-@GetMapping("/{invoiceId}")
+    @GetMapping("/paged")
+    public ResponseEntity<ApiResponse<PagedResponse<MyInvoiceDTO>>> getMyInvoicesPaged(
+            @RequestParam Long userId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        return ResponseEntity.ok(ApiResponse.success(
+                invoiceService.getMyInvoicesPage(userId, status, search, page, size, sort)
+        ));
+    }
+
+    @GetMapping("/{invoiceId}")
     public ResponseEntity<ApiResponse<MyInvoiceDetailDTO>> getInvoiceDetail(
             @PathVariable Long invoiceId,
             @RequestParam Long userId) {
-        log.info("GET /api/tenant/invoices/{} - userId: {}", invoiceId, userId);
-        return ResponseEntity.ok(
-                ApiResponse.success(
-                        invoiceService.getInvoiceDetail(invoiceId, userId)));
+        return ResponseEntity.ok(ApiResponse.success(invoiceService.getInvoiceDetail(invoiceId, userId)));
+    }
+
+    @PostMapping(value = "/{invoiceId}/payment-proof", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<MyInvoiceDetailDTO>> submitPaymentProof(
+            @PathVariable Long invoiceId,
+            @RequestParam Long userId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(required = false) String note) {
+        return ResponseEntity.ok(ApiResponse.success(
+                invoiceService.submitPaymentProof(invoiceId, userId, file, note)
+        ));
     }
 }

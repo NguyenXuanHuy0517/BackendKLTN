@@ -5,20 +5,21 @@ import com.project.adminservice.dto.host.AdminHostResponseDTO;
 import com.project.adminservice.dto.host.AdminHostStatusUpdateRequest;
 import com.project.adminservice.exception.ResourceNotFoundException;
 import com.project.datalayer.entity.User;
-import com.project.datalayer.repository.*;
+import com.project.datalayer.repository.ContractRepository;
+import com.project.datalayer.repository.InvoiceRepository;
+import com.project.datalayer.repository.MotelAreaRepository;
+import com.project.datalayer.repository.RoomRepository;
+import com.project.datalayer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module admin-service.
- * Chức năng: Chứa logic xử lý liên quan đến admin host.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -30,49 +31,54 @@ public class AdminHostService {
     private final ContractRepository contractRepository;
     private final InvoiceRepository invoiceRepository;
 
-        /**
-     * Chức năng: Lấy dữ liệu all hosts.
-     */
-public List<AdminHostResponseDTO> getAllHosts() {
-        return userRepository.findByRole_RoleName("HOST").stream()
-                .map(this::mapToListDTO)
+    public List<AdminHostResponseDTO> getAllHosts() {
+        List<User> hosts = userRepository.findByRole_RoleName("HOST");
+        List<Long> hostIds = hosts.stream()
+                .map(User::getUserId)
+                .toList();
+
+        Map<Long, Long> areaCountsByHostId = hostIds.isEmpty()
+                ? Map.of()
+                : toCountMap(areaRepository.countAreasByHostIds(hostIds));
+        Map<Long, Long> roomCountsByHostId = hostIds.isEmpty()
+                ? Map.of()
+                : toCountMap(roomRepository.countRoomsByHostIds(hostIds));
+
+        return hosts.stream()
+                .map(host -> mapToListDTO(
+                        host,
+                        areaCountsByHostId.getOrDefault(host.getUserId(), 0L),
+                        roomCountsByHostId.getOrDefault(host.getUserId(), 0L)
+                ))
                 .toList();
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu host detail.
-     */
-public AdminHostDetailDTO getHostDetail(Long hostId) {
+    public AdminHostDetailDTO getHostDetail(Long hostId) {
         User host = userRepository.findById(hostId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy host: " + hostId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay host: " + hostId));
 
         if (!"HOST".equals(host.getRole().getRoleName())) {
-            throw new IllegalArgumentException("User này không phải host");
+            throw new IllegalArgumentException("User nay khong phai host");
         }
 
         return mapToDetailDTO(host);
     }
 
-        /**
-     * Chức năng: Cập nhật host status.
-     */
-@Transactional
+    @Transactional
     public void updateHostStatus(Long hostId, AdminHostStatusUpdateRequest request) {
         User host = userRepository.findById(hostId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy host: " + hostId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay host: " + hostId));
 
         if (!"HOST".equals(host.getRole().getRoleName())) {
-            throw new IllegalArgumentException("User này không phải host");
+            throw new IllegalArgumentException("User nay khong phai host");
         }
 
-        
         if ("ADMIN".equals(host.getRole().getRoleName())) {
-            throw new IllegalArgumentException("Không thể khóa tài khoản ADMIN");
+            throw new IllegalArgumentException("Khong the khoa tai khoan ADMIN");
         }
 
-        
         if (host.isActive() == request.isActive()) {
-            log.warn("Host {} đã ở trạng thái target {}", hostId, request.isActive());
+            log.warn("Host {} da o trang thai target {}", hostId, request.isActive());
             return;
         }
 
@@ -83,10 +89,7 @@ public AdminHostDetailDTO getHostDetail(Long hostId) {
                 hostId, request.isActive(), request.getReason(), request.getNote());
     }
 
-        /**
-     * Chức năng: Ánh xạ to list dto.
-     */
-private AdminHostResponseDTO mapToListDTO(User host) {
+    private AdminHostResponseDTO mapToListDTO(User host, Long totalAreas, Long totalRooms) {
         AdminHostResponseDTO dto = new AdminHostResponseDTO();
         dto.setUserId(host.getUserId());
         dto.setFullName(host.getFullName());
@@ -94,20 +97,12 @@ private AdminHostResponseDTO mapToListDTO(User host) {
         dto.setPhoneNumber(host.getPhoneNumber());
         dto.setAvatarUrl(host.getAvatarUrl());
         dto.setActive(host.isActive());
-        
-        Long totalAreas = (long) areaRepository.findByHost_UserId(host.getUserId()).size();
         dto.setTotalAreas(totalAreas);
-
-        Long totalRooms = (long) roomRepository.findByArea_Host_UserId(host.getUserId()).size();
         dto.setTotalRooms(totalRooms);
-
         return dto;
     }
 
-        /**
-     * Chức năng: Ánh xạ to detail dto.
-     */
-private AdminHostDetailDTO mapToDetailDTO(User host) {
+    private AdminHostDetailDTO mapToDetailDTO(User host) {
         AdminHostDetailDTO dto = new AdminHostDetailDTO();
         dto.setUserId(host.getUserId());
         dto.setFullName(host.getFullName());
@@ -116,34 +111,26 @@ private AdminHostDetailDTO mapToDetailDTO(User host) {
         dto.setAvatarUrl(host.getAvatarUrl());
         dto.setActive(host.isActive());
         dto.setCreatedAt(host.getCreatedAt());
+        dto.setTotalAreas(areaRepository.countByHost_UserId(host.getUserId()));
+        dto.setTotalRooms(roomRepository.countByArea_Host_UserId(host.getUserId()));
+        dto.setActiveContracts(contractRepository.countByRoom_Area_Host_UserIdAndStatus(host.getUserId(), "ACTIVE"));
+        dto.setOverdueInvoices(invoiceRepository.countOverdueByHostId(host.getUserId()));
 
-        
-        Long totalAreas = (long) areaRepository.findByHost_UserId(host.getUserId()).size();
-        dto.setTotalAreas(totalAreas);
-        
-        
-        Long totalRooms = (long) roomRepository.findByArea_Host_UserId(host.getUserId()).size();
-        dto.setTotalRooms(totalRooms);
-        
-        
-        Long activeContracts = contractRepository.countByRoom_Area_Host_UserIdAndStatus(host.getUserId(), "ACTIVE");
-        dto.setActiveContracts(activeContracts);
-
-        
-        Long overdueInvoices = invoiceRepository.countOverdueByHostId(host.getUserId());
-        dto.setOverdueInvoices(overdueInvoices);
-
-        
         YearMonth currentMonth = YearMonth.now();
-        Long roomsWithoutInvoice = roomRepository.countRoomsWithoutInvoiceByHostId(
+        dto.setRoomsWithoutInvoice(roomRepository.countRoomsWithoutInvoiceByHostId(
                 host.getUserId(),
                 currentMonth.getMonthValue(),
                 currentMonth.getYear()
-        );
-        dto.setRoomsWithoutInvoice(roomsWithoutInvoice);
-
-        dto.setLatestStatusReason(null);  
-
+        ));
+        dto.setLatestStatusReason(null);
         return dto;
+    }
+
+    private Map<Long, Long> toCountMap(List<Object[]> rows) {
+        return rows.stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
     }
 }

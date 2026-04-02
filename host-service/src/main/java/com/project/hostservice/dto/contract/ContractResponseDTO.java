@@ -3,6 +3,7 @@ package com.project.hostservice.dto.contract;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -22,6 +23,9 @@ public class ContractResponseDTO {
     private BigDecimal elecPriceOverride;
     private BigDecimal waterPriceOverride;
     private String status;
+    private BigDecimal depositAmount;
+    private String depositStatus;
+    private LocalDateTime depositDate;
 
     
     private List<ContractServiceDTO> contractServices;

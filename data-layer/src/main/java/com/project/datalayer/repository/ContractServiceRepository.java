@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ContractServiceRepository extends JpaRepository<ContractService, ContractServiceId> {
     List<ContractService> findByContract_ContractId(Long contractId);
+    List<ContractService> findByContract_ContractIdIn(List<Long> contractIds);
     void deleteByContract_ContractIdAndService_ServiceId(Long contractId, Long serviceId);
 }

@@ -1,5 +1,6 @@
 package com.project.hostservice.service;
 
+import com.project.datalayer.dto.common.PagedResponse;
 import com.project.datalayer.entity.Contract;
 import com.project.datalayer.entity.Notification;
 import com.project.datalayer.entity.User;
@@ -11,33 +12,33 @@ import com.project.hostservice.exception.ResourceNotFoundException;
 import com.project.hostservice.mapper.NotificationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Vai trò: Service xử lý nghiệp vụ của module host-service.
- * Chức năng: Chứa logic xử lý liên quan đến notification.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationService {
+
+    private static final Set<String> NOTIFICATION_SORT_FIELDS = Set.of("createdAt", "readAt", "type");
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final ContractRepository contractRepository;
     private final NotificationMapper notificationMapper;
 
-        /**
-     * Chức năng: Gửi to user.
-     */
-public void sendToUser(Long userId, String type, String title, String body, String refType, Long refId) {
+    public void sendToUser(Long userId, String type, String title, String body, String refType, Long refId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy user: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay user: " + userId));
 
         Notification notification = new Notification();
         notification.setUser(user);
@@ -47,24 +48,40 @@ public void sendToUser(Long userId, String type, String title, String body, Stri
         notification.setRefType(refType);
         notification.setRefId(refId);
         notification.setRead(false);
-
         notificationRepository.save(notification);
     }
 
-        /**
-     * Chức năng: Lấy dữ liệu notifications by user.
-     */
-public List<NotificationResponseDTO> getNotificationsByUser(Long userId) {
-        return notificationRepository
-                .findByUser_UserIdOrderByCreatedAtDesc(userId).stream()
+    public List<NotificationResponseDTO> getNotificationsByUser(Long userId) {
+        return notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId).stream()
                 .map(notificationMapper::toDTO)
                 .toList();
     }
 
-        /**
-     * Chức năng: Thực hiện nghiệp vụ mark as read.
-     */
-public void markAsRead(Long notificationId) {
+    public PagedResponse<NotificationResponseDTO> getNotificationsPageByUser(
+            Long userId,
+            Boolean isRead,
+            String search,
+            int page,
+            int size,
+            String sort
+    ) {
+        Page<Notification> notificationPage = notificationRepository.findPageByUserId(
+                userId,
+                isRead,
+                normalize(search),
+                PageRequest.of(Math.max(page, 0), Math.min(Math.max(size, 1), 100), buildSort(sort))
+        );
+        List<NotificationResponseDTO> items = notificationPage.getContent().stream()
+                .map(notificationMapper::toDTO)
+                .toList();
+        return PagedResponse.from(notificationPage, items);
+    }
+
+    public long countUnreadByUser(Long userId) {
+        return notificationRepository.countByUser_UserIdAndIsReadFalse(userId);
+    }
+
+    public void markAsRead(Long notificationId) {
         notificationRepository.findById(notificationId).ifPresent(notification -> {
             notification.setRead(true);
             notification.setReadAt(LocalDateTime.now());
@@ -72,12 +89,8 @@ public void markAsRead(Long notificationId) {
         });
     }
 
-        /**
-     * Chức năng: Thực hiện nghiệp vụ mark all as read.
-     */
-public void markAllAsRead(Long userId) {
-        List<Notification> unreadNotifications = notificationRepository
-                .findByUser_UserIdAndIsRead(userId, false);
+    public void markAllAsRead(Long userId) {
+        List<Notification> unreadNotifications = notificationRepository.findByUser_UserIdAndIsRead(userId, false);
         unreadNotifications.forEach(notification -> {
             notification.setRead(true);
             notification.setReadAt(LocalDateTime.now());
@@ -85,14 +98,9 @@ public void markAllAsRead(Long userId) {
         notificationRepository.saveAll(unreadNotifications);
     }
 
-    
-
-        /**
-     * Chức năng: Gửi to tenant.
-     */
-public void sendToTenant(Long tenantId, String type, String title, String body, String refType, Long refId) {
+    public void sendToTenant(Long tenantId, String type, String title, String body, String refType, Long refId) {
         User tenant = userRepository.findById(tenantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tenant: " + tenantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Khong tim thay tenant: " + tenantId));
 
         Notification notification = new Notification();
         notification.setUser(tenant);
@@ -104,48 +112,68 @@ public void sendToTenant(Long tenantId, String type, String title, String body, 
         notification.setRead(false);
 
         notificationRepository.save(notification);
-        log.info("Thông báo gửi đến tenant {} - type: {}", tenantId, type);
+        log.info("Thong bao gui den tenant {} - type: {}", tenantId, type);
     }
 
-    
-
-        /**
-     * Chức năng: Gửi to all tenants by host.
-     */
-public void sendToAllTenantsByHost(Long hostId, String type, String title, String body, String refType, Long refId) {
-        
-        List<Contract> contracts = contractRepository.findByRoom_Area_Host_UserId(hostId);
-
-        
-        Set<Long> tenantIds = contracts.stream()
+    public void sendToAllTenantsByHost(Long hostId, String type, String title, String body, String refType, Long refId) {
+        List<Contract> contracts = contractRepository.findWithRelationsByHostIdAndStatus(hostId, "ACTIVE");
+        List<Long> tenantIds = contracts.stream()
                 .map(contract -> contract.getTenant().getUserId())
-                .collect(Collectors.toSet());
+                .distinct()
+                .toList();
 
-        log.info("Gửi thông báo đến {} tenants của host {}", tenantIds.size(), hostId);
+        if (tenantIds.isEmpty()) {
+            log.info("Khong co tenant active nao de gui thong bao cho host {}", hostId);
+            return;
+        }
 
-        
-        tenantIds.forEach(tenantId -> {
-            try {
-                sendToTenant(tenantId, type, title, body, refType, refId);
-            } catch (Exception e) {
-                log.error("Lỗi gửi thông báo đến tenant {}: {}", tenantId, e.getMessage());
-            }
-        });
+        Map<Long, User> tenantsById = userRepository.findAllById(tenantIds).stream()
+                .collect(Collectors.toMap(User::getUserId, user -> user));
+
+        List<Notification> notifications = tenantIds.stream()
+                .map(tenantsById::get)
+                .filter(Objects::nonNull)
+                .map(tenant -> {
+                    Notification notification = new Notification();
+                    notification.setUser(tenant);
+                    notification.setType(type);
+                    notification.setTitle(title);
+                    notification.setBody(body);
+                    notification.setRefType(refType);
+                    notification.setRefId(refId);
+                    notification.setRead(false);
+                    return notification;
+                })
+                .toList();
+
+        notificationRepository.saveAll(notifications);
+        log.info("Gui thong bao den {} tenants cua host {}", notifications.size(), hostId);
     }
 
-    
-
-        /**
-     * Chức năng: Gửi notification.
-     */
-public void sendNotification(Long hostId, Long tenantId, String type, String title, String body,
+    public void sendNotification(Long hostId, Long tenantId, String type, String title, String body,
                                  String refType, Long refId) {
         if (tenantId != null) {
-            
             sendToTenant(tenantId, type, title, body, refType, refId);
         } else {
-            
             sendToAllTenantsByHost(hostId, type, title, body, refType, refId);
         }
+    }
+
+    private Sort buildSort(String sort) {
+        String[] sortParts = (sort == null ? "" : sort).split(",", 2);
+        String requestedField = sortParts.length > 0 ? sortParts[0].trim() : "";
+        String field = NOTIFICATION_SORT_FIELDS.contains(requestedField) ? requestedField : "createdAt";
+        Sort.Direction direction = sortParts.length > 1 && "asc".equalsIgnoreCase(sortParts[1].trim())
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+        return Sort.by(direction, field);
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 }

@@ -31,6 +31,11 @@ public ContractResponseDTO toDTO(Contract contract, List<ContractService> servic
         dto.setElecPriceOverride(contract.getElecPriceOverride());
         dto.setWaterPriceOverride(contract.getWaterPriceOverride());
         dto.setStatus(contract.getStatus());
+        if (contract.getDeposit() != null) {
+            dto.setDepositAmount(contract.getDeposit().getAmount());
+            dto.setDepositStatus(contract.getDeposit().getStatus());
+            dto.setDepositDate(contract.getDeposit().getDepositDate());
+        }
         
         
         dto.setContractServices(services.stream()
