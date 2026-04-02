@@ -10,13 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Controller cho phép host cập nhật avatar của chính mình.
- *
- * Flow:
- *   Flutter → POST /api/host/avatar?userId=X (multipart file)
- *          ← { success: true, data: "https://res.cloudinary.com/..." }
- *
- * Flutter sau đó lưu URL mới vào SharedPreferences và hiển thị lại avatar.
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ avatar và điều phối xử lý sang tầng bên dưới.
  */
 @Slf4j
 @RestController
@@ -26,11 +21,13 @@ public class AvatarController {
 
     private final AvatarService avatarService;
 
-    /**
-     * Upload avatar mới cho user.
-     * File được upload lên Cloudinary, URL được lưu vào users.avatar_url.
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload avatar.
+     * URL: POST /api/host/avatar
      */
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<String>> uploadAvatar(
             @RequestParam Long userId,
             @RequestParam("file") MultipartFile file) {
@@ -44,10 +41,13 @@ public class AvatarController {
         return ResponseEntity.ok(ApiResponse.success(avatarUrl));
     }
 
-    /**
-     * Xoá avatar — đặt lại về null (dùng ảnh mặc định trên Flutter).
+    
+
+        /**
+     * Chức năng: Xóa avatar.
+     * URL: DELETE /api/host/avatar
      */
-    @DeleteMapping
+@DeleteMapping
     public ResponseEntity<ApiResponse<Void>> deleteAvatar(@RequestParam Long userId) {
         log.info("DELETE /api/host/avatar - userId: {}", userId);
         avatarService.removeAvatar(userId);

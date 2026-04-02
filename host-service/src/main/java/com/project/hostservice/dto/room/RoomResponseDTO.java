@@ -4,6 +4,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến room để trao đổi giữa các tầng.
+ */
 @Data
 public class RoomResponseDTO {
     private Long roomId;
@@ -15,13 +19,13 @@ public class RoomResponseDTO {
     private BigDecimal areaSize;
     private String status;
     private String amenities;
-    private String images;  // JSON raw data
-    private List<String> imagesList;  // Parsed list of image URLs
+    private String images;  
+    private List<String> imagesList;  
     private String description;
     private Long areaId;
     private String areaName;
     private String hostName;
-    private String hostAvatar;  // Avatar URL of the host/owner
+    private String hostAvatar;  
     private String currentTenantName;
     private Long currentContractId;
 }

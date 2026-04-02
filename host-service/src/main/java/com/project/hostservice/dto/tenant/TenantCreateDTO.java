@@ -2,6 +2,10 @@ package com.project.hostservice.dto.tenant;
 
 import lombok.Data;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến tenant create để trao đổi giữa các tầng.
+ */
 @Data
 public class TenantCreateDTO {
     private String fullName;

@@ -9,6 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ profile và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tenant/profile")
@@ -17,7 +21,11 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu profile.
+     * URL: GET /api/tenant/profile
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<ProfileResponseDTO>> getProfile(
             @RequestParam Long userId) {
         log.info("GET /api/tenant/profile - userId: {}", userId);
@@ -25,7 +33,11 @@ public class ProfileController {
                 ApiResponse.success(profileService.getProfile(userId)));
     }
 
-    @PutMapping
+        /**
+     * Chức năng: Cập nhật profile.
+     * URL: PUT /api/tenant/profile
+     */
+@PutMapping
     public ResponseEntity<ApiResponse<ProfileResponseDTO>> updateProfile(
             @RequestParam Long userId,
             @RequestBody ProfileUpdateDTO request) {

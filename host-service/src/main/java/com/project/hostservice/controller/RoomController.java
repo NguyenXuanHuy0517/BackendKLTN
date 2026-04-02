@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ room và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/rooms")
@@ -20,7 +24,11 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu rooms.
+     * URL: GET /api/host/rooms
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<RoomResponseDTO>>> getRooms(@RequestParam Long hostId) {
         log.info("GET /api/host/rooms - hostId: {}", hostId);
         List<RoomResponseDTO> result = roomService.getRoomsByHost(hostId);
@@ -28,7 +36,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/area/{areaId}")
+        /**
+     * Chức năng: Lấy dữ liệu rooms by area.
+     * URL: GET /api/host/rooms/area/{areaId}
+     */
+@GetMapping("/area/{areaId}")
     public ResponseEntity<ApiResponse<List<RoomResponseDTO>>> getRoomsByArea(@PathVariable Long areaId) {
         log.info("GET /api/host/rooms/area/{}", areaId);
         List<RoomResponseDTO> result = roomService.getRoomsByArea(areaId);
@@ -36,7 +48,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{roomId}")
+        /**
+     * Chức năng: Lấy dữ liệu room detail.
+     * URL: GET /api/host/rooms/{roomId}
+     */
+@GetMapping("/{roomId}")
     public ResponseEntity<ApiResponse<RoomResponseDTO>> getRoomDetail(@PathVariable Long roomId) {
         log.info("GET /api/host/rooms/{}", roomId);
         RoomResponseDTO result = roomService.getRoomDetail(roomId);
@@ -44,7 +60,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PostMapping
+        /**
+     * Chức năng: Tạo room.
+     * URL: POST /api/host/rooms
+     */
+@PostMapping
     public ResponseEntity<ApiResponse<RoomResponseDTO>> createRoom(@RequestBody RoomCreateDTO request) {
         log.info("POST /api/host/rooms - areaId: {}, roomCode: {}", request.getAreaId(), request.getRoomCode());
         RoomResponseDTO result = roomService.createRoom(request);
@@ -52,7 +72,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PutMapping("/{roomId}")
+        /**
+     * Chức năng: Cập nhật room.
+     * URL: PUT /api/host/rooms/{roomId}
+     */
+@PutMapping("/{roomId}")
     public ResponseEntity<ApiResponse<RoomResponseDTO>> updateRoom(@PathVariable Long roomId,
                                                                    @RequestBody RoomUpdateDTO request) {
         log.info("PUT /api/host/rooms/{}", roomId);
@@ -61,7 +85,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PatchMapping("/{roomId}/status")
+        /**
+     * Chức năng: Cập nhật status.
+     * URL: PATCH /api/host/rooms/{roomId}/status
+     */
+@PatchMapping("/{roomId}/status")
     public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable Long roomId,
                                                           @RequestBody RoomStatusUpdateDTO request,
                                                           @RequestParam Long changedById) {
@@ -73,7 +101,11 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @GetMapping("/{roomId}/history")
+        /**
+     * Chức năng: Lấy dữ liệu status history.
+     * URL: GET /api/host/rooms/{roomId}/history
+     */
+@GetMapping("/{roomId}/history")
     public ResponseEntity<ApiResponse<List<RoomStatusHistory>>> getStatusHistory(@PathVariable Long roomId) {
         log.info("GET /api/host/rooms/{}/history", roomId);
         List<RoomStatusHistory> result = roomService.getStatusHistory(roomId);

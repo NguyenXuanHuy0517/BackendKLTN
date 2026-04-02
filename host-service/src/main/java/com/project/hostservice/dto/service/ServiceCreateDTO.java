@@ -3,6 +3,10 @@ package com.project.hostservice.dto.service;
 import lombok.Data;
 import java.math.BigDecimal;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến service create dto.
+ */
 @Data
 public class ServiceCreateDTO {
     private String serviceName;

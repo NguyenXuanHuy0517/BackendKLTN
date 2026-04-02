@@ -7,10 +7,17 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ room giữa entity và DTO.
+ */
 @Component
 public class RoomMapper {
 
-    public RoomResponseDTO toDTO(Room room) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public RoomResponseDTO toDTO(Room room) {
         RoomResponseDTO dto = new RoomResponseDTO();
         dto.setRoomId(room.getRoomId());
         dto.setRoomCode(room.getRoomCode());
@@ -23,7 +30,7 @@ public class RoomMapper {
         dto.setAmenities(room.getAmenities());
         dto.setImages(room.getImages());
         
-        // Parse images JSON to list
+        
         List<String> imagesList = parseJsonImages(room.getImages());
         dto.setImagesList(imagesList);
         
@@ -31,7 +38,7 @@ public class RoomMapper {
         dto.setAreaId(room.getArea().getAreaId());
         dto.setAreaName(room.getArea().getAreaName());
         
-        // Load host information
+        
         if (room.getArea().getHost() != null) {
             dto.setHostName(room.getArea().getHost().getFullName());
             dto.setHostAvatar(room.getArea().getHost().getAvatarUrl());
@@ -40,7 +47,10 @@ public class RoomMapper {
         return dto;
     }
 
-    private List<String> parseJsonImages(String imagesJson) {
+        /**
+     * Chức năng: Phân tích json images.
+     */
+private List<String> parseJsonImages(String imagesJson) {
         List<String> result = new ArrayList<>();
         
         if (imagesJson == null || imagesJson.trim().isEmpty() || imagesJson.equals("[]")) {
@@ -48,8 +58,8 @@ public class RoomMapper {
         }
         
         try {
-            // Simple JSON parsing without ObjectMapper
-            // Expected format: ["url1", "url2", ...]
+            
+            
             String cleaned = imagesJson.trim();
             if (cleaned.startsWith("[") && cleaned.endsWith("]")) {
                 cleaned = cleaned.substring(1, cleaned.length() - 1);
@@ -59,7 +69,7 @@ public class RoomMapper {
                 String[] urls = cleaned.split(",");
                 for (String url : urls) {
                     String trimmed = url.trim();
-                    // Remove quotes if present
+                    
                     if (trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
                         trimmed = trimmed.substring(1, trimmed.length() - 1);
                     }
@@ -69,7 +79,7 @@ public class RoomMapper {
                 }
             }
         } catch (Exception e) {
-            // Return empty list if parsing fails
+            
         }
         
         return result;

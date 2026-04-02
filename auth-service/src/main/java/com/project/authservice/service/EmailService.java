@@ -7,6 +7,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module auth-service.
+ * Chức năng: Chứa logic xử lý liên quan đến email.
+ */
 @Service
 @Slf4j
 @ConditionalOnBean(JavaMailSender.class)
@@ -24,12 +28,12 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    /**
-     * Gửi email reset mật khẩu
-     * @param toEmail Email của người dùng
-     * @param resetToken Token dùng để reset mật khẩu
+    
+
+        /**
+     * Chức năng: Gửi password reset email.
      */
-    public void sendPasswordResetEmail(String toEmail, String resetToken) {
+public void sendPasswordResetEmail(String toEmail, String resetToken) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
@@ -45,13 +49,12 @@ public class EmailService {
         }
     }
 
-    /**
-     * Gửi email xác nhận đăng ký tài khoản
-     * @param toEmail Email của người dùng
-     * @param fullName Tên người dùng
-     * @param userType Loại tài khoản (TENANT/HOST/ADMIN)
+    
+
+        /**
+     * Chức năng: Gửi welcome email.
      */
-    @SuppressWarnings("unused")
+@SuppressWarnings("unused")
     public void sendWelcomeEmail(String toEmail, String fullName, String userType) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -64,19 +67,17 @@ public class EmailService {
             log.info("Welcome email sent to: {} ({})", toEmail, userType);
         } catch (Exception e) {
             log.error("Failed to send welcome email to: {}", toEmail, e);
-            // Không throw exception để không ảnh hưởng đến registration flow
+            
             log.warn("Welcome email sending failed, but registration will continue");
         }
     }
 
-    /**
-     * Gửi email thông báo đăng nhập từ thiết bị mới
-     * @param toEmail Email của người dùng
-     * @param fullName Tên người dùng
-     * @param loginTime Thời gian đăng nhập
-     * @param device Thiết bị đăng nhập
+    
+
+        /**
+     * Chức năng: Gửi login notification email.
      */
-    @SuppressWarnings("unused")
+@SuppressWarnings("unused")
     public void sendLoginNotificationEmail(String toEmail, String fullName, String loginTime, String device) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -89,14 +90,16 @@ public class EmailService {
             log.info("Login notification email sent to: {}", toEmail);
         } catch (Exception e) {
             log.error("Failed to send login notification email to: {}", toEmail, e);
-            // Không throw exception
+            
         }
     }
 
-    /**
-     * Build nội dung email reset mật khẩu
+    
+
+        /**
+     * Chức năng: Khởi tạo reset password email content.
      */
-    private String buildResetPasswordEmailContent(String resetToken) {
+private String buildResetPasswordEmailContent(String resetToken) {
         String resetLink = frontendUrl + "/reset-password?token=" + resetToken;
         return String.format("""
             Xin chào,
@@ -117,10 +120,12 @@ public class EmailService {
             """, resetLink);
     }
 
-    /**
-     * Build nội dung email chào mừng
+    
+
+        /**
+     * Chức năng: Khởi tạo welcome email content.
      */
-    private String buildWelcomeEmailContent(String fullName, String userType) {
+private String buildWelcomeEmailContent(String fullName, String userType) {
         String roleText = switch (userType.toUpperCase()) {
             case "HOST" -> "Quản lý motel/phòng trọ";
             case "TENANT" -> "Tìm kiếm phòng trọ";
@@ -152,10 +157,12 @@ public class EmailService {
             """, fullName, roleText, frontendUrl);
     }
 
-    /**
-     * Build nội dung email thông báo đăng nhập
+    
+
+        /**
+     * Chức năng: Khởi tạo login notification content.
      */
-    private String buildLoginNotificationContent(String fullName, String loginTime, String device) {
+private String buildLoginNotificationContent(String fullName, String loginTime, String device) {
         return String.format("""
             Xin chào %s,
             
@@ -172,8 +179,3 @@ public class EmailService {
             """, fullName, device, loginTime, frontendUrl);
     }
 }
-
-
-
-
-

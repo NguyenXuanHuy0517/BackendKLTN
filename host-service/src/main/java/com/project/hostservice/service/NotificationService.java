@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến notification.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +32,10 @@ public class NotificationService {
     private final ContractRepository contractRepository;
     private final NotificationMapper notificationMapper;
 
-    public void sendToUser(Long userId, String type, String title, String body, String refType, Long refId) {
+        /**
+     * Chức năng: Gửi to user.
+     */
+public void sendToUser(Long userId, String type, String title, String body, String refType, Long refId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy user: " + userId));
 
@@ -44,14 +51,20 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<NotificationResponseDTO> getNotificationsByUser(Long userId) {
+        /**
+     * Chức năng: Lấy dữ liệu notifications by user.
+     */
+public List<NotificationResponseDTO> getNotificationsByUser(Long userId) {
         return notificationRepository
                 .findByUser_UserIdOrderByCreatedAtDesc(userId).stream()
                 .map(notificationMapper::toDTO)
                 .toList();
     }
 
-    public void markAsRead(Long notificationId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark as read.
+     */
+public void markAsRead(Long notificationId) {
         notificationRepository.findById(notificationId).ifPresent(notification -> {
             notification.setRead(true);
             notification.setReadAt(LocalDateTime.now());
@@ -59,7 +72,10 @@ public class NotificationService {
         });
     }
 
-    public void markAllAsRead(Long userId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark all as read.
+     */
+public void markAllAsRead(Long userId) {
         List<Notification> unreadNotifications = notificationRepository
                 .findByUser_UserIdAndIsRead(userId, false);
         unreadNotifications.forEach(notification -> {
@@ -69,10 +85,12 @@ public class NotificationService {
         notificationRepository.saveAll(unreadNotifications);
     }
 
-    /**
-     * Gửi thông báo đến một tenant cụ thể
+    
+
+        /**
+     * Chức năng: Gửi to tenant.
      */
-    public void sendToTenant(Long tenantId, String type, String title, String body, String refType, Long refId) {
+public void sendToTenant(Long tenantId, String type, String title, String body, String refType, Long refId) {
         User tenant = userRepository.findById(tenantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tenant: " + tenantId));
 
@@ -89,21 +107,23 @@ public class NotificationService {
         log.info("Thông báo gửi đến tenant {} - type: {}", tenantId, type);
     }
 
-    /**
-     * Gửi thông báo đến tất cả tenants của một host cụ thể
+    
+
+        /**
+     * Chức năng: Gửi to all tenants by host.
      */
-    public void sendToAllTenantsByHost(Long hostId, String type, String title, String body, String refType, Long refId) {
-        // Lấy tất cả contracts của host (mỗi contract liên kết host với tenant)
+public void sendToAllTenantsByHost(Long hostId, String type, String title, String body, String refType, Long refId) {
+        
         List<Contract> contracts = contractRepository.findByRoom_Area_Host_UserId(hostId);
 
-        // Lấy tập hợp unique tenants từ contracts
+        
         Set<Long> tenantIds = contracts.stream()
                 .map(contract -> contract.getTenant().getUserId())
                 .collect(Collectors.toSet());
 
         log.info("Gửi thông báo đến {} tenants của host {}", tenantIds.size(), hostId);
 
-        // Gửi thông báo cho mỗi tenant
+        
         tenantIds.forEach(tenantId -> {
             try {
                 sendToTenant(tenantId, type, title, body, refType, refId);
@@ -113,24 +133,18 @@ public class NotificationService {
         });
     }
 
-    /**
-     * Gửi thông báo đến tenant cụ thể hoặc tất cả tenants của host
-     *
-     * @param hostId ID của host gửi thông báo
-     * @param tenantId ID của tenant nhận thông báo (null nếu gửi đến tất cả)
-     * @param type Loại thông báo
-     * @param title Tiêu đề
-     * @param body Nội dung
-     * @param refType Loại tham chiếu
-     * @param refId ID tham chiếu
+    
+
+        /**
+     * Chức năng: Gửi notification.
      */
-    public void sendNotification(Long hostId, Long tenantId, String type, String title, String body,
+public void sendNotification(Long hostId, Long tenantId, String type, String title, String body,
                                  String refType, Long refId) {
         if (tenantId != null) {
-            // Gửi đến tenant cụ thể
+            
             sendToTenant(tenantId, type, title, body, refType, refId);
         } else {
-            // Gửi đến tất cả tenants của host
+            
             sendToAllTenantsByHost(hostId, type, title, body, refType, refId);
         }
     }

@@ -3,6 +3,10 @@ package com.project.tenantservice.dto.notification;
 import lombok.Data;
 import java.time.LocalDateTime;
 
+/**
+ * Vai trò: DTO của module tenant-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến notification để trao đổi giữa các tầng.
+ */
 @Data
 public class NotificationDTO {
     private Long notificationId;

@@ -18,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến my service.
+ */
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,10 +32,12 @@ public class MyServiceService {
     private final ContractServiceRepository contractServiceRepository;
     private final TenantServiceMapper serviceMapper;
 
-    /**
-     * Lấy danh sách dịch vụ có sẵn của khu trọ (từ room của contract)
+    
+
+        /**
+     * Chức năng: Lấy dữ liệu available services.
      */
-    public List<TenantServiceDTO> getAvailableServices(Long contractId) {
+public List<TenantServiceDTO> getAvailableServices(Long contractId) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
 
@@ -42,10 +48,12 @@ public class MyServiceService {
                 .toList();
     }
 
-    /**
-     * Lấy danh sách dịch vụ của hợp đồng hiện tại
+    
+
+        /**
+     * Chức năng: Lấy dữ liệu contract services.
      */
-    public List<TenantServiceDTO> getContractServices(Long contractId) {
+public List<TenantServiceDTO> getContractServices(Long contractId) {
         List<ContractService> contractServices = contractServiceRepository.findByContract_ContractId(contractId);
 
         return contractServices.stream()
@@ -53,14 +61,16 @@ public class MyServiceService {
                 .toList();
     }
 
-    /**
-     * Thêm dịch vụ vào hợp đồng
+    
+
+        /**
+     * Chức năng: Thêm service to contract.
      */
-    public void addServiceToContract(Long tenantId, AddServiceToContractDTO request) {
+public void addServiceToContract(Long tenantId, AddServiceToContractDTO request) {
         Contract contract = contractRepository.findById(request.getContractId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + request.getContractId()));
 
-        // Verify tenant owns this contract
+        
         if (!contract.getTenant().getUserId().equals(tenantId)) {
             throw new IllegalArgumentException("Bạn không có quyền quản lý hợp đồng này");
         }
@@ -68,7 +78,7 @@ public class MyServiceService {
         Service service = serviceRepository.findById(request.getServiceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy dịch vụ: " + request.getServiceId()));
 
-        // Check if service already added
+        
         ContractServiceId id = new ContractServiceId(request.getContractId(), request.getServiceId());
         if (contractServiceRepository.existsById(id)) {
             throw new IllegalArgumentException("Dịch vụ này đã được thêm vào hợp đồng");
@@ -85,14 +95,16 @@ public class MyServiceService {
         log.info("Dịch vụ {} được thêm vào hợp đồng {}", service.getServiceId(), contract.getContractId());
     }
 
-    /**
-     * Gỡ dịch vụ khỏi hợp đồng
+    
+
+        /**
+     * Chức năng: Loại bỏ service from contract.
      */
-    public void removeServiceFromContract(Long tenantId, Long contractId, Long serviceId) {
+public void removeServiceFromContract(Long tenantId, Long contractId, Long serviceId) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
 
-        // Verify tenant owns this contract
+        
         if (!contract.getTenant().getUserId().equals(tenantId)) {
             throw new IllegalArgumentException("Bạn không có quyền quản lý hợp đồng này");
         }
@@ -105,14 +117,16 @@ public class MyServiceService {
         log.info("Dịch vụ {} được gỡ khỏi hợp đồng {}", serviceId, contractId);
     }
 
-    /**
-     * Cập nhật số lượng dịch vụ trong hợp đồng
+    
+
+        /**
+     * Chức năng: Cập nhật service quantity.
      */
-    public void updateServiceQuantity(Long tenantId, Long contractId, Long serviceId, UpdateServiceQuantityDTO request) {
+public void updateServiceQuantity(Long tenantId, Long contractId, Long serviceId, UpdateServiceQuantityDTO request) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
 
-        // Verify tenant owns this contract
+        
         if (!contract.getTenant().getUserId().equals(tenantId)) {
             throw new IllegalArgumentException("Bạn không có quyền quản lý hợp đồng này");
         }
@@ -126,7 +140,3 @@ public class MyServiceService {
         log.info("Cập nhật số lượng dịch vụ {} trong hợp đồng {}: {}", serviceId, contractId, request.getQuantity());
     }
 }
-
-
-
-

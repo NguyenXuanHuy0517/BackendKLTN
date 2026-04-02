@@ -4,10 +4,17 @@ import com.project.datalayer.entity.Issue;
 import com.project.hostservice.dto.issue.IssueResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ issue giữa entity và DTO.
+ */
 @Component
 public class IssueMapper {
 
-    public IssueResponseDTO toDTO(Issue issue) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public IssueResponseDTO toDTO(Issue issue) {
         IssueResponseDTO dto = new IssueResponseDTO();
         dto.setIssueId(issue.getIssueId());
         dto.setTitle(issue.getTitle());
@@ -21,7 +28,7 @@ public class IssueMapper {
         dto.setTenantFeedback(issue.getTenantFeedback());
         dto.setCreatedAt(issue.getCreatedAt());
 
-        // NEW - Issue type and service suggestion fields
+        
         dto.setIssueType(issue.getIssueType());
         if (issue.getArea() != null) {
             dto.setAreaName(issue.getArea().getAreaName());

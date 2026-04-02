@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ my service và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tenant/services")
@@ -21,7 +25,11 @@ public class MyServiceController {
 
     private final MyServiceService myServiceService;
 
-    @GetMapping("/available/{contractId}")
+        /**
+     * Chức năng: Lấy dữ liệu available services.
+     * URL: GET /api/tenant/services/available/{contractId}
+     */
+@GetMapping("/available/{contractId}")
     public ResponseEntity<ApiResponse<List<TenantServiceDTO>>> getAvailableServices(@PathVariable Long contractId) {
         log.info("GET /api/tenant/services/available/{}", contractId);
         List<TenantServiceDTO> services = myServiceService.getAvailableServices(contractId);
@@ -29,7 +37,11 @@ public class MyServiceController {
         return ResponseEntity.ok(ApiResponse.success(services));
     }
 
-    @GetMapping("/{contractId}")
+        /**
+     * Chức năng: Lấy dữ liệu contract services.
+     * URL: GET /api/tenant/services/{contractId}
+     */
+@GetMapping("/{contractId}")
     public ResponseEntity<ApiResponse<List<TenantServiceDTO>>> getContractServices(@PathVariable Long contractId) {
         log.info("GET /api/tenant/services/{}", contractId);
         List<TenantServiceDTO> services = myServiceService.getContractServices(contractId);
@@ -37,7 +49,11 @@ public class MyServiceController {
         return ResponseEntity.ok(ApiResponse.success(services));
     }
 
-    @PostMapping("/add")
+        /**
+     * Chức năng: Thêm service to contract.
+     * URL: POST /api/tenant/services/add
+     */
+@PostMapping("/add")
     public ResponseEntity<ApiResponse<Void>> addServiceToContract(
             @RequestParam Long userId,
             @Valid @RequestBody AddServiceToContractDTO request) {
@@ -50,7 +66,11 @@ public class MyServiceController {
         return ResponseEntity.ok(ApiResponse.success(null, "Thêm dịch vụ thành công"));
     }
 
-    @DeleteMapping("/{contractId}/services/{serviceId}")
+        /**
+     * Chức năng: Loại bỏ service from contract.
+     * URL: DELETE /api/tenant/services/{contractId}/services/{serviceId}
+     */
+@DeleteMapping("/{contractId}/services/{serviceId}")
     public ResponseEntity<ApiResponse<Void>> removeServiceFromContract(
             @RequestParam Long userId,
             @PathVariable Long contractId,
@@ -63,7 +83,11 @@ public class MyServiceController {
         return ResponseEntity.ok(ApiResponse.success(null, "Gỡ dịch vụ thành công"));
     }
 
-    @PatchMapping("/{contractId}/services/{serviceId}")
+        /**
+     * Chức năng: Cập nhật service quantity.
+     * URL: PATCH /api/tenant/services/{contractId}/services/{serviceId}
+     */
+@PatchMapping("/{contractId}/services/{serviceId}")
     public ResponseEntity<ApiResponse<Void>> updateServiceQuantity(
             @RequestParam Long userId,
             @PathVariable Long contractId,
@@ -78,4 +102,3 @@ public class MyServiceController {
         return ResponseEntity.ok(ApiResponse.success(null, "Cập nhật dịch vụ thành công"));
     }
 }
-

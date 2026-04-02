@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Vai trò: REST controller của module auth-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ auth và điều phối xử lý sang tầng bên dưới.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -18,12 +22,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * Đăng nhập người dùng
-     * @param request Email và mật khẩu
-     * @return Token JWT và thông tin người dùng
+    
+
+        /**
+     * Chức năng: Xử lý đăng nhập người dùng.
+     * URL: POST /api/auth/login
      */
-    @PostMapping("/login")
+@PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>> login(@Valid @RequestBody LoginRequestDTO request) {
         try {
             log.info("Login request for email: {}", request.getEmail());
@@ -36,12 +41,13 @@ public class AuthController {
         }
     }
 
-    /**
-     * Đăng ký tài khoản tenant (khách thuê phòng)
-     * @param request Thông tin đăng ký
-     * @return Thông báo thành công
+    
+
+        /**
+     * Chức năng: Xử lý đăng ký tenant.
+     * URL: POST /api/auth/register/tenant
      */
-    @PostMapping("/register/tenant")
+@PostMapping("/register/tenant")
     public ResponseEntity<ApiResponse<Void>> registerTenant(@Valid @RequestBody RegisterRequestDTO request) {
         try {
             log.info("Tenant registration request for email: {}", request.getEmail());
@@ -59,12 +65,13 @@ public class AuthController {
         }
     }
 
-    /**
-     * Đăng ký tài khoản host (chủ phòng trọ/motel)
-     * @param request Thông tin đăng ký
-     * @return Thông báo thành công
+    
+
+        /**
+     * Chức năng: Xử lý đăng ký host.
+     * URL: POST /api/auth/register/host
      */
-    @PostMapping("/register/host")
+@PostMapping("/register/host")
     public ResponseEntity<ApiResponse<Void>> registerHost(@Valid @RequestBody RegisterRequestDTO request) {
         try {
             log.info("Host registration request for email: {}", request.getEmail());
@@ -82,12 +89,13 @@ public class AuthController {
         }
     }
 
-    /**
-     * Làm mới token JWT
-     * @param request Refresh token hiện tại
-     * @return Token JWT mới
+    
+
+        /**
+     * Chức năng: Làm mới token.
+     * URL: POST /api/auth/refresh-token
      */
-    @PostMapping("/refresh-token")
+@PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<RefreshTokenResponseDTO>> refreshToken(@Valid @RequestBody RefreshTokenRequestDTO request) {
         try {
             log.info("Refresh token request");
@@ -100,12 +108,13 @@ public class AuthController {
         }
     }
 
-    /**
-     * Đăng xuất người dùng
-     * @param authHeader Authorization header chứa Bearer token
-     * @return Thông báo thành công
+    
+
+        /**
+     * Chức năng: Xử lý đăng xuất người dùng.
+     * URL: POST /api/auth/logout
      */
-    @PostMapping("/logout")
+@PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(@RequestHeader("Authorization") String authHeader) {
         try {
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -113,7 +122,7 @@ public class AuthController {
                         .body(ApiResponse.error("Authorization header không hợp lệ"));
             }
             
-            String token = authHeader.substring(7); // Remove "Bearer " prefix
+            String token = authHeader.substring(7); 
             log.info("Logout request");
             authService.logout(token);
             return ResponseEntity.ok(ApiResponse.success(null, "Đăng xuất thành công"));
@@ -124,13 +133,13 @@ public class AuthController {
         }
     }
 
-    /**
-     * Yêu cầu reset mật khẩu
-     * Gửi email chứa link reset password đến người dùng
-     * @param request Email của người dùng
-     * @return Thông báo thành công
+    
+
+        /**
+     * Chức năng: Tiếp nhận yêu cầu password.
+     * URL: POST /api/auth/forgot-password
      */
-    @PostMapping("/forgot-password")
+@PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO request) {
         try {
             log.info("Forgot password request for email: {}", request.getEmail());
@@ -139,18 +148,19 @@ public class AuthController {
                     "Yêu cầu reset mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn"));
         } catch (Exception e) {
             log.error("Forgot password failed: {}", e.getMessage());
-            // Return generic message to prevent email enumeration attack
+            
             return ResponseEntity.ok(ApiResponse.success(null, 
                     "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được hướng dẫn reset mật khẩu"));
         }
     }
 
-    /**
-     * Reset mật khẩu với token
-     * @param request Token reset password và mật khẩu mới
-     * @return Thông báo thành công
+    
+
+        /**
+     * Chức năng: Đặt lại password.
+     * URL: POST /api/auth/reset-password
      */
-    @PostMapping("/reset-password")
+@PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO request) {
         try {
             log.info("Reset password request");
@@ -167,14 +177,15 @@ public class AuthController {
         }
     }
 
-    /**
-     * Debug endpoint - kiểm tra JWT secret (chỉ dùng khi phát triển)
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ debug secret.
+     * URL: GET /api/auth/debug/secret
      */
-    @GetMapping("/debug/secret")
+@GetMapping("/debug/secret")
     public ResponseEntity<String> debugSecret(
             @org.springframework.beans.factory.annotation.Value("${jwt.secret}") String secret) {
         return ResponseEntity.ok("AUTH secret: [" + secret + "] length=" + secret.length());
     }
 }
-
-

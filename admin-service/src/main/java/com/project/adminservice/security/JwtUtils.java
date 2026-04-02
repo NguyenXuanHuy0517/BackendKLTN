@@ -14,6 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
+/**
+ * Vai trò: Thành phần bảo mật của module admin-service.
+ * Chức năng: Xử lý các logic xác thực, phân quyền hoặc hỗ trợ bảo mật cho jwt.
+ */
 @Component
 public class JwtUtils {
 
@@ -23,7 +27,10 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    public String generateToken(UserDetails userDetails) {
+        /**
+     * Chức năng: Tạo token.
+     */
+public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
@@ -32,19 +39,31 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String extractEmail(String token) {
+        /**
+     * Chức năng: Trích xuất email.
+     */
+public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+        /**
+     * Chức năng: Kiểm tra token.
+     */
+public boolean validateToken(String token, UserDetails userDetails) {
         return extractEmail(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ is token expired.
+     */
+private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        /**
+     * Chức năng: Trích xuất claim.
+     */
+private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
@@ -53,9 +72,11 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    private SecretKey getSignKey() {
+        /**
+     * Chức năng: Lấy dữ liệu sign key.
+     */
+private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
-

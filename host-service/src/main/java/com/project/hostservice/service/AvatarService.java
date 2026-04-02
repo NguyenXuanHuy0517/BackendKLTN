@@ -14,14 +14,8 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Service xử lý cập nhật avatar người dùng.
- *
- * Quy trình:
- * 1. Validate file (chỉ nhận image/*, tối đa 5 MB)
- * 2. Upload lên Cloudinary folder "smartroom/avatars" với eager transform 400×400
- * 3. Xoá ảnh cũ trên Cloudinary nếu có (tránh tốn storage)
- * 4. Cập nhật users.avatar_url trong database
- * 5. Trả về URL mới cho Flutter lưu vào SharedPreferences
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến avatar.
  */
 @Slf4j
 @Service
@@ -31,20 +25,23 @@ public class AvatarService {
     private final UserRepository userRepository;
     private final Cloudinary cloudinary;
 
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; 
 
-    public String updateAvatar(Long userId, MultipartFile file) {
-        // 1. Validate
+        /**
+     * Chức năng: Cập nhật avatar.
+     */
+public String updateAvatar(Long userId, MultipartFile file) {
+        
         validateImageFile(file);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + userId));
 
-        // 2. Upload ảnh mới lên Cloudinary
+        
         String newUrl = uploadToCloudinary(file, userId);
 
-        // 3. Xoá ảnh cũ nếu có và là URL Cloudinary
+        
         String oldUrl = user.getAvatarUrl();
         if (oldUrl != null && oldUrl.contains("res.cloudinary.com")) {
             try {
@@ -52,19 +49,22 @@ public class AvatarService {
                 cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
                 log.info("Xoá avatar cũ thành công: {}", publicId);
             } catch (Exception e) {
-                // Không nên throw — ảnh mới đã upload thành công
+                
                 log.warn("Không xoá được avatar cũ {}: {}", oldUrl, e.getMessage());
             }
         }
 
-        // 4. Cập nhật database
+        
         user.setAvatarUrl(newUrl);
         userRepository.save(user);
 
         return newUrl;
     }
 
-    public void removeAvatar(Long userId) {
+        /**
+     * Chức năng: Loại bỏ avatar.
+     */
+public void removeAvatar(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + userId));
@@ -82,18 +82,21 @@ public class AvatarService {
         userRepository.save(user);
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────
+    
 
-    private String uploadToCloudinary(MultipartFile file, Long userId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload to cloudinary.
+     */
+private String uploadToCloudinary(MultipartFile file, Long userId) {
         try {
             Map result = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.asMap(
                             "folder", "smartroom/avatars",
-                            "public_id", "user_" + userId,  // overwrite ảnh cũ cùng userId
+                            "public_id", "user_" + userId,  
                             "overwrite", true,
                             "resource_type", "image",
-                            // Tự động crop 400×400, focus vào khuôn mặt
+                            
                             "transformation", "c_fill,g_face,h_400,w_400,q_auto,f_auto"
                     )
             );
@@ -104,7 +107,10 @@ public class AvatarService {
         }
     }
 
-    private void validateImageFile(MultipartFile file) {
+        /**
+     * Chức năng: Kiểm tra image file.
+     */
+private void validateImageFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File không được rỗng");
         }
@@ -120,21 +126,21 @@ public class AvatarService {
         }
     }
 
-    /**
-     * Trích xuất publicId từ Cloudinary URL.
-     * Ví dụ: https://res.cloudinary.com/dbj3kf54f/image/upload/v1234/smartroom/avatars/user_5.jpg
-     *        → smartroom/avatars/user_5
+    
+
+        /**
+     * Chức năng: Trích xuất public id.
      */
-    private String extractPublicId(String url) {
-        // Lấy phần sau "/upload/v{version}/"
+private String extractPublicId(String url) {
+        
         String[] parts = url.split("/upload/");
         if (parts.length < 2) return url;
         String afterUpload = parts[1];
-        // Bỏ version nếu có (v1234567/)
+        
         if (afterUpload.startsWith("v") && afterUpload.contains("/")) {
             afterUpload = afterUpload.substring(afterUpload.indexOf('/') + 1);
         }
-        // Bỏ đuôi file
+        
         int dotIdx = afterUpload.lastIndexOf('.');
         return dotIdx > 0 ? afterUpload.substring(0, dotIdx) : afterUpload;
     }

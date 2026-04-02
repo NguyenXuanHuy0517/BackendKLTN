@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến notification để trao đổi giữa các tầng.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +27,7 @@ public class NotificationRequestDTO {
 
     private Long refId;
 
-    // Nếu null: gửi đến tất cả tenants
-    // Nếu có giá trị: gửi đến tenant cụ thể
+    
+    
     private Long tenantId;
 }

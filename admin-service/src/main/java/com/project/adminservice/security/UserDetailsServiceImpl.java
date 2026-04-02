@@ -11,13 +11,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module admin-service.
+ * Chức năng: Chứa logic xử lý liên quan đến user details service impl.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Override
+        /**
+     * Chức năng: Nạp user by username.
+     */
+@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
@@ -30,4 +37,3 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .build();
     }
 }
-

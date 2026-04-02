@@ -2,6 +2,10 @@ package com.project.hostservice.dto.area;
 
 import lombok.Data;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến area để trao đổi giữa các tầng.
+ */
 @Data
 public class AreaResponseDTO {
     private Long areaId;

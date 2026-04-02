@@ -5,6 +5,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến contract để trao đổi giữa các tầng.
+ */
 @Data
 public class ContractResponseDTO {
     private Long contractId;
@@ -19,9 +23,9 @@ public class ContractResponseDTO {
     private BigDecimal waterPriceOverride;
     private String status;
 
-    // NEW - Replace serviceNames with full service details
+    
     private List<ContractServiceDTO> contractServices;
 
-    // Keep for backward compatibility (optional - can remove later)
+    
     private List<String> serviceNames;
 }

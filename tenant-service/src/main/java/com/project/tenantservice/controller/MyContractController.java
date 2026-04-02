@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ my contract và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tenant/contracts")
@@ -18,7 +22,11 @@ public class MyContractController {
 
     private final MyContractService contractService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu my contracts.
+     * URL: GET /api/tenant/contracts
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<MyContractDTO>>> getMyContracts(
             @RequestParam Long userId) {
         log.info("GET /api/tenant/contracts - userId: {}", userId);
@@ -26,7 +34,11 @@ public class MyContractController {
                 ApiResponse.success(contractService.getMyContracts(userId)));
     }
 
-    @GetMapping("/current")
+        /**
+     * Chức năng: Lấy dữ liệu current contract.
+     * URL: GET /api/tenant/contracts/current
+     */
+@GetMapping("/current")
     public ResponseEntity<ApiResponse<MyContractDTO>> getCurrentContract(
             @RequestParam Long userId) {
         log.info("GET /api/tenant/contracts/current - userId: {}", userId);

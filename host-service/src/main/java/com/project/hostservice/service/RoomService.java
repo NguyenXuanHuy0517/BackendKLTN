@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến room.
+ */
 @Service
 @RequiredArgsConstructor
 public class RoomService {
@@ -23,7 +27,10 @@ public class RoomService {
     private final ContractRepository contractRepository;
     private final RoomMapper roomMapper;
 
-    public List<RoomResponseDTO> getRoomsByHost(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu rooms by host.
+     */
+public List<RoomResponseDTO> getRoomsByHost(Long hostId) {
         return roomRepository.findByArea_Host_UserId(hostId).stream()
                 .map(room -> {
                     RoomResponseDTO dto = roomMapper.toDTO(room);
@@ -37,7 +44,10 @@ public class RoomService {
                 .toList();
     }
 
-    public List<RoomResponseDTO> getRoomsByArea(Long areaId) {
+        /**
+     * Chức năng: Lấy dữ liệu rooms by area.
+     */
+public List<RoomResponseDTO> getRoomsByArea(Long areaId) {
         return roomRepository.findByArea_AreaId(areaId).stream()
                 .map(room -> {
                     RoomResponseDTO dto = roomMapper.toDTO(room);
@@ -51,7 +61,10 @@ public class RoomService {
                 .toList();
     }
 
-    public RoomResponseDTO getRoomDetail(Long roomId) {
+        /**
+     * Chức năng: Lấy dữ liệu room detail.
+     */
+public RoomResponseDTO getRoomDetail(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
         RoomResponseDTO dto = roomMapper.toDTO(room);
@@ -63,7 +76,10 @@ public class RoomService {
         return dto;
     }
 
-    public RoomResponseDTO createRoom(RoomCreateDTO request) {
+        /**
+     * Chức năng: Tạo room.
+     */
+public RoomResponseDTO createRoom(RoomCreateDTO request) {
         MotelArea area = areaRepository.findById(request.getAreaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khu trọ: " + request.getAreaId()));
 
@@ -84,7 +100,10 @@ public class RoomService {
         return roomMapper.toDTO(room);
     }
 
-    public RoomResponseDTO updateRoom(Long roomId, RoomUpdateDTO request) {
+        /**
+     * Chức năng: Cập nhật room.
+     */
+public RoomResponseDTO updateRoom(Long roomId, RoomUpdateDTO request) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
 
@@ -100,7 +119,10 @@ public class RoomService {
         return roomMapper.toDTO(room);
     }
 
-    public void updateStatus(Long roomId, RoomStatusUpdateDTO request, User changedBy) {
+        /**
+     * Chức năng: Cập nhật status.
+     */
+public void updateStatus(Long roomId, RoomStatusUpdateDTO request, User changedBy) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + roomId));
 
@@ -117,7 +139,10 @@ public class RoomService {
         statusHistoryRepository.save(history);
     }
 
-    public List<RoomStatusHistory> getStatusHistory(Long roomId) {
+        /**
+     * Chức năng: Lấy dữ liệu status history.
+     */
+public List<RoomStatusHistory> getStatusHistory(Long roomId) {
         return statusHistoryRepository.findByRoom_RoomIdOrderByChangedAtDesc(roomId);
     }
 }

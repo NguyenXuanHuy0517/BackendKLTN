@@ -12,6 +12,10 @@ import java.time.YearMonth;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module admin-service.
+ * Chức năng: Chứa logic xử lý liên quan đến admin revenue.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +23,10 @@ public class AdminRevenueService {
 
     private final InvoiceRepository invoiceRepository;
 
-    public AdminRevenueDTO getRevenue(String period) {
+        /**
+     * Chức năng: Lấy dữ liệu revenue.
+     */
+public AdminRevenueDTO getRevenue(String period) {
         AdminRevenueDTO revenue = new AdminRevenueDTO();
         
         if ("month".equalsIgnoreCase(period)) {
@@ -34,13 +41,16 @@ public class AdminRevenueService {
         }
     }
 
-    private AdminRevenueDTO getMonthlyRevenue() {
+        /**
+     * Chức năng: Lấy dữ liệu monthly revenue.
+     */
+private AdminRevenueDTO getMonthlyRevenue() {
         AdminRevenueDTO revenue = new AdminRevenueDTO();
         Map<String, BigDecimal> revenueByMonth = new LinkedHashMap<>();
 
         BigDecimal totalRevenue = BigDecimal.ZERO;
 
-        // Get last 12 months
+        
         for (int i = 11; i >= 0; i--) {
             YearMonth month = YearMonth.now().minusMonths(i);
             BigDecimal monthRevenue = invoiceRepository.sumRevenueByPeriod(month.getMonthValue(), month.getYear());
@@ -59,19 +69,22 @@ public class AdminRevenueService {
         return revenue;
     }
 
-    private AdminRevenueDTO getQuarterlyRevenue() {
+        /**
+     * Chức năng: Lấy dữ liệu quarterly revenue.
+     */
+private AdminRevenueDTO getQuarterlyRevenue() {
         AdminRevenueDTO revenue = new AdminRevenueDTO();
         Map<String, BigDecimal> revenueByQuarter = new LinkedHashMap<>();
 
         BigDecimal totalRevenue = BigDecimal.ZERO;
         YearMonth now = YearMonth.now();
 
-        // Get last 4 quarters
+        
         for (int i = 3; i >= 0; i--) {
             YearMonth quarter = now.minusMonths(i * 3L);
             BigDecimal quarterRevenue = BigDecimal.ZERO;
 
-            // Sum 3 months for the quarter
+            
             for (int month = 0; month < 3; month++) {
                 YearMonth m = quarter.plusMonths(month);
                 BigDecimal monthRevenue = invoiceRepository.sumRevenueByPeriod(m.getMonthValue(), m.getYear());
@@ -92,19 +105,22 @@ public class AdminRevenueService {
         return revenue;
     }
 
-    private AdminRevenueDTO getYearlyRevenue() {
+        /**
+     * Chức năng: Lấy dữ liệu yearly revenue.
+     */
+private AdminRevenueDTO getYearlyRevenue() {
         AdminRevenueDTO revenue = new AdminRevenueDTO();
         Map<String, BigDecimal> revenueByYear = new LinkedHashMap<>();
 
         BigDecimal totalRevenue = BigDecimal.ZERO;
         int currentYear = YearMonth.now().getYear();
 
-        // Get last 5 years
+        
         for (int i = 4; i >= 0; i--) {
             int year = currentYear - i;
             BigDecimal yearRevenue = BigDecimal.ZERO;
 
-            // Sum all 12 months for the year
+            
             for (int month = 1; month <= 12; month++) {
                 BigDecimal monthRevenue = invoiceRepository.sumRevenueByPeriod(month, year);
                 yearRevenue = yearRevenue.add(monthRevenue != null ? monthRevenue : BigDecimal.ZERO);

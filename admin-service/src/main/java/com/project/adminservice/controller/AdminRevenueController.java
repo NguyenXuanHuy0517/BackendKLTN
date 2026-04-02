@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Vai trò: REST controller của module admin-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ admin revenue và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/revenue")
@@ -20,7 +24,11 @@ public class AdminRevenueController {
 
     private final AdminRevenueService revenueService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu revenue.
+     * URL: GET /api/admin/revenue
+     */
+@GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<AdminRevenueDTO>> getRevenue(
             @RequestParam(defaultValue = "month") String period) {

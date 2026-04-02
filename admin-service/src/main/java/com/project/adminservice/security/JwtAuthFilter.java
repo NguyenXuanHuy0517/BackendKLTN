@@ -16,6 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Vai trò: Thành phần bảo mật của module admin-service.
+ * Chức năng: Xử lý các logic xác thực, phân quyền hoặc hỗ trợ bảo mật cho jwt auth.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +28,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
+        /**
+     * Chức năng: Thực hiện nghiệp vụ do filter internal.
+     */
+@Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -63,4 +70,3 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-

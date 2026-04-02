@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến my issue.
+ */
 @Service
 @RequiredArgsConstructor
 public class MyIssueService {
@@ -26,18 +30,24 @@ public class MyIssueService {
     private final UserRepository userRepository;
     private final IssueMapper issueMapper;
 
-    public List<IssueResponseDTO> getMyIssues(Long tenantId) {
+        /**
+     * Chức năng: Lấy dữ liệu my issues.
+     */
+public List<IssueResponseDTO> getMyIssues(Long tenantId) {
         return issueRepository.findByTenant_UserId(tenantId).stream()
                 .map(issueMapper::toDTO)
                 .toList();
     }
 
-    public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
+        /**
+     * Chức năng: Tạo issue.
+     */
+public IssueResponseDTO createIssue(Long tenantId, IssueCreateDTO request) {
         User tenant = userRepository.findById(tenantId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + tenantId));
 
-        // Lấy phòng từ hợp đồng ACTIVE hiện tại
+        
         Room room = contractRepository.findByTenant_UserId(tenantId).stream()
                 .filter(c -> c.getStatus().equals("ACTIVE"))
                 .findFirst()
@@ -55,7 +65,7 @@ public class MyIssueService {
                 ? request.getPriority() : "MEDIUM");
         issue.setStatus("OPEN");
 
-        // NEW - Set issue type and service suggestion fields
+        
         issue.setIssueType(request.getIssueType() != null
                 ? request.getIssueType() : "GENERAL");
         if ("SERVICE_SUGGESTION".equals(request.getIssueType())) {
@@ -68,7 +78,10 @@ public class MyIssueService {
         return issueMapper.toDTO(issue);
     }
 
-    public IssueResponseDTO rateIssue(Long issueId, Long tenantId,
+        /**
+     * Chức năng: Thực hiện nghiệp vụ rate issue.
+     */
+public IssueResponseDTO rateIssue(Long issueId, Long tenantId,
                                       IssueRatingDTO request) {
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new ResourceNotFoundException(

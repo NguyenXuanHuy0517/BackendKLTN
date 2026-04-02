@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: Scheduler của module host-service.
+ * Chức năng: Thực thi các tác vụ nền liên quan đến invoice theo lịch.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -20,14 +24,12 @@ public class InvoiceScheduler {
     private final ContractRepository contractRepository;
     private final InvoiceRepository invoiceRepository;
 
-    /**
-     * Chạy lúc 01:00 ngày 1 hàng tháng.
-     * Tạo hóa đơn DRAFT cho tất cả hợp đồng đang ACTIVE.
-     *
-     * FIX: Trước đây gọi findByRoom_Area_Host_UserId(null) → không trả về bản ghi nào.
-     *      Nay dùng findByStatus("ACTIVE") trực tiếp.
+    
+
+        /**
+     * Chức năng: Tạo monthly invoices.
      */
-    @Scheduled(cron = "0 0 1 1 * ?")
+@Scheduled(cron = "0 0 1 1 * ?")
     public void createMonthlyInvoices() {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
@@ -35,7 +37,7 @@ public class InvoiceScheduler {
 
         log.info("=== InvoiceScheduler: Bắt đầu tạo hóa đơn tháng {}/{} ===", month, year);
 
-        // FIX: findByStatus thay vì truyền null vào findByRoom_Area_Host_UserId
+        
         List<Contract> activeContracts = contractRepository.findByStatus("ACTIVE");
 
         log.info("Tìm thấy {} hợp đồng ACTIVE", activeContracts.size());
@@ -63,10 +65,10 @@ public class InvoiceScheduler {
             invoice.setBillingYear(year);
             invoice.setDueDate(LocalDate.of(year, month, 15));
             invoice.setRentAmount(contract.getActualRentPrice());
-            invoice.setStatus("UNPAID");   // FIX: DRAFT → UNPAID ở đây đúng hơn
-            // vì chủ trọ vẫn cần nhập chỉ số điện nước
-            // nhưng cần biết đây là hóa đơn cần thanh toán.
-            // Nếu muốn giữ DRAFT thì đổi lại.
+            invoice.setStatus("UNPAID");   
+            
+            
+            
 
             invoiceRepository.save(invoice);
             created++;

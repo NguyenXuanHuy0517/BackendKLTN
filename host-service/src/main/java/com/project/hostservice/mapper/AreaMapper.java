@@ -4,10 +4,17 @@ import com.project.datalayer.entity.MotelArea;
 import com.project.hostservice.dto.area.AreaResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ area giữa entity và DTO.
+ */
 @Component
 public class AreaMapper {
 
-    public AreaResponseDTO toDTO(MotelArea area, int totalRooms, int availableRooms, int rentedRooms, int maintenanceRooms) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public AreaResponseDTO toDTO(MotelArea area, int totalRooms, int availableRooms, int rentedRooms, int maintenanceRooms) {
         AreaResponseDTO dto = new AreaResponseDTO();
         dto.setAreaId(area.getAreaId());
         dto.setAreaName(area.getAreaName());

@@ -13,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến service management.
+ */
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class ServiceManagementService {
@@ -22,7 +26,10 @@ public class ServiceManagementService {
     private final ContractServiceRepository contractServiceRepository;
     private final ServiceMapper serviceMapper;
 
-    public List<ServiceResponseDTO> getServicesByArea(Long areaId) {
+        /**
+     * Chức năng: Lấy dữ liệu services by area.
+     */
+public List<ServiceResponseDTO> getServicesByArea(Long areaId) {
         return serviceRepository.findByArea_AreaId(areaId).stream()
                 .map(service -> {
                     int usageCount = contractServiceRepository.findAll().stream()
@@ -33,7 +40,10 @@ public class ServiceManagementService {
                 .toList();
     }
 
-    public ServiceResponseDTO createService(Long areaId, ServiceCreateDTO request) {
+        /**
+     * Chức năng: Tạo service.
+     */
+public ServiceResponseDTO createService(Long areaId, ServiceCreateDTO request) {
         MotelArea area = areaRepository.findById(areaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khu trọ: " + areaId));
 
@@ -49,7 +59,10 @@ public class ServiceManagementService {
         return serviceMapper.toDTO(service, 0);
     }
 
-    public ServiceResponseDTO updateService(Long serviceId, ServiceCreateDTO request) {
+        /**
+     * Chức năng: Cập nhật service.
+     */
+public ServiceResponseDTO updateService(Long serviceId, ServiceCreateDTO request) {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy dịch vụ: " + serviceId));
 
@@ -62,7 +75,10 @@ public class ServiceManagementService {
         return serviceMapper.toDTO(service, 0);
     }
 
-    public void deleteService(Long serviceId) {
+        /**
+     * Chức năng: Xóa service.
+     */
+public void deleteService(Long serviceId) {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy dịch vụ: " + serviceId));
         service.setActive(false);

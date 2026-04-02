@@ -9,6 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ chatbot và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tenant/chatbot")
@@ -17,7 +21,11 @@ public class ChatbotController {
 
     private final ChatbotService chatbotService;
 
-    @PostMapping
+        /**
+     * Chức năng: Thực hiện nghiệp vụ chat.
+     * URL: POST /api/tenant/chatbot
+     */
+@PostMapping
     public ResponseEntity<ApiResponse<ChatResponseDTO>> chat(
             @RequestParam Long userId,
             @RequestBody ChatRequestDTO request) {

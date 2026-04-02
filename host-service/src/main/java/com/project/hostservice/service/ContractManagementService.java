@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến contract management.
+ */
 @Service
 @RequiredArgsConstructor
 public class ContractManagementService {
@@ -26,7 +30,10 @@ public class ContractManagementService {
     private final ContractServiceRepository contractServiceRepository;
     private final ContractMapper contractMapper;
 
-    public List<ContractResponseDTO> getContractsByHost(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu contracts by host.
+     */
+public List<ContractResponseDTO> getContractsByHost(Long hostId) {
         return contractRepository.findByRoom_Area_Host_UserId(hostId).stream()
                 .map(contract -> contractMapper.toDTO(
                         contract,
@@ -35,7 +42,10 @@ public class ContractManagementService {
                 .toList();
     }
 
-    public ContractResponseDTO getContractDetail(Long contractId) {
+        /**
+     * Chức năng: Lấy dữ liệu contract detail.
+     */
+public ContractResponseDTO getContractDetail(Long contractId) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
         return contractMapper.toDTO(
@@ -44,11 +54,12 @@ public class ContractManagementService {
         );
     }
 
-    /**
-     * FIX: Thêm @Transactional — tạo contract, cập nhật deposit, cập nhật room
-     * phải là một atomic operation. Nếu bất kỳ bước nào thất bại, toàn bộ rollback.
+    
+
+        /**
+     * Chức năng: Tạo contract.
      */
-    @Transactional
+@Transactional
     public ContractResponseDTO createContract(ContractCreateDTO request) {
         User tenant = userRepository.findById(request.getTenantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người thuê: " + request.getTenantId()));
@@ -56,7 +67,7 @@ public class ContractManagementService {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + request.getRoomId()));
 
-        // Validate phòng phải đang AVAILABLE hoặc DEPOSITED
+        
         if (!"AVAILABLE".equals(room.getStatus()) && !"DEPOSITED".equals(room.getStatus())) {
             throw new IllegalStateException(
                     "Phòng " + room.getRoomCode() + " hiện đang ở trạng thái " + room.getStatus()
@@ -73,7 +84,7 @@ public class ContractManagementService {
         contract.setWaterPriceOverride(request.getWaterPriceOverride());
         contract.setPenaltyTerms(request.getPenaltyTerms());
         contract.setStatus("ACTIVE");
-        // FIX: dùng format cố định để tránh trùng nếu nhiều hợp đồng tạo cùng millisecond
+        
         contract.setContractCode("HD-" + request.getRoomId() + "-" + System.currentTimeMillis());
 
         if (request.getDepositId() != null) {
@@ -92,7 +103,10 @@ public class ContractManagementService {
                 contractServiceRepository.findByContract_ContractId(contract.getContractId()));
     }
 
-    public ContractResponseDTO extendContract(Long contractId, ContractExtendDTO request) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ extend contract.
+     */
+public ContractResponseDTO extendContract(Long contractId, ContractExtendDTO request) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
         contract.setEndDate(request.getNewEndDate());
@@ -101,10 +115,12 @@ public class ContractManagementService {
                 contractServiceRepository.findByContract_ContractId(contractId));
     }
 
-    /**
-     * FIX: Thêm @Transactional — chấm dứt contract + cập nhật room phải atomic.
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ terminate contract.
      */
-    @Transactional
+@Transactional
     public void terminateContract(Long contractId, User terminatedBy) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
@@ -118,7 +134,10 @@ public class ContractManagementService {
         contractRepository.save(contract);
     }
 
-    public void addService(Long contractId, Long serviceId) {
+        /**
+     * Chức năng: Thêm service.
+     */
+public void addService(Long contractId, Long serviceId) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hợp đồng: " + contractId));
 
@@ -139,7 +158,10 @@ public class ContractManagementService {
         contractServiceRepository.save(cs);
     }
 
-    public void removeService(Long contractId, Long serviceId) {
+        /**
+     * Chức năng: Loại bỏ service.
+     */
+public void removeService(Long contractId, Long serviceId) {
         contractServiceRepository.deleteByContract_ContractIdAndService_ServiceId(contractId, serviceId);
     }
 }

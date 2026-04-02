@@ -8,28 +8,48 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ global exception handler và điều phối xử lý sang tầng bên dưới.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+        /**
+     * Chức năng: Xử lý not found.
+     * URL: REQUEST /
+     */
+@ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
+        /**
+     * Chức năng: Xử lý bad credentials.
+     * URL: REQUEST /
+     */
+@ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiResponse.error("Email hoặc mật khẩu không đúng"));
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
+        /**
+     * Chức năng: Xử lý username not found.
+     * URL: REQUEST /
+     */
+@ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleUsernameNotFound(UsernameNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
+        /**
+     * Chức năng: Xử lý general.
+     * URL: REQUEST /
+     */
+@ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("Lỗi hệ thống: " + ex.getMessage()));

@@ -15,15 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * Controller xử lý upload & load ảnh.
- *
- * Tách thành 2 nhóm:
- *  - /api/host/upload/avatar  → ảnh đại diện người dùng (1 file, trả về URL)
- *  - /api/host/upload/room    → ảnh phòng trọ (1 hoặc nhiều file, trả về List<URL>)
- *
- * Ảnh được lưu trên Cloudinary, URL trả về là secure_url từ Cloudinary.
- * Không cần endpoint "load" riêng vì URL Cloudinary có thể truy cập thẳng từ client.
- * Tuy nhiên, endpoint GET tiện dụng để lấy lại URL theo publicId khi cần.
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ file upload và điều phối xử lý sang tầng bên dưới.
  */
 @Slf4j
 @RestController
@@ -33,20 +26,17 @@ public class FileUploadController {
 
     private final FileUploadService fileUploadService;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // AVATAR
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Upload ảnh đại diện (avatar).
-     *
-     * POST /api/host/upload/avatar
-     * Content-Type: multipart/form-data
-     * Body: file (image/*)
-     *
-     * Response: URL ảnh trên Cloudinary (String)
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload avatar.
+     * URL: POST /api/host/upload/avatar
      */
-    @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<String>> uploadAvatar(
             @RequestParam("file") MultipartFile file) {
 
@@ -61,12 +51,13 @@ public class FileUploadController {
         return ResponseEntity.ok(ApiResponse.success(url));
     }
 
-    /**
-     * Xoá ảnh avatar khỏi Cloudinary theo publicId.
-     *
-     * DELETE /api/host/upload/avatar?publicId=smartroom/avatars/abc123
+    
+
+        /**
+     * Chức năng: Xóa avatar.
+     * URL: DELETE /api/host/upload/avatar
      */
-    @DeleteMapping("/avatar")
+@DeleteMapping("/avatar")
     public ResponseEntity<ApiResponse<Void>> deleteAvatar(
             @RequestParam String publicId) {
 
@@ -76,20 +67,17 @@ public class FileUploadController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ROOM IMAGES
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Upload 1 ảnh phòng trọ.
-     *
-     * POST /api/host/upload/room
-     * Content-Type: multipart/form-data
-     * Body: file (image/*)
-     *
-     * Response: URL ảnh trên Cloudinary (String)
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload room image.
+     * URL: POST /api/host/upload/room
      */
-    @PostMapping(value = "/room", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PostMapping(value = "/room", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<String>> uploadRoomImage(
             @RequestParam("file") MultipartFile file) {
 
@@ -104,16 +92,13 @@ public class FileUploadController {
         return ResponseEntity.ok(ApiResponse.success(url));
     }
 
-    /**
-     * Upload nhiều ảnh phòng trọ cùng lúc (tối đa 10 ảnh).
-     *
-     * POST /api/host/upload/room/batch
-     * Content-Type: multipart/form-data
-     * Body: files (image/*[])
-     *
-     * Response: List<URL> các ảnh đã upload
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload room images.
+     * URL: POST /api/host/upload/room/batch
      */
-    @PostMapping(value = "/room/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PostMapping(value = "/room/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<List<String>>> uploadRoomImages(
             @RequestParam("files") List<MultipartFile> files) {
 
@@ -134,12 +119,13 @@ public class FileUploadController {
         return ResponseEntity.ok(ApiResponse.success(urls));
     }
 
-    /**
-     * Xoá ảnh phòng khỏi Cloudinary theo publicId.
-     *
-     * DELETE /api/host/upload/room?publicId=smartroom/rooms/abc123
+    
+
+        /**
+     * Chức năng: Xóa room image.
+     * URL: DELETE /api/host/upload/room
      */
-    @DeleteMapping("/room")
+@DeleteMapping("/room")
     public ResponseEntity<ApiResponse<Void>> deleteRoomImage(
             @RequestParam String publicId) {
 
@@ -149,11 +135,15 @@ public class FileUploadController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // HELPER
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    private void validateImageFile(MultipartFile file) {
+        /**
+     * Chức năng: Kiểm tra image file.
+     * URL: REQUEST /api/host/upload
+     */
+private void validateImageFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File không được rỗng");
         }
@@ -162,7 +152,7 @@ public class FileUploadController {
             throw new IllegalArgumentException(
                     "Chỉ chấp nhận file ảnh (image/*). File nhận được: " + contentType);
         }
-        // Giới hạn 5 MB
+        
         if (file.getSize() > 5 * 1024 * 1024) {
             throw new IllegalArgumentException("Kích thước file không được vượt quá 5 MB");
         }

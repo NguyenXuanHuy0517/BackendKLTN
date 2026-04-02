@@ -8,6 +8,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến email.
+ */
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -20,7 +24,10 @@ public class EmailService {
     @Value("${app.mail.enabled:false}")
     private boolean mailEnabled;
 
-    public void sendOverdueEmail(String to, InvoiceResponseDTO invoice) {
+        /**
+     * Chức năng: Gửi overdue email.
+     */
+public void sendOverdueEmail(String to, InvoiceResponseDTO invoice) {
         if (!mailEnabled) return;
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -33,7 +40,10 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendMonthlyReport(String to, ReportDTO report) {
+        /**
+     * Chức năng: Gửi monthly report.
+     */
+public void sendMonthlyReport(String to, ReportDTO report) {
         if (!mailEnabled) return;
 
         SimpleMailMessage message = new SimpleMailMessage();

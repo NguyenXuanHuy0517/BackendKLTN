@@ -8,10 +8,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ invoice giữa entity và DTO.
+ */
 @Component
 public class InvoiceMapper {
 
-    public InvoiceResponseDTO toResponseDTO(Invoice invoice) {
+        /**
+     * Chức năng: Chuyển đổi response dto.
+     */
+public InvoiceResponseDTO toResponseDTO(Invoice invoice) {
         InvoiceResponseDTO dto = new InvoiceResponseDTO();
         dto.setInvoiceId(invoice.getInvoiceId());
         dto.setInvoiceCode(invoice.getInvoiceCode());
@@ -25,7 +32,10 @@ public class InvoiceMapper {
         return dto;
     }
 
-    public InvoiceDetailDTO toDetailDTO(Invoice invoice, List<ContractService> services) {
+        /**
+     * Chức năng: Chuyển đổi detail dto.
+     */
+public InvoiceDetailDTO toDetailDTO(Invoice invoice, List<ContractService> services) {
         InvoiceDetailDTO dto = new InvoiceDetailDTO();
         dto.setInvoiceId(invoice.getInvoiceId());
         dto.setInvoiceCode(invoice.getInvoiceCode());

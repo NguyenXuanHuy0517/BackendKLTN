@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module admin-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ admin room và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/rooms")
@@ -19,7 +23,11 @@ public class AdminRoomController {
 
     private final AdminRoomService roomService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu all rooms.
+     * URL: GET /api/admin/rooms
+     */
+@GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<AdminRoomAuditDTO>>> getAllRooms() {
         log.info("GET /api/admin/rooms");
@@ -28,7 +36,11 @@ public class AdminRoomController {
         return ResponseEntity.ok(ApiResponse.success(rooms));
     }
 
-    @GetMapping("/without-invoice")
+        /**
+     * Chức năng: Lấy dữ liệu rooms without invoice.
+     * URL: GET /api/admin/rooms/without-invoice
+     */
+@GetMapping("/without-invoice")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<AdminRoomAuditDTO>>> getRoomsWithoutInvoice() {
         log.info("GET /api/admin/rooms/without-invoice");

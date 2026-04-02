@@ -4,10 +4,17 @@ import com.project.datalayer.entity.Service;
 import com.project.hostservice.dto.service.ServiceResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ service giữa entity và DTO.
+ */
 @Component
 public class ServiceMapper {
 
-    public ServiceResponseDTO toDTO(Service service, int usageCount) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public ServiceResponseDTO toDTO(Service service, int usageCount) {
         ServiceResponseDTO dto = new ServiceResponseDTO();
         dto.setServiceId(service.getServiceId());
         dto.setServiceName(service.getServiceName());

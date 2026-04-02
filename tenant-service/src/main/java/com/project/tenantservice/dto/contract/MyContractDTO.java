@@ -6,6 +6,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: DTO của module tenant-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến my contract để trao đổi giữa các tầng.
+ */
 @Data
 public class MyContractDTO {
     private Long contractId;
@@ -20,10 +24,10 @@ public class MyContractDTO {
     private BigDecimal waterPrice;
     private String status;
 
-    // NEW - Full service details
+    
     private List<ContractServiceDTO> contractServices;
 
-    // Keep for backward compatibility
+    
     private List<String> serviceNames;
     private long daysUntilExpiry;
 }

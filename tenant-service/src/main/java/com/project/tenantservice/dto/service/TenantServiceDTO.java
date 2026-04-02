@@ -5,20 +5,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến tenant service dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TenantServiceDTO {
     private Long serviceId;
     private String serviceName;
-    private Integer quantity;           // NEW - số lượng tenant đang dùng
+    private Integer quantity;           
     private BigDecimal price;
     private String unitName;
     private String description;
 
-    // NEW - Optional fields để track service changes
-    private Long contractServiceId;     // NEW
-    private BigDecimal priceSnapshot;   // NEW - giá khi ký hợp đồng
-    private String unitSnapshot;        // NEW - đơn vị khi ký hợp đồng
+    
+    private Long contractServiceId;     
+    private BigDecimal priceSnapshot;   
+    private String unitSnapshot;        
 }
-

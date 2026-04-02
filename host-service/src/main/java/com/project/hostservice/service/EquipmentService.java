@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến equipment.
+ */
 @Service
 @RequiredArgsConstructor
 public class EquipmentService {
@@ -26,7 +30,10 @@ public class EquipmentService {
     private final RoomAssetRepository roomAssetRepository;
     private final RoomAssetMapper roomAssetMapper;
 
-    public List<EquipmentDTO> getAllEquipments() {
+        /**
+     * Chức năng: Lấy dữ liệu all equipments.
+     */
+public List<EquipmentDTO> getAllEquipments() {
         return equipmentRepository.findAll().stream()
                 .map(e -> {
                     EquipmentDTO dto = new EquipmentDTO();
@@ -40,13 +47,19 @@ public class EquipmentService {
                 .toList();
     }
 
-    public List<RoomAssetResponseDTO> getAssetsByRoom(Long roomId) {
+        /**
+     * Chức năng: Lấy dữ liệu assets by room.
+     */
+public List<RoomAssetResponseDTO> getAssetsByRoom(Long roomId) {
         return roomAssetRepository.findByRoom_RoomId(roomId).stream()
                 .map(roomAssetMapper::toDTO)
                 .toList();
     }
 
-    public RoomAssetResponseDTO addAssetToRoom(RoomAssetCreateDTO request) {
+        /**
+     * Chức năng: Thêm asset to room.
+     */
+public RoomAssetResponseDTO addAssetToRoom(RoomAssetCreateDTO request) {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng: " + request.getRoomId()));
 
@@ -68,7 +81,10 @@ public class EquipmentService {
         return roomAssetMapper.toDTO(roomAsset);
     }
 
-    public void removeAssetFromRoom(Long roomId, Long equipmentId) {
+        /**
+     * Chức năng: Loại bỏ asset from room.
+     */
+public void removeAssetFromRoom(Long roomId, Long equipmentId) {
         roomAssetRepository.deleteByRoom_RoomIdAndEquipment_EquipmentId(roomId, equipmentId);
     }
 }

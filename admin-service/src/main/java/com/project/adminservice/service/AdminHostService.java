@@ -15,6 +15,10 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module admin-service.
+ * Chức năng: Chứa logic xử lý liên quan đến admin host.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,13 +30,19 @@ public class AdminHostService {
     private final ContractRepository contractRepository;
     private final InvoiceRepository invoiceRepository;
 
-    public List<AdminHostResponseDTO> getAllHosts() {
+        /**
+     * Chức năng: Lấy dữ liệu all hosts.
+     */
+public List<AdminHostResponseDTO> getAllHosts() {
         return userRepository.findByRole_RoleName("HOST").stream()
                 .map(this::mapToListDTO)
                 .toList();
     }
 
-    public AdminHostDetailDTO getHostDetail(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu host detail.
+     */
+public AdminHostDetailDTO getHostDetail(Long hostId) {
         User host = userRepository.findById(hostId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy host: " + hostId));
 
@@ -43,7 +53,10 @@ public class AdminHostService {
         return mapToDetailDTO(host);
     }
 
-    @Transactional
+        /**
+     * Chức năng: Cập nhật host status.
+     */
+@Transactional
     public void updateHostStatus(Long hostId, AdminHostStatusUpdateRequest request) {
         User host = userRepository.findById(hostId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy host: " + hostId));
@@ -52,12 +65,12 @@ public class AdminHostService {
             throw new IllegalArgumentException("User này không phải host");
         }
 
-        // Prevent admin from disabling admin accounts
+        
         if ("ADMIN".equals(host.getRole().getRoleName())) {
             throw new IllegalArgumentException("Không thể khóa tài khoản ADMIN");
         }
 
-        // Check if already in target state
+        
         if (host.isActive() == request.isActive()) {
             log.warn("Host {} đã ở trạng thái target {}", hostId, request.isActive());
             return;
@@ -70,7 +83,10 @@ public class AdminHostService {
                 hostId, request.isActive(), request.getReason(), request.getNote());
     }
 
-    private AdminHostResponseDTO mapToListDTO(User host) {
+        /**
+     * Chức năng: Ánh xạ to list dto.
+     */
+private AdminHostResponseDTO mapToListDTO(User host) {
         AdminHostResponseDTO dto = new AdminHostResponseDTO();
         dto.setUserId(host.getUserId());
         dto.setFullName(host.getFullName());
@@ -88,7 +104,10 @@ public class AdminHostService {
         return dto;
     }
 
-    private AdminHostDetailDTO mapToDetailDTO(User host) {
+        /**
+     * Chức năng: Ánh xạ to detail dto.
+     */
+private AdminHostDetailDTO mapToDetailDTO(User host) {
         AdminHostDetailDTO dto = new AdminHostDetailDTO();
         dto.setUserId(host.getUserId());
         dto.setFullName(host.getFullName());
@@ -98,23 +117,23 @@ public class AdminHostService {
         dto.setActive(host.isActive());
         dto.setCreatedAt(host.getCreatedAt());
 
-        // Count areas
+        
         Long totalAreas = (long) areaRepository.findByHost_UserId(host.getUserId()).size();
         dto.setTotalAreas(totalAreas);
         
-        // Count rooms
+        
         Long totalRooms = (long) roomRepository.findByArea_Host_UserId(host.getUserId()).size();
         dto.setTotalRooms(totalRooms);
         
-        // Count active contracts
+        
         Long activeContracts = contractRepository.countByRoom_Area_Host_UserIdAndStatus(host.getUserId(), "ACTIVE");
         dto.setActiveContracts(activeContracts);
 
-        // Count overdue invoices
+        
         Long overdueInvoices = invoiceRepository.countOverdueByHostId(host.getUserId());
         dto.setOverdueInvoices(overdueInvoices);
 
-        // Count rooms without invoice for current month
+        
         YearMonth currentMonth = YearMonth.now();
         Long roomsWithoutInvoice = roomRepository.countRoomsWithoutInvoiceByHostId(
                 host.getUserId(),
@@ -123,9 +142,8 @@ public class AdminHostService {
         );
         dto.setRoomsWithoutInvoice(roomsWithoutInvoice);
 
-        dto.setLatestStatusReason(null);  // TODO: Implement if persistence layer added for status history
+        dto.setLatestStatusReason(null);  
 
         return dto;
     }
 }
-

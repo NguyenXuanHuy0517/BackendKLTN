@@ -2,17 +2,21 @@ package com.project.tenantservice.dto.issue;
 
 import lombok.Data;
 
+/**
+ * Vai trò: DTO của module tenant-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến issue create để trao đổi giữa các tầng.
+ */
 @Data
 public class IssueCreateDTO {
     private String title;
     private String description;
-    private String images;   // JSON string
-    private String priority; // LOW | MEDIUM | HIGH | URGENT
+    private String images;   
+    private String priority; 
 
-    // NEW - Issue type
-    private String issueType = "GENERAL";  // GENERAL, MAINTENANCE, SERVICE_SUGGESTION
+    
+    private String issueType = "GENERAL";  
 
-    // NEW - Service suggestion fields (required nếu issueType = SERVICE_SUGGESTION)
+    
     private String suggestedServiceName;
     private String suggestionNote;
 }

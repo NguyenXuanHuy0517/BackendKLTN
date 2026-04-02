@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ tenant và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/tenants")
@@ -19,7 +23,11 @@ public class TenantController {
 
     private final TenantService tenantService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu tenants.
+     * URL: GET /api/host/tenants
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<TenantResponseDTO>>> getTenants(@RequestParam Long hostId) {
         log.info("GET /api/host/tenants - hostId: {}", hostId);
         List<TenantResponseDTO> result = tenantService.getTenantsByHost(hostId);
@@ -27,7 +35,11 @@ public class TenantController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{tenantId}")
+        /**
+     * Chức năng: Lấy dữ liệu tenant detail.
+     * URL: GET /api/host/tenants/{tenantId}
+     */
+@GetMapping("/{tenantId}")
     public ResponseEntity<ApiResponse<TenantResponseDTO>> getTenantDetail(@PathVariable Long tenantId) {
         log.info("GET /api/host/tenants/{}", tenantId);
         TenantResponseDTO result = tenantService.getTenantDetail(tenantId);
@@ -35,7 +47,11 @@ public class TenantController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PostMapping
+        /**
+     * Chức năng: Tạo tenant.
+     * URL: POST /api/host/tenants
+     */
+@PostMapping
     public ResponseEntity<ApiResponse<TenantResponseDTO>> createTenant(@RequestBody TenantCreateDTO request) {
         log.info("POST /api/host/tenants - email: {}", request.getEmail());
         TenantResponseDTO result = tenantService.createTenant(request);
@@ -43,7 +59,11 @@ public class TenantController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PatchMapping("/{tenantId}/toggle")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ toggle active.
+     * URL: PATCH /api/host/tenants/{tenantId}/toggle
+     */
+@PatchMapping("/{tenantId}/toggle")
     public ResponseEntity<ApiResponse<Void>> toggleActive(@PathVariable Long tenantId) {
         log.info("PATCH /api/host/tenants/{}/toggle", tenantId);
         tenantService.toggleActive(tenantId);

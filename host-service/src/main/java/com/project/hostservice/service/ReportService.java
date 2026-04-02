@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến report.
+ */
 @Service
 @RequiredArgsConstructor
 public class ReportService {
@@ -18,7 +22,10 @@ public class ReportService {
     private final IssueRepository issueRepository;
     private final ContractServiceRepository contractServiceRepository;
 
-    public ReportDTO getDashboard(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu dashboard.
+     */
+public ReportDTO getDashboard(Long hostId) {
         int totalRooms = roomRepository.findByArea_Host_UserId(hostId).size();
         int rentedRooms = roomRepository.findByArea_Host_UserId(hostId).stream()
                 .filter(r -> r.getStatus().equals("RENTED")).toList().size();

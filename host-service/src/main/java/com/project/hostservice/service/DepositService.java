@@ -17,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến deposit.
+ */
 @Service
 @RequiredArgsConstructor
 public class DepositService {
@@ -26,16 +30,21 @@ public class DepositService {
     private final RoomRepository roomRepository;
     private final DepositMapper depositMapper;
 
-    public List<DepositResponseDTO> getDepositsByHost(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu deposits by host.
+     */
+public List<DepositResponseDTO> getDepositsByHost(Long hostId) {
         return depositRepository.findByRoom_Area_Host_UserId(hostId).stream()
                 .map(depositMapper::toDTO)
                 .toList();
     }
 
-    /**
-     * FIX: Thêm @Transactional — tạo deposit + cập nhật room.status phải atomic.
+    
+
+        /**
+     * Chức năng: Tạo deposit.
      */
-    @Transactional
+@Transactional
     public DepositResponseDTO createDeposit(DepositCreateDTO request) {
         User tenant = userRepository.findById(request.getTenantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người thuê: " + request.getTenantId()));
@@ -63,7 +72,10 @@ public class DepositService {
         return depositMapper.toDTO(deposit);
     }
 
-    public void confirmDeposit(Long depositId, User confirmedBy) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ confirm deposit.
+     */
+public void confirmDeposit(Long depositId, User confirmedBy) {
         Deposit deposit = depositRepository.findById(depositId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt cọc: " + depositId));
         deposit.setStatus("CONFIRMED");
@@ -72,10 +84,12 @@ public class DepositService {
         depositRepository.save(deposit);
     }
 
-    /**
-     * FIX: Thêm @Transactional — hoàn cọc + cập nhật room.status phải atomic.
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ refund deposit.
      */
-    @Transactional
+@Transactional
     public void refundDeposit(Long depositId) {
         Deposit deposit = depositRepository.findById(depositId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt cọc: " + depositId));

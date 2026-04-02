@@ -4,10 +4,17 @@ import com.project.datalayer.entity.User;
 import com.project.tenantservice.dto.profile.ProfileResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module tenant-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ profile giữa entity và DTO.
+ */
 @Component
 public class ProfileMapper {
 
-    public ProfileResponseDTO toDTO(User user) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public ProfileResponseDTO toDTO(User user) {
         ProfileResponseDTO dto = new ProfileResponseDTO();
         dto.setUserId(user.getUserId());
         dto.setFullName(user.getFullName());

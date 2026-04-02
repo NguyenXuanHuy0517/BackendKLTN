@@ -4,6 +4,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến invoice để trao đổi giữa các tầng.
+ */
 @Data
 public class InvoiceResponseDTO {
     private Long invoiceId;

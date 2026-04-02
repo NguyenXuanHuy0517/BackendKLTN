@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến add service to contract dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +23,3 @@ public class AddServiceToContractDTO {
     @Positive(message = "Số lượng phải lớn hơn 0")
     private Integer quantity = 1;
 }
-
-
-

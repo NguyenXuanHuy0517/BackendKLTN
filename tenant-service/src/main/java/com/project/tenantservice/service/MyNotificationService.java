@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến my notification.
+ */
 @Service
 @RequiredArgsConstructor
 public class MyNotificationService {
@@ -17,21 +21,30 @@ public class MyNotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
-    public List<NotificationDTO> getMyNotifications(Long userId) {
+        /**
+     * Chức năng: Lấy dữ liệu my notifications.
+     */
+public List<NotificationDTO> getMyNotifications(Long userId) {
         return notificationRepository
                 .findByUser_UserIdOrderByCreatedAtDesc(userId).stream()
                 .map(notificationMapper::toDTO)
                 .toList();
     }
 
-    public List<NotificationDTO> getUnread(Long userId) {
+        /**
+     * Chức năng: Lấy dữ liệu unread.
+     */
+public List<NotificationDTO> getUnread(Long userId) {
         return notificationRepository
                 .findByUser_UserIdAndIsRead(userId, false).stream()
                 .map(notificationMapper::toDTO)
                 .toList();
     }
 
-    public void markAsRead(Long notificationId, Long userId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark as read.
+     */
+public void markAsRead(Long notificationId, Long userId) {
         notificationRepository.findById(notificationId).ifPresent(n -> {
             if (n.getUser().getUserId().equals(userId)) {
                 n.setRead(true);
@@ -41,7 +54,10 @@ public class MyNotificationService {
         });
     }
 
-    public void markAllAsRead(Long userId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark all as read.
+     */
+public void markAllAsRead(Long userId) {
         List<Notification> unread = notificationRepository
                 .findByUser_UserIdAndIsRead(userId, false);
         unread.forEach(n -> {
@@ -51,7 +67,10 @@ public class MyNotificationService {
         notificationRepository.saveAll(unread);
     }
 
-    public long countUnread(Long userId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ count unread.
+     */
+public long countUnread(Long userId) {
         return notificationRepository
                 .findByUser_UserIdAndIsRead(userId, false).size();
     }

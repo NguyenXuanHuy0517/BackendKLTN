@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Vai trò: File cấu hình của module host-service.
+ * Chức năng: Khai báo bean và thiết lập liên quan đến cloudinary.
+ */
 @Configuration
 public class CloudinaryConfig {
 
@@ -17,7 +21,10 @@ public class CloudinaryConfig {
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ cloudinary.
+     */
+@Bean
     public Cloudinary cloudinary() {
         return new Cloudinary(String.format(
                 "cloudinary://%s:%s@%s",
@@ -27,4 +34,3 @@ public class CloudinaryConfig {
         ));
     }
 }
-

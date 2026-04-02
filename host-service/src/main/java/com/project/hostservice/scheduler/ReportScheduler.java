@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Vai trò: Scheduler của module host-service.
+ * Chức năng: Thực thi các tác vụ nền liên quan đến report theo lịch.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,7 +25,10 @@ public class ReportScheduler {
     private final ReportService reportService;
     private final EmailService emailService;
 
-    @Scheduled(cron = "0 0 8 1 * ?")
+        /**
+     * Chức năng: Gửi monthly reports.
+     */
+@Scheduled(cron = "0 0 8 1 * ?")
     public void sendMonthlyReports() {
         List<User> hosts = userRepository.findByRole_RoleName("HOST");
 

@@ -8,10 +8,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ contract giữa entity và DTO.
+ */
 @Component
 public class ContractMapper {
 
-    public ContractResponseDTO toDTO(Contract contract, List<ContractService> services) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public ContractResponseDTO toDTO(Contract contract, List<ContractService> services) {
         ContractResponseDTO dto = new ContractResponseDTO();
         dto.setContractId(contract.getContractId());
         dto.setContractCode(contract.getContractCode());
@@ -25,20 +32,23 @@ public class ContractMapper {
         dto.setWaterPriceOverride(contract.getWaterPriceOverride());
         dto.setStatus(contract.getStatus());
         
-        // NEW - Map full ContractService details
+        
         dto.setContractServices(services.stream()
                 .map(this::toContractServiceDTO)
                 .toList());
         
-        // Keep for backward compatibility
+        
         dto.setServiceNames(services.stream()
                 .map(cs -> cs.getService().getServiceName())
                 .toList());
         return dto;
     }
 
-    // NEW - Helper method to map ContractService to ContractServiceDTO
-    private ContractServiceDTO toContractServiceDTO(ContractService contractService) {
+    
+        /**
+     * Chức năng: Chuyển đổi contract service dto.
+     */
+private ContractServiceDTO toContractServiceDTO(ContractService contractService) {
         ContractServiceDTO dto = new ContractServiceDTO();
         dto.setContractServiceId(contractService.getId().getServiceId());
         dto.setServiceId(contractService.getService().getServiceId());

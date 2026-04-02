@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến notification để trao đổi giữa các tầng.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +24,3 @@ public class NotificationResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime readAt;
 }
-

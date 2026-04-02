@@ -9,10 +9,17 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: Mapper của module tenant-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ contract giữa entity và DTO.
+ */
 @Component
 public class ContractMapper {
 
-    public MyContractDTO toDTO(Contract contract, List<ContractService> services) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public MyContractDTO toDTO(Contract contract, List<ContractService> services) {
         MyContractDTO dto = new MyContractDTO();
         dto.setContractId(contract.getContractId());
         dto.setContractCode(contract.getContractCode());
@@ -24,7 +31,7 @@ public class ContractMapper {
         dto.setActualRentPrice(contract.getActualRentPrice());
         dto.setStatus(contract.getStatus());
 
-        // Ưu tiên giá override, fallback về giá phòng
+        
         dto.setElecPrice(contract.getElecPriceOverride() != null
                 ? contract.getElecPriceOverride()
                 : contract.getRoom().getElecPrice());
@@ -32,12 +39,12 @@ public class ContractMapper {
                 ? contract.getWaterPriceOverride()
                 : contract.getRoom().getWaterPrice());
 
-        // NEW - Map full ContractService details
+        
         dto.setContractServices(services.stream()
                 .map(this::toContractServiceDTO)
                 .toList());
 
-        // Keep for backward compatibility
+        
         dto.setServiceNames(services.stream()
                 .map(cs -> cs.getService().getServiceName())
                 .toList());
@@ -48,8 +55,11 @@ public class ContractMapper {
         return dto;
     }
 
-    // NEW - Helper method to map ContractService to ContractServiceDTO
-    private ContractServiceDTO toContractServiceDTO(ContractService contractService) {
+    
+        /**
+     * Chức năng: Chuyển đổi contract service dto.
+     */
+private ContractServiceDTO toContractServiceDTO(ContractService contractService) {
         ContractServiceDTO dto = new ContractServiceDTO();
         dto.setContractServiceId(contractService.getId().getServiceId());
         dto.setServiceId(contractService.getService().getServiceId());

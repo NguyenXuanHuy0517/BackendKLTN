@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: Scheduler của module host-service.
+ * Chức năng: Thực thi các tác vụ nền liên quan đến notification theo lịch.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,7 +30,10 @@ public class NotificationScheduler {
     private final EmailService emailService;
     private final InvoiceMapper invoiceMapper;
 
-    @Scheduled(cron = "0 0 9 * * ?")
+        /**
+     * Chức năng: Gửi overdue reminders.
+     */
+@Scheduled(cron = "0 0 9 * * ?")
     public void sendOverdueReminders() {
         List<Invoice> overdueInvoices = invoiceRepository.findByStatusIn(List.of("UNPAID", "OVERDUE"));
 
@@ -55,7 +62,10 @@ public class NotificationScheduler {
         }
     }
 
-    @Scheduled(cron = "0 30 9 * * ?")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ remind expiring contracts.
+     */
+@Scheduled(cron = "0 30 9 * * ?")
     public void remindExpiringContracts() {
         LocalDate now = LocalDate.now();
         LocalDate in30Days = now.plusDays(30);

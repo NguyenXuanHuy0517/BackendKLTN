@@ -8,10 +8,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Vai trò: File cấu hình của module admin-service.
+ * Chức năng: Khai báo bean và thiết lập liên quan đến cors.
+ */
 @Configuration
 public class CorsConfig {
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ cors configuration source.
+     */
+@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
@@ -25,4 +32,3 @@ public class CorsConfig {
         return source;
     }
 }
-

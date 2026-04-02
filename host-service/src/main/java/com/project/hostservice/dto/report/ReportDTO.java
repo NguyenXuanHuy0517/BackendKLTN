@@ -4,6 +4,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến report để trao đổi giữa các tầng.
+ */
 @Data
 public class ReportDTO {
     private BigDecimal totalRevenue;

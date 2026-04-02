@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến chatbot.
+ */
 @Service
 @RequiredArgsConstructor
 public class ChatbotService {
@@ -24,12 +28,15 @@ public class ChatbotService {
     private final ContractRepository contractRepository;
     private final ChatbotHistoryRepository chatbotHistoryRepository;
 
-    public ChatResponseDTO chat(Long userId, ChatRequestDTO request) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ chat.
+     */
+public ChatResponseDTO chat(Long userId, ChatRequestDTO request) {
         String message = request.getMessage().toLowerCase().trim();
         String intent = detectIntent(message);
         String reply = generateReply(userId, intent, message);
 
-        // Lưu lịch sử
+        
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + userId));
@@ -47,8 +54,11 @@ public class ChatbotService {
         return response;
     }
 
-    // ── Intent detection ─────────────────────────────────────
-    private String detectIntent(String message) {
+    
+        /**
+     * Chức năng: Thực hiện nghiệp vụ detect intent.
+     */
+private String detectIntent(String message) {
         if (containsAny(message, "hóa đơn", "tiền phòng", "tiền điện",
                 "tiền nước", "thanh toán", "nợ", "bao nhiêu")) {
             return "INVOICE_QUERY";
@@ -75,8 +85,11 @@ public class ChatbotService {
         return "UNKNOWN";
     }
 
-    // ── Reply generation ─────────────────────────────────────
-    private String generateReply(Long userId, String intent, String message) {
+    
+        /**
+     * Chức năng: Tạo reply.
+     */
+private String generateReply(Long userId, String intent, String message) {
         return switch (intent) {
             case "INVOICE_QUERY" -> handleInvoiceQuery(userId);
             case "CONTRACT_QUERY" -> handleContractQuery(userId);
@@ -92,7 +105,10 @@ public class ChatbotService {
         };
     }
 
-    private String handleInvoiceQuery(Long userId) {
+        /**
+     * Chức năng: Xử lý invoice query.
+     */
+private String handleInvoiceQuery(Long userId) {
         var invoices = invoiceRepository
                 .findByContract_Room_Area_Host_UserId(userId).stream()
                 .filter(i -> i.getContract().getTenant()
@@ -103,7 +119,7 @@ public class ChatbotService {
             return "Bạn chưa có hóa đơn nào trong hệ thống.";
         }
 
-        // Tìm hóa đơn tháng hiện tại hoặc chưa thanh toán
+        
         LocalDate now = LocalDate.now();
         var currentInvoice = invoices.stream()
                 .filter(i -> i.getBillingMonth() == now.getMonthValue()
@@ -129,7 +145,7 @@ public class ChatbotService {
                     translateStatus(inv.getStatus()));
         }
 
-        // Tìm hóa đơn chưa thanh toán
+        
         var unpaid = invoices.stream()
                 .filter(i -> List.of("UNPAID", "OVERDUE")
                         .contains(i.getStatus()))
@@ -152,7 +168,10 @@ public class ChatbotService {
                 "Bạn có thể xem chi tiết trong mục Hóa đơn.";
     }
 
-    private String handleContractQuery(Long userId) {
+        /**
+     * Chức năng: Xử lý contract query.
+     */
+private String handleContractQuery(Long userId) {
         var contracts = contractRepository.findByTenant_UserId(userId);
         var active = contracts.stream()
                 .filter(c -> c.getStatus().equals("ACTIVE"))
@@ -190,7 +209,10 @@ public class ChatbotService {
                 warning);
     }
 
-    private String handleServiceQuery(Long userId) {
+        /**
+     * Chức năng: Xử lý service query.
+     */
+private String handleServiceQuery(Long userId) {
         var active = contractRepository.findByTenant_UserId(userId).stream()
                 .filter(c -> c.getStatus().equals("ACTIVE"))
                 .findFirst();
@@ -215,7 +237,10 @@ public class ChatbotService {
                         : room.getWaterPrice());
     }
 
-    private String handleRuleQuery() {
+        /**
+     * Chức năng: Xử lý rule query.
+     */
+private String handleRuleQuery() {
         return "Một số quy định chung của khu trọ:\n" +
                 "• Giờ đóng cửa: 23:00 — mở cửa: 05:00\n" +
                 "• Khách ở lại qua đêm cần đăng ký với chủ trọ\n" +
@@ -225,22 +250,31 @@ public class ChatbotService {
                 "vui lòng liên hệ trực tiếp với chủ trọ.";
     }
 
-    private String handleReportIssue() {
+        /**
+     * Chức năng: Xử lý report issue.
+     */
+private String handleReportIssue() {
         return "Để báo sự cố hoặc yêu cầu sửa chữa, " +
                 "vui lòng vào mục Khiếu nại & Bảo trì trong ứng dụng " +
                 "và nhấn nút Gửi khiếu nại. " +
                 "Chủ trọ sẽ xử lý trong thời gian sớm nhất.";
     }
 
-    // ── Helpers ──────────────────────────────────────────────
-    private boolean containsAny(String message, String... keywords) {
+    
+        /**
+     * Chức năng: Thực hiện nghiệp vụ contains any.
+     */
+private boolean containsAny(String message, String... keywords) {
         for (String kw : keywords) {
             if (message.contains(kw)) return true;
         }
         return false;
     }
 
-    private String translateStatus(String status) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ translate status.
+     */
+private String translateStatus(String status) {
         return switch (status) {
             case "DRAFT" -> "Chưa có chỉ số";
             case "UNPAID" -> "Chưa thanh toán";

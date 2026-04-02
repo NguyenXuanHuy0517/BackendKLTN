@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ issue và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/issues")
@@ -19,7 +23,11 @@ public class IssueController {
 
     private final IssueService issueService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu issues.
+     * URL: GET /api/host/issues
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<IssueResponseDTO>>> getIssues(@RequestParam Long hostId,
                                                                           @RequestParam(required = false) String issueType) {
         log.info("GET /api/host/issues - hostId: {}, issueType: {}", hostId, issueType);
@@ -34,7 +42,11 @@ public class IssueController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{issueId}")
+        /**
+     * Chức năng: Lấy dữ liệu issue detail.
+     * URL: GET /api/host/issues/{issueId}
+     */
+@GetMapping("/{issueId}")
     public ResponseEntity<ApiResponse<IssueResponseDTO>> getIssueDetail(@PathVariable Long issueId) {
         log.info("GET /api/host/issues/{}", issueId);
         IssueResponseDTO result = issueService.getIssueDetail(issueId);
@@ -42,7 +54,11 @@ public class IssueController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PatchMapping("/{issueId}/status")
+        /**
+     * Chức năng: Cập nhật status.
+     * URL: PATCH /api/host/issues/{issueId}/status
+     */
+@PatchMapping("/{issueId}/status")
     public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable Long issueId,
                                                           @RequestBody IssueStatusUpdateDTO request) {
         log.info("PATCH /api/host/issues/{}/status - status: {}", issueId, request.getStatus());

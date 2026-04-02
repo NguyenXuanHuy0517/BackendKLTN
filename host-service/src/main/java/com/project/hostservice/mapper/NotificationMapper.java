@@ -4,10 +4,17 @@ import com.project.datalayer.entity.Notification;
 import com.project.hostservice.dto.notification.NotificationResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ notification giữa entity và DTO.
+ */
 @Component
 public class NotificationMapper {
 
-    public NotificationResponseDTO toDTO(Notification notification) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public NotificationResponseDTO toDTO(Notification notification) {
         if (notification == null) {
             return null;
         }
@@ -25,5 +32,3 @@ public class NotificationMapper {
         );
     }
 }
-
-

@@ -3,6 +3,10 @@ package com.project.hostservice.dto.issue;
 import lombok.Data;
 import java.time.LocalDateTime;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến issue để trao đổi giữa các tầng.
+ */
 @Data
 public class IssueResponseDTO {
     private Long issueId;
@@ -17,7 +21,7 @@ public class IssueResponseDTO {
     private String tenantFeedback;
     private LocalDateTime createdAt;
 
-    // NEW - Issue type and service suggestion fields
+    
     private String issueType;
     private String areaName;
     private Long areaId;

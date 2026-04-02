@@ -14,13 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Scheduler tự động hóa hợp đồng hết hạn.
- *
- * Luận văn (mục 3.2.5) đề cập: "Hàng ngày hệ thống kiểm tra và tự chuyển
- * trạng thái hợp đồng quá ngày kết thúc từ ACTIVE sang EXPIRED, đồng thời
- * cập nhật trạng thái phòng về AVAILABLE."
- *
- * File này bị thiếu trong code gốc — đây là bản bổ sung.
+ * Vai trò: Scheduler của module host-service.
+ * Chức năng: Thực thi các tác vụ nền liên quan đến contract expiry theo lịch.
  */
 @Slf4j
 @Component
@@ -31,16 +26,17 @@ public class ContractExpiryScheduler {
     private final RoomRepository roomRepository;
     private final NotificationService notificationService;
 
-    /**
-     * Chạy lúc 00:30 hàng ngày.
-     * Chuyển hợp đồng ACTIVE đã quá hạn → EXPIRED, phòng → AVAILABLE.
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ expire contracts.
      */
-    @Scheduled(cron = "0 30 0 * * ?")
+@Scheduled(cron = "0 30 0 * * ?")
     public void expireContracts() {
         LocalDate today = LocalDate.now();
         log.info("=== ContractExpiryScheduler: Kiểm tra hợp đồng hết hạn ngày {} ===", today);
 
-        // Lấy tất cả hợp đồng ACTIVE có endDate < hôm nay
+        
         List<Contract> expiredContracts = contractRepository
                 .findByStatusAndEndDateBefore("ACTIVE", today);
 
@@ -48,16 +44,16 @@ public class ContractExpiryScheduler {
 
         int count = 0;
         for (Contract contract : expiredContracts) {
-            // Chuyển hợp đồng sang EXPIRED
+            
             contract.setStatus("EXPIRED");
             contractRepository.save(contract);
 
-            // Cập nhật phòng về AVAILABLE
+            
             Room room = contract.getRoom();
             room.setStatus("AVAILABLE");
             roomRepository.save(room);
 
-            // Gửi thông báo cho người thuê
+            
             try {
                 Long tenantId = contract.getTenant().getUserId();
                 notificationService.sendToUser(

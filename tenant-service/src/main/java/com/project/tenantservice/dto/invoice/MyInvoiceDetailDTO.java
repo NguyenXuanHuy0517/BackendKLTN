@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: DTO của module tenant-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến my invoice detail để trao đổi giữa các tầng.
+ */
 @Data
 public class MyInvoiceDetailDTO {
     private Long invoiceId;

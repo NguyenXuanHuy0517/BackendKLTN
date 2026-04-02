@@ -19,6 +19,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến billing.
+ */
 @Service
 @RequiredArgsConstructor
 public class BillingService {
@@ -28,13 +32,19 @@ public class BillingService {
     private final ContractServiceRepository contractServiceRepository;
     private final InvoiceMapper invoiceMapper;
 
-    public List<InvoiceResponseDTO> getInvoicesByHost(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu invoices by host.
+     */
+public List<InvoiceResponseDTO> getInvoicesByHost(Long hostId) {
         return invoiceRepository.findByContract_Room_Area_Host_UserId(hostId).stream()
                 .map(invoiceMapper::toResponseDTO)
                 .toList();
     }
 
-    public InvoiceDetailDTO getInvoiceDetail(Long invoiceId) {
+        /**
+     * Chức năng: Lấy dữ liệu invoice detail.
+     */
+public InvoiceDetailDTO getInvoiceDetail(Long invoiceId) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn: " + invoiceId));
         List<ContractService> services = contractServiceRepository
@@ -42,14 +52,20 @@ public class BillingService {
         return invoiceMapper.toDetailDTO(invoice, services);
     }
 
-    public List<InvoiceResponseDTO> getOverdueInvoices(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu overdue invoices.
+     */
+public List<InvoiceResponseDTO> getOverdueInvoices(Long hostId) {
         return invoiceRepository.findByContract_Room_Area_Host_UserId(hostId).stream()
                 .filter(i -> i.getStatus().equals("OVERDUE"))
                 .map(invoiceMapper::toResponseDTO)
                 .toList();
     }
 
-    public InvoiceDetailDTO updateMeterReading(Long invoiceId, MeterReadingDTO request) {
+        /**
+     * Chức năng: Cập nhật meter reading.
+     */
+public InvoiceDetailDTO updateMeterReading(Long invoiceId, MeterReadingDTO request) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn: " + invoiceId));
 
@@ -91,7 +107,10 @@ public class BillingService {
         return invoiceMapper.toDetailDTO(invoice, services);
     }
 
-    public void confirmPayment(Long invoiceId, User paidBy) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ confirm payment.
+     */
+public void confirmPayment(Long invoiceId, User paidBy) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn: " + invoiceId));
         invoice.setStatus("PAID");

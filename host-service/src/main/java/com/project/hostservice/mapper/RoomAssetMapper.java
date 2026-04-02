@@ -4,10 +4,17 @@ import com.project.datalayer.entity.RoomAsset;
 import com.project.hostservice.dto.equipment.RoomAssetResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ room asset giữa entity và DTO.
+ */
 @Component
 public class RoomAssetMapper {
 
-    public RoomAssetResponseDTO toDTO(RoomAsset roomAsset) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public RoomAssetResponseDTO toDTO(RoomAsset roomAsset) {
         RoomAssetResponseDTO dto = new RoomAssetResponseDTO();
         dto.setEquipmentId(roomAsset.getEquipment().getEquipmentId());
         dto.setEquipmentName(roomAsset.getEquipment().getName());

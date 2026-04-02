@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ my invoice và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tenant/invoices")
@@ -19,7 +23,11 @@ public class MyInvoiceController {
 
     private final MyInvoiceService invoiceService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu my invoices.
+     * URL: GET /api/tenant/invoices
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<MyInvoiceDTO>>> getMyInvoices(
             @RequestParam Long userId) {
         log.info("GET /api/tenant/invoices - userId: {}", userId);
@@ -27,7 +35,11 @@ public class MyInvoiceController {
                 ApiResponse.success(invoiceService.getMyInvoices(userId)));
     }
 
-    @GetMapping("/{invoiceId}")
+        /**
+     * Chức năng: Lấy dữ liệu invoice detail.
+     * URL: GET /api/tenant/invoices/{invoiceId}
+     */
+@GetMapping("/{invoiceId}")
     public ResponseEntity<ApiResponse<MyInvoiceDetailDTO>> getInvoiceDetail(
             @PathVariable Long invoiceId,
             @RequestParam Long userId) {

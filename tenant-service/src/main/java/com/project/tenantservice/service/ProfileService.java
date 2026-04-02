@@ -9,6 +9,10 @@ import com.project.tenantservice.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến profile.
+ */
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
@@ -16,14 +20,20 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final ProfileMapper profileMapper;
 
-    public ProfileResponseDTO getProfile(Long userId) {
+        /**
+     * Chức năng: Lấy dữ liệu profile.
+     */
+public ProfileResponseDTO getProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + userId));
         return profileMapper.toDTO(user);
     }
 
-    public ProfileResponseDTO updateProfile(Long userId, ProfileUpdateDTO request) {
+        /**
+     * Chức năng: Cập nhật profile.
+     */
+public ProfileResponseDTO updateProfile(Long userId, ProfileUpdateDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng: " + userId));

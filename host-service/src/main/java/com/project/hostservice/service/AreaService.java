@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến area.
+ */
 @Service
 @RequiredArgsConstructor
 public class AreaService {
@@ -24,7 +28,10 @@ public class AreaService {
     private final UserRepository userRepository;
     private final AreaMapper areaMapper;
 
-    public List<AreaResponseDTO> getAreasByHost(Long hostId) {
+        /**
+     * Chức năng: Lấy dữ liệu areas by host.
+     */
+public List<AreaResponseDTO> getAreasByHost(Long hostId) {
         return areaRepository.findByHost_UserId(hostId).stream()
                 .map(area -> areaMapper.toDTO(
                         area,
@@ -39,7 +46,10 @@ public class AreaService {
                 .toList();
     }
 
-    public AreaResponseDTO createArea(Long hostId, AreaCreateDTO request) {
+        /**
+     * Chức năng: Tạo area.
+     */
+public AreaResponseDTO createArea(Long hostId, AreaCreateDTO request) {
         User host = userRepository.findById(hostId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy host: " + hostId));
 
@@ -58,7 +68,10 @@ public class AreaService {
         return areaMapper.toDTO(area, 0, 0, 0, 0);
     }
 
-    public AreaResponseDTO updateArea(Long areaId, AreaCreateDTO request) {
+        /**
+     * Chức năng: Cập nhật area.
+     */
+public AreaResponseDTO updateArea(Long areaId, AreaCreateDTO request) {
         MotelArea area = areaRepository.findById(areaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khu trọ: " + areaId));
 

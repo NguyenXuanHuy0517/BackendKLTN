@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến tenant.
+ */
 @Service
 @RequiredArgsConstructor
 public class TenantService {
@@ -25,23 +29,19 @@ public class TenantService {
     private final PasswordEncoder passwordEncoder;
     private final TenantMapper tenantMapper;
 
-    /**
-     * Lấy danh sách người thuê thuộc về một chủ trọ (hostId).
-     *
-     * FIX: Trước đây dùng findByRole_RoleName("TENANT") → trả về TẤT CẢ tenant
-     *      toàn hệ thống, bỏ qua hostId hoàn toàn.
-     *
-     *      Nay: Join qua contract → room → area → host để chỉ lấy tenant
-     *      đã hoặc đang thuê phòng trong khu trọ của hostId này.
+    
+
+        /**
+     * Chức năng: Lấy dữ liệu tenants by host.
      */
-    public List<TenantResponseDTO> getTenantsByHost(Long hostId) {
+public List<TenantResponseDTO> getTenantsByHost(Long hostId) {
         return contractRepository.findByRoom_Area_Host_UserId(hostId).stream()
                 .map(contract -> contract.getTenant())
                 .distinct()
                 .map(user -> {
                     TenantResponseDTO dto = tenantMapper.toDTO(user);
 
-                    // Tìm hợp đồng ACTIVE của tenant này trong khu trọ của host
+                    
                     contractRepository.findByTenant_UserId(user.getUserId()).stream()
                             .filter(c -> "ACTIVE".equals(c.getStatus()))
                             .filter(c -> c.getRoom().getArea().getHost()
@@ -57,7 +57,10 @@ public class TenantService {
                 .toList();
     }
 
-    public TenantResponseDTO getTenantDetail(Long tenantId) {
+        /**
+     * Chức năng: Lấy dữ liệu tenant detail.
+     */
+public TenantResponseDTO getTenantDetail(Long tenantId) {
         User user = userRepository.findById(tenantId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người thuê: " + tenantId));
@@ -75,7 +78,10 @@ public class TenantService {
         return dto;
     }
 
-    public TenantResponseDTO createTenant(TenantCreateDTO request) {
+        /**
+     * Chức năng: Tạo tenant.
+     */
+public TenantResponseDTO createTenant(TenantCreateDTO request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email đã tồn tại: " + request.getEmail());
         }
@@ -100,7 +106,10 @@ public class TenantService {
         return tenantMapper.toDTO(user);
     }
 
-    public void toggleActive(Long tenantId) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ toggle active.
+     */
+public void toggleActive(Long tenantId) {
         User user = userRepository.findById(tenantId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người thuê: " + tenantId));

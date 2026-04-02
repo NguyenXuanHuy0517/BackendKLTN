@@ -5,18 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
+/**
+ * Vai trò: DTO của module host-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến contract service để trao đổi giữa các tầng.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContractServiceDTO {
-    private Long contractServiceId;    // PK trong bảng contract_services
+    private Long contractServiceId;    
     private Long serviceId;
     private String serviceName;
     private Integer quantity;
-    private BigDecimal price;          // giá trong contract
+    private BigDecimal price;          
     private String unitName;
 
-    // Optional - thêm nếu cần tracking giá thay đổi
-    private BigDecimal currentServicePrice;  // giá hiện tại của service
+    
+    private BigDecimal currentServicePrice;  
 }
-

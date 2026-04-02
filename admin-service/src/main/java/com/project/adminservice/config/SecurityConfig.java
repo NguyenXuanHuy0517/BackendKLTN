@@ -20,6 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Vai trò: File cấu hình của module admin-service.
+ * Chức năng: Khai báo bean và thiết lập liên quan đến security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -29,7 +33,10 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ security filter chain.
+     */
+@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
@@ -51,21 +58,29 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ password encoder.
+     */
+@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ authentication provider.
+     */
+@Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ authentication manager.
+     */
+@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }
-

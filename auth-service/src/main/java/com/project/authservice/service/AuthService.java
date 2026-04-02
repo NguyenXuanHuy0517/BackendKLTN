@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module auth-service.
+ * Chức năng: Chứa logic xử lý liên quan đến auth.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,14 +39,16 @@ public class AuthService {
     @Value("${email.send-reset-password:false}")
     private boolean sendPasswordResetEmail;
 
-    // Simple in-memory token blacklist (use Redis/DB in production)
+    
     private static final Set<String> tokenBlacklist = new HashSet<>();
     private static final Map<String, String> passwordResetTokens = new HashMap<>();
 
-    /**
-     * Đăng nhập người dùng
+    
+
+        /**
+     * Chức năng: Xử lý đăng nhập người dùng.
      */
-    public LoginResponseDTO login(LoginRequestDTO request) {
+public LoginResponseDTO login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
 
@@ -66,10 +72,12 @@ public class AuthService {
         );
     }
 
-    /**
-     * Đăng ký tài khoản tenant
+    
+
+        /**
+     * Chức năng: Xử lý đăng ký tenant.
      */
-    public void registerTenant(RegisterRequestDTO request) {
+public void registerTenant(RegisterRequestDTO request) {
         validateUserRegistration(request);
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email đã tồn tại");
@@ -93,7 +101,7 @@ public class AuthService {
         userRepository.save(user);
         log.info("Tenant registered successfully: {}", request.getEmail());
 
-        // Send welcome email if available
+        
         if (emailService.isPresent()) {
             try {
                 emailService.get().sendWelcomeEmail(user.getEmail(), user.getFullName(), "TENANT");
@@ -103,10 +111,12 @@ public class AuthService {
         }
     }
 
-    /**
-     * Đăng ký tài khoản host
+    
+
+        /**
+     * Chức năng: Xử lý đăng ký host.
      */
-    public void registerHost(RegisterRequestDTO request) {
+public void registerHost(RegisterRequestDTO request) {
         validateUserRegistration(request);
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email đã tồn tại");
@@ -131,7 +141,7 @@ public class AuthService {
         userRepository.save(user);
         log.info("Host registered successfully: {}", request.getEmail());
 
-        // Send welcome email if available
+        
         if (emailService.isPresent()) {
             try {
                 emailService.get().sendWelcomeEmail(user.getEmail(), user.getFullName(), "HOST");
@@ -141,10 +151,12 @@ public class AuthService {
         }
     }
 
-    /**
-     * Validate thông tin đăng ký
+    
+
+        /**
+     * Chức năng: Kiểm tra user registration.
      */
-    private void validateUserRegistration(RegisterRequestDTO request) {
+private void validateUserRegistration(RegisterRequestDTO request) {
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("Email không được để trống");
         }
@@ -159,10 +171,12 @@ public class AuthService {
         }
     }
 
-    /**
-     * Làm mới token
+    
+
+        /**
+     * Chức năng: Làm mới token.
      */
-    public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request) {
+public RefreshTokenResponseDTO refreshToken(RefreshTokenRequestDTO request) {
         if (tokenBlacklist.contains(request.getToken())) {
             throw new BadCredentialsException("Token đã bị hủy");
         }
@@ -178,29 +192,33 @@ public class AuthService {
         return new RefreshTokenResponseDTO(newToken);
     }
 
-    /**
-     * Đăng xuất người dùng
+    
+
+        /**
+     * Chức năng: Xử lý đăng xuất người dùng.
      */
-    public void logout(String token) {
+public void logout(String token) {
         tokenBlacklist.add(token);
         log.info("Token added to blacklist - User logged out");
     }
 
-    /**
-     * Yêu cầu reset mật khẩu
+    
+
+        /**
+     * Chức năng: Tiếp nhận yêu cầu password.
      */
-    public void forgotPassword(ForgotPasswordRequestDTO request) {
-        // Find user by email
+public void forgotPassword(ForgotPasswordRequestDTO request) {
+        
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại"));
 
-        // Generate reset token (in production use proper JWT or secure random token with expiration)
+        
         String resetToken = UUID.randomUUID().toString();
         passwordResetTokens.put(resetToken, user.getEmail());
 
         log.info("Password reset token generated for: {}", user.getEmail());
 
-        // Send email if enabled and available
+        
         if (sendPasswordResetEmail) {
             emailService.ifPresentOrElse(
                 service -> {
@@ -218,10 +236,12 @@ public class AuthService {
         }
     }
 
-    /**
-     * Reset mật khẩu với token
+    
+
+        /**
+     * Chức năng: Đặt lại password.
      */
-    public void resetPassword(ResetPasswordRequestDTO request) {
+public void resetPassword(ResetPasswordRequestDTO request) {
         String email = passwordResetTokens.get(request.getToken());
         if (email == null) {
             throw new BadCredentialsException("Token không hợp lệ hoặc đã hết hạn");
@@ -234,10 +254,7 @@ public class AuthService {
         userRepository.save(user);
         log.info("Password reset successfully for: {}", email);
 
-        // Remove used token
+        
         passwordResetTokens.remove(request.getToken());
     }
 }
-
-
-

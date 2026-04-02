@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Vai trò: File cấu hình của module tenant-service.
+ * Chức năng: Khai báo bean và thiết lập liên quan đến cloudinary.
+ */
 @Configuration
 public class CloudinaryConfig {
 
@@ -20,7 +24,10 @@ public class CloudinaryConfig {
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
 
-    @Bean
+        /**
+     * Chức năng: Thực hiện nghiệp vụ cloudinary.
+     */
+@Bean
     public Cloudinary cloudinary() {
         Map<String, String> config = new HashMap<>();
         config.put("cloud_name", cloudName);

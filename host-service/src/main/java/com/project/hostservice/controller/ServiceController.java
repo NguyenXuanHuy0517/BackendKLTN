@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ service và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host")
@@ -19,7 +23,11 @@ public class ServiceController {
 
     private final ServiceManagementService serviceManagementService;
 
-    @GetMapping("/areas/{areaId}/services")
+        /**
+     * Chức năng: Lấy dữ liệu services.
+     * URL: GET /api/host/areas/{areaId}/services
+     */
+@GetMapping("/areas/{areaId}/services")
     public ResponseEntity<ApiResponse<List<ServiceResponseDTO>>> getServices(@PathVariable Long areaId) {
         log.info("GET /api/host/areas/{}/services", areaId);
         List<ServiceResponseDTO> result = serviceManagementService.getServicesByArea(areaId);
@@ -27,7 +35,11 @@ public class ServiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PostMapping("/areas/{areaId}/services")
+        /**
+     * Chức năng: Tạo service.
+     * URL: POST /api/host/areas/{areaId}/services
+     */
+@PostMapping("/areas/{areaId}/services")
     public ResponseEntity<ApiResponse<ServiceResponseDTO>> createService(@PathVariable Long areaId,
                                                                          @RequestBody ServiceCreateDTO request) {
         log.info("POST /api/host/areas/{}/services - serviceName: {}", areaId, request.getServiceName());
@@ -36,7 +48,11 @@ public class ServiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PutMapping("/services/{serviceId}")
+        /**
+     * Chức năng: Cập nhật service.
+     * URL: PUT /api/host/services/{serviceId}
+     */
+@PutMapping("/services/{serviceId}")
     public ResponseEntity<ApiResponse<ServiceResponseDTO>> updateService(@PathVariable Long serviceId,
                                                                          @RequestBody ServiceCreateDTO request) {
         log.info("PUT /api/host/services/{}", serviceId);
@@ -45,7 +61,11 @@ public class ServiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @DeleteMapping("/services/{serviceId}")
+        /**
+     * Chức năng: Xóa service.
+     * URL: DELETE /api/host/services/{serviceId}
+     */
+@DeleteMapping("/services/{serviceId}")
     public ResponseEntity<ApiResponse<Void>> deleteService(@PathVariable Long serviceId) {
         log.info("DELETE /api/host/services/{}", serviceId);
         serviceManagementService.deleteService(serviceId);

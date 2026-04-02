@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * Vai trò: DTO của module admin-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến admin room audit để trao đổi giữa các tầng.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +20,6 @@ public class AdminRoomAuditDTO {
     private String hostName;
     private String status;
     private BigDecimal basePrice;
-    private String currentTenantName;  // Current tenant name if room is rented
-    private Long daysWithoutInvoice;   // Days since last invoice (for audit)
+    private String currentTenantName;  
+    private Long daysWithoutInvoice;   
 }
-

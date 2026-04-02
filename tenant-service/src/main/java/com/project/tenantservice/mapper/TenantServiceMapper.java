@@ -5,10 +5,17 @@ import com.project.datalayer.entity.ContractService;
 import com.project.tenantservice.dto.service.TenantServiceDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module tenant-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ tenant service giữa entity và DTO.
+ */
 @Component
 public class TenantServiceMapper {
 
-    public TenantServiceDTO toDTO(Service service) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public TenantServiceDTO toDTO(Service service) {
         if (service == null) {
             return null;
         }
@@ -16,18 +23,21 @@ public class TenantServiceMapper {
         return new TenantServiceDTO(
                 service.getServiceId(),
                 service.getServiceName(),
-                0,  // quantity = 0 (chưa có trong contract)
+                0,  
                 service.getPrice(),
                 service.getUnitName(),
                 service.getDescription(),
-                null,  // contractServiceId
-                null,  // priceSnapshot
-                null   // unitSnapshot
+                null,  
+                null,  
+                null   
         );
     }
 
-    // NEW - Map from ContractService (includes quantity and snapshot)
-    public TenantServiceDTO toDTOFromContractService(ContractService contractService) {
+    
+        /**
+     * Chức năng: Chuyển đổi dto from contract service.
+     */
+public TenantServiceDTO toDTOFromContractService(ContractService contractService) {
         if (contractService == null || contractService.getService() == null) {
             return null;
         }
@@ -40,10 +50,9 @@ public class TenantServiceMapper {
                 service.getPrice(),
                 service.getUnitName(),
                 service.getDescription(),
-                contractService.getId().getServiceId(),  // contractServiceId
-                contractService.getPriceSnapshot(),      // priceSnapshot
-                service.getUnitName()                    // unitSnapshot
+                contractService.getId().getServiceId(),  
+                contractService.getPriceSnapshot(),      
+                service.getUnitName()                    
         );
     }
 }
-

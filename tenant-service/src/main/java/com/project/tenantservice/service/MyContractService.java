@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Vai trò: Service xử lý nghiệp vụ của module tenant-service.
+ * Chức năng: Chứa logic xử lý liên quan đến my contract.
+ */
 @Service
 @RequiredArgsConstructor
 public class MyContractService {
@@ -18,7 +22,10 @@ public class MyContractService {
     private final ContractServiceRepository contractServiceRepository;
     private final ContractMapper contractMapper;
 
-    public List<MyContractDTO> getMyContracts(Long tenantId) {
+        /**
+     * Chức năng: Lấy dữ liệu my contracts.
+     */
+public List<MyContractDTO> getMyContracts(Long tenantId) {
         return contractRepository.findByTenant_UserId(tenantId).stream()
                 .map(contract -> contractMapper.toDTO(
                         contract,
@@ -27,7 +34,10 @@ public class MyContractService {
                 .toList();
     }
 
-    public MyContractDTO getCurrentContract(Long tenantId) {
+        /**
+     * Chức năng: Lấy dữ liệu current contract.
+     */
+public MyContractDTO getCurrentContract(Long tenantId) {
         return contractRepository.findByTenant_UserId(tenantId).stream()
                 .filter(c -> c.getStatus().equals("ACTIVE"))
                 .findFirst()

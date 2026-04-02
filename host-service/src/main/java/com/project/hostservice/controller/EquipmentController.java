@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ equipment và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host")
@@ -20,7 +24,11 @@ public class EquipmentController {
 
     private final EquipmentService equipmentService;
 
-    @GetMapping("/equipments")
+        /**
+     * Chức năng: Lấy dữ liệu all equipments.
+     * URL: GET /api/host/equipments
+     */
+@GetMapping("/equipments")
     public ResponseEntity<ApiResponse<List<EquipmentDTO>>> getAllEquipments() {
         log.info("GET /api/host/equipments");
         List<EquipmentDTO> result = equipmentService.getAllEquipments();
@@ -28,7 +36,11 @@ public class EquipmentController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/rooms/{roomId}/assets")
+        /**
+     * Chức năng: Lấy dữ liệu assets by room.
+     * URL: GET /api/host/rooms/{roomId}/assets
+     */
+@GetMapping("/rooms/{roomId}/assets")
     public ResponseEntity<ApiResponse<List<RoomAssetResponseDTO>>> getAssetsByRoom(@PathVariable Long roomId) {
         log.info("GET /api/host/rooms/{}/assets", roomId);
         List<RoomAssetResponseDTO> result = equipmentService.getAssetsByRoom(roomId);
@@ -36,7 +48,11 @@ public class EquipmentController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PostMapping("/rooms/{roomId}/assets")
+        /**
+     * Chức năng: Thêm asset.
+     * URL: POST /api/host/rooms/{roomId}/assets
+     */
+@PostMapping("/rooms/{roomId}/assets")
     public ResponseEntity<ApiResponse<RoomAssetResponseDTO>> addAsset(@PathVariable Long roomId,
                                                                       @RequestBody RoomAssetCreateDTO request) {
         log.info("POST /api/host/rooms/{}/assets - equipmentId: {}", roomId, request.getEquipmentId());
@@ -46,7 +62,11 @@ public class EquipmentController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @DeleteMapping("/rooms/{roomId}/assets/{equipmentId}")
+        /**
+     * Chức năng: Loại bỏ asset.
+     * URL: DELETE /api/host/rooms/{roomId}/assets/{equipmentId}
+     */
+@DeleteMapping("/rooms/{roomId}/assets/{equipmentId}")
     public ResponseEntity<ApiResponse<Void>> removeAsset(@PathVariable Long roomId,
                                                          @PathVariable Long equipmentId) {
         log.info("DELETE /api/host/rooms/{}/assets/{}", roomId, equipmentId);

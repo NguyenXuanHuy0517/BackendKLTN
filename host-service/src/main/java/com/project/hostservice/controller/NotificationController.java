@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ notification và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/notifications")
@@ -20,7 +24,11 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu notifications.
+     * URL: GET /api/host/notifications
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotifications(@RequestParam Long userId) {
         log.info("GET /api/host/notifications - userId: {}", userId);
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUser(userId);
@@ -28,7 +36,11 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(notifications));
     }
 
-    @PatchMapping("/{notificationId}/read")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark as read.
+     * URL: PATCH /api/host/notifications/{notificationId}/read
+     */
+@PatchMapping("/{notificationId}/read")
     public ResponseEntity<ApiResponse<Void>> markAsRead(@PathVariable Long notificationId) {
         log.info("PATCH /api/host/notifications/{}/read", notificationId);
         notificationService.markAsRead(notificationId);
@@ -36,7 +48,11 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @PatchMapping("/mark-all-read")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ mark all as read.
+     * URL: PATCH /api/host/notifications/mark-all-read
+     */
+@PatchMapping("/mark-all-read")
     public ResponseEntity<ApiResponse<Void>> markAllAsRead(@RequestParam Long userId) {
         log.info("PATCH /api/host/notifications/mark-all-read - userId: {}", userId);
         notificationService.markAllAsRead(userId);
@@ -44,10 +60,13 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    /**
-     * Gửi thông báo đến một tenant cụ thể
+    
+
+        /**
+     * Chức năng: Gửi to tenant.
+     * URL: POST /api/host/notifications/send-to-tenant/{tenantId}
      */
-    @PostMapping("/send-to-tenant/{tenantId}")
+@PostMapping("/send-to-tenant/{tenantId}")
     public ResponseEntity<ApiResponse<Void>> sendToTenant(
             @RequestParam Long hostId,
             @PathVariable Long tenantId,
@@ -67,10 +86,13 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(null, "Gửi thông báo đến tenant thành công"));
     }
 
-    /**
-     * Gửi thông báo đến tất cả tenants của một host
+    
+
+        /**
+     * Chức năng: Gửi to all tenants.
+     * URL: POST /api/host/notifications/send-to-all
      */
-    @PostMapping("/send-to-all")
+@PostMapping("/send-to-all")
     public ResponseEntity<ApiResponse<Void>> sendToAllTenants(
             @RequestParam Long hostId,
             @Valid @RequestBody NotificationRequestDTO request) {
@@ -89,10 +111,13 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(null, "Gửi thông báo đến tất cả tenants thành công"));
     }
 
-    /**
-     * Gửi thông báo đến tenant cụ thể hoặc tất cả tenants (nếu tenantId null)
+    
+
+        /**
+     * Chức năng: Gửi notification.
+     * URL: POST /api/host/notifications/send
      */
-    @PostMapping("/send")
+@PostMapping("/send")
     public ResponseEntity<ApiResponse<Void>> sendNotification(
             @RequestParam Long hostId,
             @Valid @RequestBody NotificationRequestDTO request) {
@@ -117,4 +142,3 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(null, message));
     }
 }
-

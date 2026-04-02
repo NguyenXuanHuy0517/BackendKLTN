@@ -10,17 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Cho phép người thuê cập nhật avatar của chính mình.
- *
- * Flow 1 - Upload file trực tiếp:
- *   Flutter → POST /api/tenant/avatar?userId=X (multipart file)
- *          ← { success: true, data: "https://res.cloudinary.com/..." }
- *
- * Flow 2 - Cập nhật via URL (Flutter tự upload lên Cloudinary):
- *   Flutter → PUT /api/tenant/avatar?userId=X (JSON body với avatarUrl)
- *          ← { success: true, data: "https://res.cloudinary.com/..." }
- *
- * Flutter sau đó lưu URL mới vào SharedPreferences và hiển thị lại avatar.
+ * Vai trò: REST controller của module tenant-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ avatar và điều phối xử lý sang tầng bên dưới.
  */
 @Slf4j
 @RestController
@@ -30,11 +21,13 @@ public class AvatarController {
 
     private final AvatarService avatarService;
 
-    /**
-     * Upload avatar mới cho user.
-     * File được upload lên Cloudinary, URL được lưu vào users.avatar_url.
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload avatar.
+     * URL: POST /api/tenant/avatar
      */
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<String>> uploadAvatar(
             @RequestParam Long userId,
             @RequestParam("file") MultipartFile file) {
@@ -48,11 +41,13 @@ public class AvatarController {
         return ResponseEntity.ok(ApiResponse.success(avatarUrl));
     }
 
-    /**
-     * Cập nhật avatar qua URL (sau khi Flutter đã upload lên Cloudinary).
-     * Body: { "avatarUrl": "https://res.cloudinary.com/..." }
+    
+
+        /**
+     * Chức năng: Cập nhật avatar url.
+     * URL: PUT /api/tenant/avatar
      */
-    @PutMapping
+@PutMapping
     public ResponseEntity<ApiResponse<String>> updateAvatarUrl(
             @RequestParam Long userId,
             @RequestBody AvatarUrlRequest request) {
@@ -62,10 +57,13 @@ public class AvatarController {
         return ResponseEntity.ok(ApiResponse.success(url));
     }
 
-    /**
-     * Xoá avatar — đặt lại về null (dùng ảnh mặc định trên Flutter).
+    
+
+        /**
+     * Chức năng: Loại bỏ avatar.
+     * URL: DELETE /api/tenant/avatar
      */
-    @DeleteMapping
+@DeleteMapping
     public ResponseEntity<ApiResponse<Void>> removeAvatar(@RequestParam Long userId) {
         log.info("DELETE /api/tenant/avatar - userId: {}", userId);
         avatarService.removeAvatar(userId);
@@ -73,10 +71,18 @@ public class AvatarController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    // ── Inner DTO ─────────────────────────────────────────────
+    
     public static class AvatarUrlRequest {
         private String avatarUrl;
-        public String getAvatarUrl() { return avatarUrl; }
-        public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+                /**
+         * Chức năng: Lấy dữ liệu avatar url.
+         * URL: REQUEST /api/tenant/avatar
+         */
+public String getAvatarUrl() { return avatarUrl; }
+                /**
+         * Chức năng: Thực hiện nghiệp vụ set avatar url.
+         * URL: REQUEST /api/tenant/avatar
+         */
+public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     }
 }

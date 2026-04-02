@@ -4,10 +4,17 @@ import com.project.datalayer.entity.User;
 import com.project.hostservice.dto.tenant.TenantResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ tenant giữa entity và DTO.
+ */
 @Component
 public class TenantMapper {
 
-    public TenantResponseDTO toDTO(User user) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public TenantResponseDTO toDTO(User user) {
         TenantResponseDTO dto = new TenantResponseDTO();
         dto.setUserId(user.getUserId());
         dto.setFullName(user.getFullName());

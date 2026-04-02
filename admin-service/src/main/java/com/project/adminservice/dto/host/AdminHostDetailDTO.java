@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Vai trò: DTO của module admin-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến admin host detail để trao đổi giữa các tầng.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +25,6 @@ public class AdminHostDetailDTO {
     private Long activeContracts;
     private Long overdueInvoices;
     private Long roomsWithoutInvoice;
-    private String latestStatusReason;  // Reason for last status change
+    private String latestStatusReason;  
     private LocalDateTime createdAt;
 }
-

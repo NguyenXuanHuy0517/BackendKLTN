@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ contract và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/contracts")
@@ -21,7 +25,11 @@ public class ContractController {
 
     private final ContractManagementService contractService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu contracts.
+     * URL: GET /api/host/contracts
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<ContractResponseDTO>>> getContracts(@RequestParam Long hostId) {
         log.info("GET /api/host/contracts - hostId: {}", hostId);
         List<ContractResponseDTO> result = contractService.getContractsByHost(hostId);
@@ -29,7 +37,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{contractId}")
+        /**
+     * Chức năng: Lấy dữ liệu contract detail.
+     * URL: GET /api/host/contracts/{contractId}
+     */
+@GetMapping("/{contractId}")
     public ResponseEntity<ApiResponse<ContractResponseDTO>> getContractDetail(@PathVariable Long contractId) {
         log.info("GET /api/host/contracts/{}", contractId);
         ContractResponseDTO result = contractService.getContractDetail(contractId);
@@ -37,7 +49,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PostMapping
+        /**
+     * Chức năng: Tạo contract.
+     * URL: POST /api/host/contracts
+     */
+@PostMapping
     public ResponseEntity<ApiResponse<ContractResponseDTO>> createContract(@RequestBody ContractCreateDTO request) {
         log.info("POST /api/host/contracts - tenantId: {}, roomId: {}", request.getTenantId(), request.getRoomId());
         ContractResponseDTO result = contractService.createContract(request);
@@ -45,7 +61,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PutMapping("/{contractId}/extend")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ extend contract.
+     * URL: PUT /api/host/contracts/{contractId}/extend
+     */
+@PutMapping("/{contractId}/extend")
     public ResponseEntity<ApiResponse<ContractResponseDTO>> extendContract(@PathVariable Long contractId,
                                                                            @RequestBody ContractExtendDTO request) {
         log.info("PUT /api/host/contracts/{}/extend - newEndDate: {}", contractId, request.getNewEndDate());
@@ -54,7 +74,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PatchMapping("/{contractId}/terminate")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ terminate contract.
+     * URL: PATCH /api/host/contracts/{contractId}/terminate
+     */
+@PatchMapping("/{contractId}/terminate")
     public ResponseEntity<ApiResponse<Void>> terminateContract(@PathVariable Long contractId,
                                                                @RequestParam Long terminatedById) {
         log.info("PATCH /api/host/contracts/{}/terminate - terminatedById: {}", contractId, terminatedById);
@@ -65,7 +89,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @PostMapping("/{contractId}/services/{serviceId}")
+        /**
+     * Chức năng: Thêm service.
+     * URL: POST /api/host/contracts/{contractId}/services/{serviceId}
+     */
+@PostMapping("/{contractId}/services/{serviceId}")
     public ResponseEntity<ApiResponse<Void>> addService(@PathVariable Long contractId,
                                                         @PathVariable Long serviceId) {
         log.info("POST /api/host/contracts/{}/services/{}", contractId, serviceId);
@@ -74,7 +102,11 @@ public class ContractController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @DeleteMapping("/{contractId}/services/{serviceId}")
+        /**
+     * Chức năng: Loại bỏ service.
+     * URL: DELETE /api/host/contracts/{contractId}/services/{serviceId}
+     */
+@DeleteMapping("/{contractId}/services/{serviceId}")
     public ResponseEntity<ApiResponse<Void>> removeService(@PathVariable Long contractId,
                                                            @PathVariable Long serviceId) {
         log.info("DELETE /api/host/contracts/{}/services/{}", contractId, serviceId);

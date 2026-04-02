@@ -2,6 +2,10 @@ package com.project.tenantservice.dto.profile;
 
 import lombok.Data;
 
+/**
+ * Vai trò: DTO của module tenant-service.
+ * Chức năng: Đóng gói dữ liệu liên quan đến profile để trao đổi giữa các tầng.
+ */
 @Data
 public class ProfileResponseDTO {
     private Long userId;

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Vai trò: REST controller của module host-service.
+ * Chức năng: Tiếp nhận request HTTP cho nghiệp vụ invoice và điều phối xử lý sang tầng bên dưới.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/host/invoices")
@@ -21,7 +25,11 @@ public class InvoiceController {
 
     private final BillingService billingService;
 
-    @GetMapping
+        /**
+     * Chức năng: Lấy dữ liệu invoices.
+     * URL: GET /api/host/invoices
+     */
+@GetMapping
     public ResponseEntity<ApiResponse<List<InvoiceResponseDTO>>> getInvoices(@RequestParam Long hostId) {
         log.info("GET /api/host/invoices - hostId: {}", hostId);
         List<InvoiceResponseDTO> result = billingService.getInvoicesByHost(hostId);
@@ -29,7 +37,11 @@ public class InvoiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{invoiceId}")
+        /**
+     * Chức năng: Lấy dữ liệu invoice detail.
+     * URL: GET /api/host/invoices/{invoiceId}
+     */
+@GetMapping("/{invoiceId}")
     public ResponseEntity<ApiResponse<InvoiceDetailDTO>> getInvoiceDetail(@PathVariable Long invoiceId) {
         log.info("GET /api/host/invoices/{}", invoiceId);
         InvoiceDetailDTO result = billingService.getInvoiceDetail(invoiceId);
@@ -37,7 +49,11 @@ public class InvoiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/overdue")
+        /**
+     * Chức năng: Lấy dữ liệu overdue invoices.
+     * URL: GET /api/host/invoices/overdue
+     */
+@GetMapping("/overdue")
     public ResponseEntity<ApiResponse<List<InvoiceResponseDTO>>> getOverdueInvoices(@RequestParam Long hostId) {
         log.info("GET /api/host/invoices/overdue - hostId: {}", hostId);
         List<InvoiceResponseDTO> result = billingService.getOverdueInvoices(hostId);
@@ -45,7 +61,11 @@ public class InvoiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PutMapping("/{invoiceId}/meters")
+        /**
+     * Chức năng: Cập nhật meters.
+     * URL: PUT /api/host/invoices/{invoiceId}/meters
+     */
+@PutMapping("/{invoiceId}/meters")
     public ResponseEntity<ApiResponse<InvoiceDetailDTO>> updateMeters(@PathVariable Long invoiceId,
                                                                       @RequestBody MeterReadingDTO request) {
         log.info("PUT /api/host/invoices/{}/meters - elecNew: {}, waterNew: {}",
@@ -55,7 +75,11 @@ public class InvoiceController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @PatchMapping("/{invoiceId}/pay")
+        /**
+     * Chức năng: Thực hiện nghiệp vụ confirm payment.
+     * URL: PATCH /api/host/invoices/{invoiceId}/pay
+     */
+@PatchMapping("/{invoiceId}/pay")
     public ResponseEntity<ApiResponse<Void>> confirmPayment(@PathVariable Long invoiceId,
                                                             @RequestParam Long paidById) {
         log.info("PATCH /api/host/invoices/{}/pay - paidById: {}", invoiceId, paidById);

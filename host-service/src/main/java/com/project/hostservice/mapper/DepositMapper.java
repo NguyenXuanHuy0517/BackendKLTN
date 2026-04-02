@@ -4,10 +4,17 @@ import com.project.datalayer.entity.Deposit;
 import com.project.hostservice.dto.deposit.DepositResponseDTO;
 import org.springframework.stereotype.Component;
 
+/**
+ * Vai trò: Mapper của module host-service.
+ * Chức năng: Chuyển đổi dữ liệu cho nghiệp vụ deposit giữa entity và DTO.
+ */
 @Component
 public class DepositMapper {
 
-    public DepositResponseDTO toDTO(Deposit deposit) {
+        /**
+     * Chức năng: Chuyển đổi dto.
+     */
+public DepositResponseDTO toDTO(Deposit deposit) {
         DepositResponseDTO dto = new DepositResponseDTO();
         dto.setDepositId(deposit.getDepositId());
         dto.setTenantName(deposit.getTenant().getFullName());

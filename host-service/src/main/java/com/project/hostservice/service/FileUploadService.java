@@ -13,12 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Service xử lý upload/delete file lên Cloudinary.
- *
- * Folder structure trên Cloudinary:
- *   smartroom/avatars/  → ảnh đại diện người dùng
- *   smartroom/rooms/    → ảnh phòng trọ
- *   smartroom/documents/→ tài liệu (PDF, Word, ...)
+ * Vai trò: Service xử lý nghiệp vụ của module host-service.
+ * Chức năng: Chứa logic xử lý liên quan đến file upload.
  */
 @Slf4j
 @Service
@@ -27,17 +23,16 @@ public class FileUploadService {
 
     private final Cloudinary cloudinary;
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // AVATAR
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Upload ảnh đại diện lên Cloudinary folder "smartroom/avatars".
-     * Ảnh được nén về 400×400 px phía server Cloudinary (eager transform).
-     *
-     * @return secure_url của ảnh đã upload
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload avatar.
      */
-    public String uploadAvatar(MultipartFile file) {
+public String uploadAvatar(MultipartFile file) {
         try {
             Map uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
@@ -46,7 +41,7 @@ public class FileUploadService {
                             "resource_type", "image",
                             "use_filename", true,
                             "unique_filename", true,
-                            // Tự động crop về 400×400, giữ khuôn mặt ở trung tâm
+                            
                             "transformation", "c_fill,g_face,h_400,w_400,q_auto,f_auto"
                     )
             );
@@ -59,17 +54,16 @@ public class FileUploadService {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ROOM IMAGES
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Upload 1 ảnh phòng trọ lên Cloudinary folder "smartroom/rooms".
-     * Ảnh được tối ưu chất lượng tự động, giữ nguyên tỷ lệ gốc.
-     *
-     * @return secure_url của ảnh đã upload
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload room image.
      */
-    public String uploadRoomImage(MultipartFile file) {
+public String uploadRoomImage(MultipartFile file) {
         try {
             Map uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
@@ -78,7 +72,7 @@ public class FileUploadService {
                             "resource_type", "image",
                             "use_filename", true,
                             "unique_filename", true,
-                            // Tối ưu chất lượng và format tự động, giới hạn chiều rộng 1280px
+                            
                             "transformation", "w_1280,c_limit,q_auto,f_auto"
                     )
             );
@@ -91,13 +85,12 @@ public class FileUploadService {
         }
     }
 
-    /**
-     * Upload nhiều ảnh phòng trọ cùng lúc.
-     * Mỗi ảnh được xử lý độc lập; nếu 1 ảnh thất bại sẽ throw exception ngay.
-     *
-     * @return Danh sách secure_url tương ứng theo thứ tự files đầu vào
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload room images.
      */
-    public List<String> uploadRoomImages(List<MultipartFile> files) {
+public List<String> uploadRoomImages(List<MultipartFile> files) {
         List<String> urls = new ArrayList<>();
         for (MultipartFile file : files) {
             urls.add(uploadRoomImage(file));
@@ -105,16 +98,16 @@ public class FileUploadService {
         return urls;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DOCUMENT (giữ lại để dùng cho các mục đích khác)
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Upload tài liệu (PDF, Word, Excel, text) lên folder "smartroom/documents".
-     *
-     * @return secure_url của tài liệu đã upload
+    
+
+        /**
+     * Chức năng: Thực hiện nghiệp vụ upload document.
      */
-    public String uploadDocument(MultipartFile file) {
+public String uploadDocument(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File không được rỗng");
         }
@@ -140,16 +133,16 @@ public class FileUploadService {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DELETE
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Xoá file khỏi Cloudinary theo publicId.
-     * publicId là phần path không bao gồm đuôi file,
-     * ví dụ: "smartroom/avatars/abc123" hoặc "smartroom/rooms/xyz789"
+    
+
+        /**
+     * Chức năng: Xóa file.
      */
-    public void deleteFile(String publicId) {
+public void deleteFile(String publicId) {
         try {
             cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
             log.info("deleteFile thành công: {}", publicId);
@@ -159,11 +152,14 @@ public class FileUploadService {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    private boolean isValidDocumentType(String contentType) {
+        /**
+     * Chức năng: Thực hiện nghiệp vụ is valid document type.
+     */
+private boolean isValidDocumentType(String contentType) {
         if (contentType == null) return false;
         return contentType.equals("application/pdf")
                 || contentType.equals("application/msword")
