@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,6 +35,7 @@ public class NotificationScheduler {
      * Chức năng: Gửi overdue reminders.
      */
 @Scheduled(cron = "0 0 9 * * ?")
+    @Transactional
     public void sendOverdueReminders() {
         List<Invoice> overdueInvoices = invoiceRepository.findByStatusIn(List.of("UNPAID", "OVERDUE"));
 
@@ -66,6 +68,7 @@ public class NotificationScheduler {
      * Chức năng: Thực hiện nghiệp vụ remind expiring contracts.
      */
 @Scheduled(cron = "0 30 9 * * ?")
+    @Transactional
     public void remindExpiringContracts() {
         LocalDate now = LocalDate.now();
         LocalDate in30Days = now.plusDays(30);
